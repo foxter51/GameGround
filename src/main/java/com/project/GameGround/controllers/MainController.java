@@ -26,8 +26,8 @@ public class MainController {
     private UserRepository repo;
 
     @GetMapping("/")
-    public String loginFormStart(){
-        return "login";
+    public String mainPage(){
+        return "main";
     }
 
     @GetMapping("/login")
