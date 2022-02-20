@@ -28,7 +28,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {  //on success auth
         CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
         if(repo.findByEmail(oAuth2User.getEmail()) == null){  //if user doesn't exist
-            userDetailsService.createCustomerAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.GOOGLE);  //add him to DB
+            userDetailsService.createCustomerAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
         }
         else{  //if exists
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
