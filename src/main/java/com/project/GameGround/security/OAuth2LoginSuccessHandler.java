@@ -33,6 +33,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         else{  //if exists
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
         }
-        response.sendRedirect("/users_list");
+        response.sendRedirect("/");
     }
 }
