@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Users list</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -14,9 +15,9 @@
         <div>
             <h3 class="float-md-start mb-0">PROJECT</h3>
             <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link" sec:authentication="name"></a>
                 <form th:action="@{/logout}" method="post">
-                    <b>[[${#request.userPrincipal.principal.fullName}]]</b>
-                    <button type="submit" class="btn-close-white" style="margin-left: 10px;">Logout</button>
+                    <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
                 </form>
             </nav>
         </div>

@@ -63,6 +63,11 @@ public class MainController {
         return "users";
     }
 
+    @GetMapping("/403")
+    public String error(){
+        return "403";
+    }
+
     @RequestMapping("/user_control")
     public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
         switch (button) {

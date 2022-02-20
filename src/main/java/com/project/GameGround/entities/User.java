@@ -3,6 +3,8 @@ package com.project.GameGround.entities;
 import com.project.GameGround.security.AuthProvider;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -35,6 +37,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column()
     private AuthProvider authProvider;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -106,5 +112,13 @@ public class User {
 
     public void setAuthProvider(AuthProvider authProvider) {
         this.authProvider = authProvider;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

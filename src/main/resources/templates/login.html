@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -13,9 +14,7 @@
             <h3 class="float-md-start mb-0">PROJECT</h3>
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link" th:href="@{/users_list}">Users list</a>
-                <th:block sec:authorize="isAnonymous()">
-                    <a class="nav-link" th:href="@{/register}">Register</a>
-                </th:block>
+                <a class="nav-link" th:href="@{/register}">Register</a>
             </nav>
         </div>
     </header>

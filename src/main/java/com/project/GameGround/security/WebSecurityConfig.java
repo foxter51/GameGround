@@ -50,24 +50,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configu
         http
                 .authorizeRequests()
                 .antMatchers("/oauth2/**").permitAll()
-                .antMatchers("/users_list").authenticated()
+                .antMatchers("/users_list").hasAuthority("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/users_list")
+                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and()
                 .oauth2Login()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/users_list")
+                    .defaultSuccessUrl("/")
                     .userInfoEndpoint().userService(oAuth2UserService)  //specify OAuth user service
                     .and()
                     .successHandler(oAuth2LoginSuccessHandler)  //specify success handler
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/403");
+        ;
     }
 
     @Autowired
