@@ -1,5 +1,6 @@
 package com.project.GameGround.service;
 
+import com.project.GameGround.RoleRepository;
 import com.project.GameGround.security.AuthProvider;
 import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.UserRepository;
@@ -19,6 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private RoleRepository roleRepo;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repo.findByEmail(email);  //searching for user in database
@@ -37,6 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
+        user.addRole(roleRepo.findRoleByName("USER"));
         repo.save(user);
     }
 }

@@ -1,5 +1,7 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.RoleRepository;
+import com.project.GameGround.entities.Role;
 import com.project.GameGround.security.AuthProvider;
 import com.project.GameGround.details.CustomOAuth2User;
 import com.project.GameGround.details.CustomUserDetails;
@@ -25,6 +27,9 @@ public class MainController {
     @Autowired  //object loads automatically(doesn't need initializing)
     private UserRepository repo;
 
+    @Autowired
+    private RoleRepository roleRepo;
+
     @GetMapping("/")
     public String mainPage(){
         return "main";
@@ -48,6 +53,7 @@ public class MainController {
         user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
+        user.addRole(roleRepo.findRoleByName("USER"));
         if(repo.findByEmail(user.getEmail()) == null){
             repo.save(user);
             model.addAttribute("register", "Successful registration!");
