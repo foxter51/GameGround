@@ -1,6 +1,6 @@
 package com.project.GameGround.security;
 
-import com.project.GameGround.service.CustomOAuth2UserService;
+import com.project.GameGround.service.CustomOAuth2UserDetailsService;
 import com.project.GameGround.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configu
     }
 
     @Autowired
-    private CustomOAuth2UserService oAuth2UserService;
+    private CustomOAuth2UserDetailsService oAuth2UserService;
 
     @Autowired
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;

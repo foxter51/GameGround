@@ -2,7 +2,7 @@ package com.project.GameGround.controllers;
 
 import com.project.GameGround.RoleRepository;
 import com.project.GameGround.security.AuthProvider;
-import com.project.GameGround.details.CustomOAuth2User;
+import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.UserRepository;
 import com.project.GameGround.entities.User;
@@ -87,7 +87,7 @@ public class MainController {
         if (isCustomUserDetails(auth)) {
             return ID.contains(repo.findByEmail(auth.getName()).getId()) ? "redirect:/" : "redirect:/users_list";
         }
-        return ID.contains(repo.findByEmail(((CustomOAuth2User) auth.getPrincipal()).getAttribute("email")).getId()) ? "redirect:/" : "redirect:/users_list";
+        return ID.contains(repo.findByEmail(((CustomOAuth2UserDetails) auth.getPrincipal()).getAttribute("email")).getId()) ? "redirect:/" : "redirect:/users_list";
     }
 
     public void unblockAction(List<Long> ID){
@@ -99,7 +99,7 @@ public class MainController {
         if (isCustomUserDetails(auth)) {
             return (repo.findByEmail(auth.getName()) == null) ? "redirect:/" : "redirect:/users_list";
         }
-        return (repo.findByEmail(((CustomOAuth2User) auth.getPrincipal()).getAttribute("email")) == null) ? "redirect:/" : "redirect:/users_list";
+        return (repo.findByEmail(((CustomOAuth2UserDetails) auth.getPrincipal()).getAttribute("email")) == null) ? "redirect:/" : "redirect:/users_list";
     }
 
     public boolean isCustomUserDetails(Authentication auth){

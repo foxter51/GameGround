@@ -1,8 +1,8 @@
 package com.project.GameGround.security;
 
 import com.project.GameGround.UserRepository;
-import com.project.GameGround.details.CustomOAuth2User;
-import com.project.GameGround.service.CustomUserDetailsService;
+import com.project.GameGround.details.CustomOAuth2UserDetails;
+import com.project.GameGround.service.CustomOAuth2UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,16 +22,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private UserRepository repo;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private CustomOAuth2UserDetailsService userDetailsService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {  //on success auth
-        CustomOAuth2User oAuth2User = (CustomOAuth2User)authentication.getPrincipal();
+        CustomOAuth2UserDetails oAuth2User = (CustomOAuth2UserDetails)authentication.getPrincipal();
         if(repo.findByEmail(oAuth2User.getEmail()) == null){  //if user doesn't exist
-            userDetailsService.createCustomerAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
+            userDetailsService.createUserAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
         }
         else{  //if exists
-            System.out.println(oAuth2User.getAuthorities());
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
         }
         response.sendRedirect("/");
