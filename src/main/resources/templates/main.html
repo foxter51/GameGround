@@ -19,7 +19,7 @@
                     <a class="nav-link" th:href="@{/users_list}">Users list</a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" sec:authentication="name"></a>
+                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${currentUserID})}" sec:authentication="name"></a>
                     <a class="nav-link" sec:authentication="principal.authorities"></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
@@ -38,13 +38,10 @@
     <h3 align="center" th:text="${register}"></h3>
 </main>
 
-<footer class="text-muted py-5">
-    <div class="container">
-
+<footer class="flex-shrink-0 py-4 bg-dark text-white-50" style="position: fixed; bottom: 0; width: 100%">
+    <div class="container text-center">
+        <small>All rights are reserved. 2022</small>
     </div>
 </footer>
-
-
-<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

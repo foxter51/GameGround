@@ -1,7 +1,7 @@
 package com.project.GameGround.service;
 
-import com.project.GameGround.RoleRepository;
-import com.project.GameGround.UserRepository;
+import com.project.GameGround.repositories.RoleRepository;
+import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;

@@ -34,7 +34,7 @@ public class CustomUserDetails implements UserDetails {  //implement authenticat
 
     @Override
     public String getUsername() {
-        return user.getFirstName()+" "+user.getLastName();
+        return user.getEmail();
     }
 
     @Override

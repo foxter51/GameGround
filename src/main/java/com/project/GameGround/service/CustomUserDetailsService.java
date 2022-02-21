@@ -1,7 +1,7 @@
 package com.project.GameGround.service;
 
 import com.project.GameGround.details.CustomUserDetails;
-import com.project.GameGround.UserRepository;
+import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

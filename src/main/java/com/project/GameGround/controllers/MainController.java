@@ -1,20 +1,18 @@
 package com.project.GameGround.controllers;
 
-import com.project.GameGround.RoleRepository;
+import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.security.AuthProvider;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
-import com.project.GameGround.UserRepository;
+import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +28,10 @@ public class MainController {
     private RoleRepository roleRepo;
 
     @GetMapping("/")
-    public String mainPage(){
+    public String mainPage(Model model, @AuthenticationPrincipal CustomUserDetails currentUser){
+        if(currentUser != null){
+            model.addAttribute("currentUserID", repo.findByEmail(currentUser.getUsername()).getId());
+        }
         return "main";
     }
 
@@ -59,6 +60,12 @@ public class MainController {
         }
         else model.addAttribute("register", "User with this e-mail has already been registered!");
         return "main";
+    }
+
+    @GetMapping("/profile/{id}")
+    public String profilePage(@PathVariable ("id") String id, Model model){
+        model.addAttribute("userProfile", repo.findByID(Long.parseLong(id)));
+        return "profile";
     }
 
     @GetMapping("/users_list")

@@ -3,6 +3,7 @@ package com.project.GameGround;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.GameGround.entities.User;
+import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.security.AuthProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

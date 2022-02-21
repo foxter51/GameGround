@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b7f4bdb099.js" crossorigin="anonymous"></script>
+</head>
+<body style="overflow-x:hidden">
+<header>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+                <a th:href="@{/}" class="navbar-brand d-flex align-items-center">
+                    <strong>GameGround</strong>
+                </a>
+                <nav class="nav nav-masthead justify-content-center float-md-end">
+                    <th:block sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{/users_list}">Users list</a>
+                    </th:block>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <a class="nav-link" sec:authentication="name"></a>
+                        <a class="nav-link" sec:authentication="principal.authorities"></a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
+                        </form>
+                    </th:block>
+                    <th:block sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}"><button class="btn btn-outline-primary me-2">Login</button></a>
+                        <a th:href="@{/register}"><button class="btn btn-primary">Register</button></a>
+                    </th:block>
+                </nav>
+            </div>
+        </div>
+    </header>
+</header>
+<main>
+    <div class="row" th:object="${userProfile}">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                    <h5 class="my-3" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></h5>
+                    <p class="text-muted mb-1">Editor</p>
+                </div>
+            </div>
+            <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Full Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${userProfile.email}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Registration date</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${userProfile.registrationDate}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Last login date</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${userProfile.lastLoginDate}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="flex-shrink-0 py-4 bg-dark text-white-50" style="position: fixed; bottom: 0; width: 100%">
+    <div class="container text-center">
+        <small>All rights are reserved. 2022</small>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.project.GameGround;
+package com.project.GameGround.repositories;
 
 import com.project.GameGround.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

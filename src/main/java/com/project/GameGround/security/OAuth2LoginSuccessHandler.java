@@ -1,6 +1,6 @@
 package com.project.GameGround.security;
 
-import com.project.GameGround.UserRepository;
+import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.service.CustomOAuth2UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
