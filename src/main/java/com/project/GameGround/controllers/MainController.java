@@ -28,9 +28,12 @@ public class MainController {
     private RoleRepository roleRepo;
 
     @GetMapping("/")
-    public String mainPage(Model model, @AuthenticationPrincipal CustomUserDetails currentUser){
-        if(currentUser != null){
-            model.addAttribute("currentUserID", repo.findByEmail(currentUser.getUsername()).getId());
+    public String mainPage(Model model, Authentication currentUser){
+        if(currentUser != null && isCustomUserDetails(currentUser)){
+            model.addAttribute("currentUserID", repo.findByEmail(currentUser.getName()).getId());
+        }
+        else if(currentUser != null){
+            model.addAttribute("currentUserID", repo.findByEmail(((CustomOAuth2UserDetails)currentUser.getPrincipal()).getAttribute("email")).getId());
         }
         return "main";
     }
@@ -69,7 +72,7 @@ public class MainController {
     }
 
     @GetMapping("/users_list")
-    public String userList(Model model, Authentication auth){
+    public String userList(Model model){
         List<User> users = repo.findAll();
         model.addAttribute("users", users);
         return "users";
