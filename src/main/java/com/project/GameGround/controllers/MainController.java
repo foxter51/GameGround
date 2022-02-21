@@ -45,7 +45,7 @@ public class MainController {
         return "registration";
     }
 
-    @PostMapping("/process_register")
+    @PostMapping("/")
     public String processRegistration(User user, Model model){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
@@ -58,7 +58,7 @@ public class MainController {
             model.addAttribute("register", "Successful registration!");
         }
         else model.addAttribute("register", "User with this e-mail has already been registered!");
-        return "registration_success";
+        return "main";
     }
 
     @GetMapping("/users_list")
