@@ -2,7 +2,6 @@ package com.project.GameGround;
 
 import com.project.GameGround.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;

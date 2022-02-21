@@ -45,6 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configu
         auth.authenticationProvider(authenticationProvider());
     }
 
+    @Autowired
+    private CustomOAuth2UserService oAuth2UserService;
+
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -72,10 +78,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configu
                 .exceptionHandling().accessDeniedPage("/403");
         ;
     }
-
-    @Autowired
-    private CustomOAuth2UserService oAuth2UserService;
-
-    @Autowired
-    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 }

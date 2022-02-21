@@ -1,6 +1,7 @@
 package com.project.GameGround.service;
 
 import com.project.GameGround.RoleRepository;
+import com.project.GameGround.entities.Role;
 import com.project.GameGround.security.AuthProvider;
 import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.UserRepository;

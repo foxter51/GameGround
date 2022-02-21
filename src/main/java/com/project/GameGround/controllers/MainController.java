@@ -1,7 +1,6 @@
 package com.project.GameGround.controllers;
 
 import com.project.GameGround.RoleRepository;
-import com.project.GameGround.entities.Role;
 import com.project.GameGround.security.AuthProvider;
 import com.project.GameGround.details.CustomOAuth2User;
 import com.project.GameGround.details.CustomUserDetails;
@@ -69,11 +68,6 @@ public class MainController {
         return "users";
     }
 
-    @GetMapping("/403")
-    public String error(){
-        return "403";
-    }
-
     @RequestMapping("/user_control")
     public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
         switch (button) {
@@ -110,5 +104,10 @@ public class MainController {
 
     public boolean isCustomUserDetails(Authentication auth){
         return auth.getPrincipal() instanceof CustomUserDetails;
+    }
+
+    @GetMapping("/403")
+    public String error(){
+        return "403";
     }
 }

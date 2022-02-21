@@ -28,8 +28,4 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
     @Modifying
     @Query("UPDATE User user SET user.status = 'Unblocked' WHERE user.id = ?1")  //request to unblock user
     void unblockById(Long id);
-
-//    @Modifying
-//    @Query(nativeQuery = true, value = "UPDATE Role role SET role_id = 1 WHERE user_id = ?1")
-//    void setRoleUser(Long id);
 }

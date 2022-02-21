@@ -31,6 +31,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             userDetailsService.createCustomerAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
         }
         else{  //if exists
+            System.out.println(oAuth2User.getAuthorities());
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
         }
         response.sendRedirect("/");
