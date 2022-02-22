@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/b7f4bdb099.js" crossorigin="anonymous"></script>
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script th:src="@{/js/theme.js}" type="text/javascript"></script>
+    <script th:src="@{/js/switch.js}" type="text/javascript"></script>
 </head>
 <body>
     <header>
@@ -16,19 +16,19 @@
                     <strong>GameGround</strong>
                 </a>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
-                    <a class="nav-link" th:href="@{/}">Home</a>
-                    <a th:href="@{/register}"><button class="btn btn-primary">Register</button></a>
+                    <a class="nav-link" th:href="@{/}" id="homeLabel">Home</a>
+                    <a th:href="@{/register}"><button class="btn btn-primary" id="regButtonLabel">Register</button></a>
                 </nav>
             </div>
         </div>
     </header>
 
     <main class="text-center w-100 h-100 p-3 mx-auto flex-column">
-        <h1>Login form</h1>
+        <h1 id="logFormLabel">Login form</h1>
 
         <form th:action="@{/login}" method="post" style="margin: 30px auto 30px auto; max-width: 500px">
             <div th:if="${param.error}">
-                <p class="text-danger">Bad credentials or you have been blocked!</p>
+                <p class="text-danger" id="badLogLabel">Bad credentials or you have been blocked!</p>
             </div>
             <div>
                 <div class="form-group row" style="margin: 10px 0 10px 0">
@@ -39,19 +39,19 @@
                 </div>
 
                 <div class="form-group row" style="margin: 10px 0 10px 0">
-                    <label class="col-form-label col-4">Password</label>
+                    <label class="col-form-label col-4" id="authPass">Password</label>
                     <div class="col-8">
                         <input type="password" class="form-control" name="password" required minlength="1" maxlength="32" autofocus/>
                     </div>
                 </div>
 
                 <div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary" id="logButton">Login</button>
                 </div>
             </div>
         </form>
         <div class="mb-4 mx-auto w-25">
-            <h6 class=" text-uppercase">or</h6>
+            <h6 class=" text-uppercase" id="orLabel">or</h6>
             <hr data-content="AND" class="hr-text">
         </div>
         <div class="container px-4 w-25">
@@ -67,7 +67,7 @@
     </main>
     <footer class="flex-shrink-0 py-4 bg-dark text-white-50" style="position: fixed; bottom: 0; width: 100%">
         <div class="container text-center">
-            <small>All rights are reserved. 2022</small>
+            <small id="footerLabel">All rights are reserved. 2022</small>
         </div>
     </footer>
 </body>
