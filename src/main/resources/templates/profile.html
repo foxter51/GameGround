@@ -22,7 +22,7 @@
                         <a class="nav-link" th:href="@{/users_list}">Users list</a>
                     </th:block>
                     <th:block sec:authorize="isAuthenticated()">
-                        <a class="nav-link" sec:authentication="name"></a>
+                        <a class="nav-link" th:text="${#authentication.getPrincipal().getFullName()}"></a>
                         <a class="nav-link" sec:authentication="principal.authorities"></a>
                         <form th:action="@{/logout}" method="post">
                             <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>

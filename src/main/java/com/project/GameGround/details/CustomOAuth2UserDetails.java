@@ -29,7 +29,7 @@ public class CustomOAuth2UserDetails implements OAuth2User {  //implement authen
         if(user != null){
             roles = user.getRoles();  //if user exists - get his roles
         }
-        else roles.add(new Role(1, "USER"));  //else give "USER"
+        else roles.add(new Role(1, "USER"));  //else give role "USER"
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return authorities;
