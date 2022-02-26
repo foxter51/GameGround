@@ -16,6 +16,6 @@ public class Tag {
     @Column(name = "tag_name", nullable = false, unique = true, length = 32)
     private String tagName;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    @OneToMany
     private Set<Review> reviews;
 }

@@ -15,9 +15,7 @@ public class Comment {
     @Column(name="comment_text", nullable = false)
     private String text;
 
-    @OneToOne(mappedBy = "id")
-    private Review review;
-
-    @OneToOne(mappedBy = "id")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }
