@@ -45,6 +45,13 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         return new CustomUserDetails(user);  //found user
     }
 
+    public void sendID(Model model, Authentication currentUser){
+        if(currentUser != null){
+            String email = getUserEmail(currentUser);
+            model.addAttribute("currentUserID", repo.findByEmail(email).getId());
+        }
+    }
+
     public void loadReviews(Model model){
         model.addAttribute("reviews", reviewRepo.findAll());
     }
