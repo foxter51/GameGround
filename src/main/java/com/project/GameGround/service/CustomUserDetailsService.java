@@ -22,8 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {  //implements getting user information from database
@@ -47,15 +45,8 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         return new CustomUserDetails(user);  //found user
     }
 
-    public void sendID(Model model, Authentication currentUser){
-        if(currentUser != null){
-            String email = getUserEmail(currentUser);
-            model.addAttribute("currentUserID", repo.findByEmail(email).getId());
-        }
-    }
-
-    public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof CustomUserDetails;
+    public void loadReviews(Model model){
+        model.addAttribute("reviews", reviewRepo.findAll());
     }
 
     public void saveUser(User user, Model model){
@@ -106,7 +97,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
     public String blockAction(List<Long> ID, Authentication auth){
         ID.forEach(id -> repo.blockById(id));
         String email = getUserEmail(auth);
-        if(ID.contains(repo.findByEmail(email).getId()) || ID.contains(repo.findByEmail(email).getId())){
+        if(ID.contains(repo.findByEmail(email).getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
         } else return "redirect:/users_list";
@@ -119,7 +110,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
     public String deleteAction(List<Long> ID, Authentication auth){
         ID.forEach(id -> repo.deleteById(id));
         String email = getUserEmail(auth);
-        if(ID.contains(repo.findByEmail(email).getId()) || ID.contains(repo.findByEmail(email).getId())){
+        if(ID.contains(repo.findByEmail(email).getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
         } else return "redirect:/users_list";
@@ -127,5 +118,9 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     public String getUserEmail(Authentication auth){
         return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");
+    }
+
+    public boolean isCustomUserDetails(Authentication auth){
+        return auth.getPrincipal() instanceof CustomUserDetails;
     }
 }

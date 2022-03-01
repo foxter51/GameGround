@@ -24,7 +24,7 @@
                     <a class="nav-link" th:href="@{/users_list}">Users list</a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${#authentication.getPrincipal().getId()})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
                     <a class="nav-link" sec:authentication="principal.authorities"></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
@@ -44,8 +44,8 @@
             <div class="card mb-4">
                 <div class="card-body text-center">
                     <h1 th:text="${review.reviewName}"></h1>
-                    <h2 class="mb-0" style="display: inline">Group: </h2><h2 class="mb-0" th:text="${review.groupName}" style="display: inline"></h2><br>
-                    <h3 class="mb-0" style="display: inline">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
+                    <h2 class="mb-0" style="display: inline" name="genre">Genre: </h2><h2 class="mb-0" th:text="${review.groupName}" style="display: inline"></h2><br>
+                    <h3 class="mb-0" style="display: inline" name="tags">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
                     <br><br><p style="max-width: 70%; margin: auto" th:text="${review.text}"></p><br><br>
                     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="max-width: 60%; margin: auto">
                         <div class="carousel-inner">
@@ -70,8 +70,8 @@
                     </div>
                     <br>
                     <div>
-                        <h4 class="mb-0" style="display: inline">Review rate: </h4><h4 style="display: inline" th:text="${review.rate}"></h4><br>
-                        <h4 class="mb-0" style="display: inline">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}"></a></h4>
+                        <h4 class="mb-0" style="display: inline" id="rate">Review rate: </h4><h4 style="display: inline" th:text="${review.rate}"></h4><br>
+                        <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}"></a></h4>
                     </div>
                 </div>
             </div>

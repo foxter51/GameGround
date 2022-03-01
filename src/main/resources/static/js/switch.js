@@ -56,6 +56,7 @@ function transitionAfterChange(){
 function setRussian(){
     $('[name="cardCol"]').removeClass("col-sm-3").addClass("col-sm-4");
     $("#homeLabel").text('Главная');
+    $("#reviewsLabel").text('Обзоры');
     $("#regFormLabel").text('Форма регистрации');
     $("#authFirst").text('Имя');
     $("#authLast").text('Фамилия');
@@ -75,12 +76,17 @@ function setRussian(){
     $("#checkOptMode").text('Вкл.');
     $("#langLabel").text('Язык');
     $("#checkOptLang").text('Русский');
+    $('[name="genre"]').text('Жанр: ');
+    $('[name="tags"]').text('Теги: ');
+    $("#rate").text('Рейтинг: ');
+    $("#author").text('Автор: ');
     $("#footerLabel").text('Все права защищены. 2022');
 }
 
 function setEnglish(){
     $('[name="cardCol"]').removeClass("col-sm-4").addClass("col-sm-3");
     $("#homeLabel").text('Home');
+    $("#reviewsLabel").text('Reviews');
     $("#regFormLabel").text('Registration form');
     $("#authFirst").text('First name');
     $("#authLast").text('Last name');
@@ -100,5 +106,9 @@ function setEnglish(){
     $("#checkOptMode").text('On');
     $("#langLabel").text('Language');
     $("#checkOptLang").text('Russian');
+    $('[name="genre"]').text('Genre: ');
+    $('[name="tags"]').text('Tags: ');
+    $("#rate").text('Rate: ');
+    $("#author").text('Author: ');
     $("#footerLabel").text('All rights are reserved. 2022');
 }

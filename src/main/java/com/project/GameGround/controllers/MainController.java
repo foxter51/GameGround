@@ -16,8 +16,8 @@ public class MainController {
     private CustomUserDetailsService userDetailsService;
 
     @GetMapping("/")
-    public String mainPage(Model model, Authentication currentUser){
-        userDetailsService.sendID(model, currentUser);
+    public String mainPage(Model model){
+        userDetailsService.loadReviews(model);
         return "main";
     }
 

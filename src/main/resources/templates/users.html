@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Users list GameGround</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -17,7 +16,7 @@
                 </a>
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     <a class="nav-link" th:href="@{/}">Home</a>
-                    <a class="nav-link" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${#authentication.getPrincipal().getId()})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
                     </form>

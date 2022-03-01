@@ -21,7 +21,7 @@
                     <a class="nav-link" th:href="@{/users_list}">Users list</a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${currentUserID})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${#authentication.getPrincipal().getId()})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
                     <a class="nav-link" sec:authentication="principal.authorities"></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
@@ -36,8 +36,20 @@
     </div>
 </header>
 
-<main class="px-3">
+<main class="container py-5">
     <h3 align="center" th:text="${register}"></h3>
+    <h2 id="reviewsLabel">Reviews</h2><br><hr><br>
+    <div class="row" th:each="review: ${reviews}" style="max-width: 70%">
+        <div class="row">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a class="mb-0" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
+                    <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                    <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer class="flex-shrink-0 py-4 bg-dark text-white-50" style="position: fixed; bottom: 0; width: 100%">
