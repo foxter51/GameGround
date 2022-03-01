@@ -3,7 +3,6 @@ package com.project.GameGround.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @Entity
@@ -15,7 +14,4 @@ public class Tag {
 
     @Column(name = "tag_name", nullable = false, unique = true, length = 32)
     private String tagName;
-
-    @OneToMany
-    private Set<Review> reviews;
 }

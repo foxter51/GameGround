@@ -37,7 +37,7 @@ public class User {
     private String status;
 
     @Enumerated(EnumType.STRING)
-    @Column()
+    @Column
     private AuthProvider authProvider;
 
     @ManyToMany(fetch = FetchType.EAGER)

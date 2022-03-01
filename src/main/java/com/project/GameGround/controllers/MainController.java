@@ -44,6 +44,12 @@ public class MainController {
         return "profile";
     }
 
+    @GetMapping("/review/{id}")
+    public String reviewPage(@PathVariable ("id") String id, Model model){
+        userDetailsService.getReviewByID(id, model);
+        return "review";
+    }
+
     @GetMapping("/users_list")
     public String userList(Model model){
         userDetailsService.sendUsersList(model);

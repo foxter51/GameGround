@@ -2,6 +2,8 @@ package com.project.GameGround.service;
 
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
+import com.project.GameGround.entities.Review;
+import com.project.GameGround.repositories.ReviewRepository;
 import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
@@ -17,8 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {  //implements getting user information from database
@@ -28,6 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     @Autowired
     private RoleRepository roleRepo;
+
+    @Autowired
+    private ReviewRepository reviewRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -65,7 +73,16 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
     }
 
     public void getProfileByID(String id, Model model){
-        model.addAttribute("userProfile", repo.findByID(Long.parseLong(id)));
+        model.addAttribute("userProfile", repo.getById(Long.parseLong(id)));
+        model.addAttribute("reviews", reviewRepo.getReviewsByUserID(Long.parseLong(id)));
+    }
+
+    public void getReviewByID(String id, Model model){
+        Review review = reviewRepo.getById(Long.parseLong(id));
+        model.addAttribute("review", review);
+        model.addAttribute("img1", Base64.getEncoder().encodeToString(review.getImg1()));
+        model.addAttribute("img2", Base64.getEncoder().encodeToString(review.getImg2()));
+        model.addAttribute("img3", Base64.getEncoder().encodeToString(review.getImg3()));
     }
 
     public void sendUsersList(Model model){

@@ -22,28 +22,41 @@ public class Review {
     @Column(name="group_name", nullable = false, length = 32)
     private String groupName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "reviews_tags", joinColumns = @JoinColumn(name = "review_id"), inverseJoinColumns = @JoinColumn(name="tag_id"))
     private Set<Tag> tags = new HashSet<>();
-
-    @OneToMany
-    private List<Comment> comments = new ArrayList<>();
 
     @Column(name="review_text", nullable = false)
     private String text;
 
+    @Lob
     @Column(name="img1")
     private byte[] img1;
 
+    @Lob
     @Column(name="img2")
     private byte[] img2;
 
+    @Lob
     @Column(name="img3")
     private byte[] img3;
 
-//    @OneToOne(mappedBy = "id")
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(name = "review_rate")
     private float rate;
+
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<Comment> comments = new ArrayList<>();
+
+    public void addTag(Tag tag){
+        this.tags.add(tag);
+    }
+
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+    }
 }

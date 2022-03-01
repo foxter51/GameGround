@@ -3,6 +3,7 @@ package com.project.GameGround;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.project.GameGround.entities.User;
+import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.security.AuthProvider;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ public class UserRepositoryTest {
     private UserRepository repo;
 
     @Autowired
+    private RoleRepository roleRepo;
+
+    @Autowired
     private TestEntityManager entityManager;  //useful methods for tests
 
     @Test
@@ -38,6 +42,7 @@ public class UserRepositoryTest {
         user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
+        user.addRole(roleRepo.findRoleByName("USER"));
         User savedUser = repo.save(user);
         User existUser = entityManager.find(User.class, savedUser.getId());
         assertThat(existUser.getEmail()).isEqualTo(user.getEmail());
