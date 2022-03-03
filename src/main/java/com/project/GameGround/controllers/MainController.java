@@ -1,5 +1,7 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.Tags;
+import com.project.GameGround.entities.Review;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,18 @@ public class MainController {
     }
 
     @GetMapping("/profile/{id}")
-    public String profilePage(@PathVariable ("id") String id, Model model){
+    public String profilePage(@PathVariable ("id") String id, Model model, Authentication auth){
         userDetailsService.getProfileByID(id, model);
+        userDetailsService.sendID(model, auth);
+        userDetailsService.loadReviewsByID(id, model);
+        userDetailsService.createReview(model);
         return "profile";
+    }
+
+    @PostMapping("/profile/{id}")
+    public String updProfilePage(@PathVariable ("id") String id, Review review, @ModelAttribute("Tags") Tags tags){
+        userDetailsService.saveReview(id, review, tags);
+        return "redirect:/profile/"+id;
     }
 
     @GetMapping("/review/{id}")

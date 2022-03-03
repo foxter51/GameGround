@@ -14,4 +14,10 @@ public class Tag {
 
     @Column(name = "tag_name", nullable = false, unique = true, length = 32)
     private String tagName;
+
+    public Tag(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public Tag() {}
 }

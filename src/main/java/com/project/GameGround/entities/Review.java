@@ -29,18 +29,6 @@ public class Review {
     @Column(name="review_text", nullable = false)
     private String text;
 
-    @Lob
-    @Column(name="img1")
-    private byte[] img1;
-
-    @Lob
-    @Column(name="img2")
-    private byte[] img2;
-
-    @Lob
-    @Column(name="img3")
-    private byte[] img3;
-
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
