@@ -1,6 +1,7 @@
 package com.project.GameGround.controllers;
 
 import com.project.GameGround.service.CustomUserDetailsService;
+import com.project.GameGround.service.ReviewDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,12 @@ public class ReviewController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private ReviewDetailsService reviewDetailsService;
+
     @GetMapping("/review/{id}")
     public String reviewPage(@PathVariable("id") String id, Model model){
-        userDetailsService.getReviewByID(id, model);
+        reviewDetailsService.getReviewByID(id, model);
         return "review";
     }
 }

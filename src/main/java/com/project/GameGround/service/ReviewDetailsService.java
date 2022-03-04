@@ -1,0 +1,62 @@
+package com.project.GameGround.service;
+
+import com.project.GameGround.Tags;
+import com.project.GameGround.entities.Review;
+import com.project.GameGround.entities.Tag;
+import com.project.GameGround.repositories.ReviewRepository;
+import com.project.GameGround.repositories.UserRepository;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+
+@Service
+public class ReviewDetailsService {
+
+    @Autowired
+    private UserRepository repo;
+
+    @Autowired
+    private ReviewRepository reviewRepo;
+
+    public void loadReviews(Model model){
+        model.addAttribute("reviews", reviewRepo.findAll());
+    }
+
+    public void loadReviewsByID(String id, Model model){
+        model.addAttribute("reviews", reviewRepo.getReviewsByUserID(Long.parseLong(id)));
+    }
+
+    public void createReview(Model model){
+        Review review = new Review();
+        model.addAttribute("createReview", review);
+        model.addAttribute("Tags", new Tags());
+    }
+
+    public void saveReview(String id, Review review, Tags tags){
+        review.setUser(repo.getById(Long.parseLong(id)));
+        for (String tag : tags.getTagsString().split(" ")) {
+            review.addTag(new Tag(tag));
+        }
+        review.setText(markdownToHTML(review.getText()));
+        reviewRepo.save(review);
+    }
+
+    public void getReviewByID(String id, Model model){
+        Review review = reviewRepo.getById(Long.parseLong(id));
+        model.addAttribute("review", review);
+    }
+
+    private String markdownToHTML(String markdown) {
+        Parser parser = Parser.builder()
+                .build();
+
+        Node document = parser.parse(markdown);
+        HtmlRenderer renderer = HtmlRenderer.builder()
+                .build();
+
+        return renderer.render(document);
+    }
+}

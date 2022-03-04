@@ -23,8 +23,6 @@ import org.springframework.ui.Model;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -62,10 +60,6 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         model.addAttribute("profileUserID", id);
     }
 
-    public void loadReviews(Model model){
-        model.addAttribute("reviews", reviewRepo.findAll());
-    }
-
     public void saveUser(User user, Model model){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
@@ -84,86 +78,16 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         model.addAttribute("userProfile", repo.getById(Long.parseLong(id)));
     }
 
-    public void loadReviewsByID(String id, Model model){
-        model.addAttribute("reviews", reviewRepo.getReviewsByUserID(Long.parseLong(id)));
-    }
-
-    public void createReview(Model model){
-        Review review = new Review();
-        model.addAttribute("createReview", review);
-        model.addAttribute("Tags", new Tags());
-    }
-
-    public void saveReview(String id, Review review, Tags tags){
-        review.setUser(repo.getById(Long.parseLong(id)));
-        for (String tag : tags.getTagsString().split(" ")) {
-            review.addTag(new Tag(tag));
-        }
-        review.setText(markdownToHTML(review.getText()));
-        reviewRepo.save(review);
-    }
-
-    private String markdownToHTML(String markdown) {
-        Parser parser = Parser.builder()
-                .build();
-
-        Node document = parser.parse(markdown);
-        HtmlRenderer renderer = HtmlRenderer.builder()
-                .build();
-
-        return renderer.render(document);
-    }
-
-    public void getReviewByID(String id, Model model){
-        Review review = reviewRepo.getById(Long.parseLong(id));
-        model.addAttribute("review", review);
-    }
-
     public void sendUsersList(Model model){
         List<User> users = repo.findAll();
         model.addAttribute("users", users);
     }
 
-    public String doCheckboxAction(List<Long> ID, String button, Authentication auth){
-        switch (button) {
-            case "Block":
-                return blockAction(ID, auth);
-            case "Unblock":
-                unblockAction(ID);
-                break;
-            case "Delete":
-                return deleteAction(ID, auth);
-        }
-        return "redirect:/users_list";
-    }
-
-    public String blockAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> repo.blockById(id));
-        String email = getUserEmail(auth);
-        if(ID.contains(repo.findByEmail(email).getId())){
-            SecurityContextHolder.getContext().setAuthentication(null);
-            return "redirect:/";
-        } else return "redirect:/users_list";
-    }
-
-    public void unblockAction(List<Long> ID){
-        ID.forEach(id -> repo.unblockById(id));
-    }
-
-    public String deleteAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> repo.deleteById(id));
-        String email = getUserEmail(auth);
-        if(ID.contains(repo.findByEmail(email).getId())){
-            SecurityContextHolder.getContext().setAuthentication(null);
-            return "redirect:/";
-        } else return "redirect:/users_list";
+    public boolean isCustomUserDetails(Authentication auth){
+        return auth.getPrincipal() instanceof CustomUserDetails;
     }
 
     public String getUserEmail(Authentication auth){
         return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");
-    }
-
-    public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof CustomUserDetails;
     }
 }

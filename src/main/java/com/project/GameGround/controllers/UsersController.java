@@ -1,5 +1,6 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.service.CheckboxesService;
 import com.project.GameGround.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,9 @@ public class UsersController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private CheckboxesService checkboxesService;
+
     @GetMapping("/users_list")
     public String userList(Model model){
         userDetailsService.sendUsersList(model);
@@ -24,6 +28,6 @@ public class UsersController {
 
     @RequestMapping("/user_control")
     public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
-        return userDetailsService.doCheckboxAction(ID, button, auth);
+        return checkboxesService.doCheckboxAction(ID, button, auth);
     }
 }
