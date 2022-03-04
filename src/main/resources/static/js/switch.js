@@ -1,4 +1,5 @@
 $(function (){
+    $("#reviewForm").hide();
     $("#modeCheck").change(function (){
         if($('#modeCheck').prop('checked')) {
             localStorage.setItem('darkMode', 'true');
@@ -19,7 +20,11 @@ $(function (){
             setEnglish();
         }
     });
-})
+    $("#writeReview").click(function (){
+        $("#writeReview").hide();
+        $("#reviewForm").show();
+    });
+});
 
 window.addEventListener('load', function(){
     if (localStorage.getItem('darkMode')==='true'){
@@ -112,3 +117,4 @@ function setEnglish(){
     $("#author").text('Author: ');
     $("#footerLabel").text('All rights are reserved. 2022');
 }
+

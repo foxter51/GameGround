@@ -51,11 +51,15 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         return new CustomUserDetails(user);  //found user
     }
 
-    public void sendID(Model model, Authentication currentUser){
+    public void sendCurrentUserID(Model model, Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
             model.addAttribute("currentUserID", repo.findByEmail(email).getId());
         }
+    }
+
+    public void sendProfileUserID(String id, Model model){
+        model.addAttribute("profileUserID", id);
     }
 
     public void loadReviews(Model model){

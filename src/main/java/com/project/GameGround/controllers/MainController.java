@@ -19,7 +19,7 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage(Model model, Authentication currentUser){
-        userDetailsService.sendID(model, currentUser);
+        userDetailsService.sendCurrentUserID(model, currentUser);
         userDetailsService.loadReviews(model);
         return "main";
     }
@@ -44,8 +44,9 @@ public class MainController {
     @GetMapping("/profile/{id}")
     public String profilePage(@PathVariable ("id") String id, Model model, Authentication auth){
         userDetailsService.getProfileByID(id, model);
-        userDetailsService.sendID(model, auth);
+        userDetailsService.sendCurrentUserID(model, auth);
         userDetailsService.loadReviewsByID(id, model);
+        userDetailsService.sendProfileUserID(id, model);
         userDetailsService.createReview(model);
         return "profile";
     }
