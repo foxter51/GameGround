@@ -1,0 +1,20 @@
+package com.project.GameGround.controllers;
+
+import com.project.GameGround.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@Controller
+public class ReviewController {
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @GetMapping("/review/{id}")
+    public String reviewPage(@PathVariable("id") String id, Model model){
+        userDetailsService.getReviewByID(id, model);
+        return "review";
+    }
+}
