@@ -100,11 +100,6 @@
             <div class="text-center" id="writeReview">
                 <i class="fa-solid fa-pencil"></i>
             </div>
-            <script>
-                if([[${currentUserID}]] !== [[${profileUserID}]]){
-                    $("#writeReview").hide();
-                }
-            </script>
             <div class="col-lg-12" id="reviewForm">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -142,13 +137,21 @@
         </div>
     </div>
         <div class="row" th:each="review: ${reviews}">
-            <div class="col">
-                <div class="row">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <a class="mb-0" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
-                            <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                            <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+            <div class="row">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <a class="mb-0" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
+                        <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                        <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                        <div class="float-end">
+                            <form th:action="@{/review_control/{id}(id=${review.user.id})}" method="post">
+                                <div id="editReview" style="display: inline; margin-right: 30px">
+                                    <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-pencil"></i></button>
+                                </div>
+                                <div id="deleteReview" style="display: inline">
+                                    <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-xmark"></i></i></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -156,6 +159,13 @@
         </div>
     </div>
     </div>
+    <script>
+        if([[${currentUserID}]] !== [[${profileUserID}]]){
+            $("#writeReview").hide();
+            $("#editReview").hide();
+            $("#deleteReview").hide();
+        }
+    </script>
     <script>
         let simplemde = new SimpleMDE({element: document.getElementById("content")});
     </script>

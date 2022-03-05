@@ -4,6 +4,7 @@ import com.project.GameGround.Tags;
 import com.project.GameGround.entities.Review;
 import com.project.GameGround.entities.Tag;
 import com.project.GameGround.repositories.ReviewRepository;
+import com.project.GameGround.repositories.TagRepository;
 import com.project.GameGround.repositories.UserRepository;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -11,6 +12,8 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+
+import java.util.Objects;
 
 @Service
 public class ReviewDetailsService {
@@ -20,6 +23,9 @@ public class ReviewDetailsService {
 
     @Autowired
     private ReviewRepository reviewRepo;
+
+    @Autowired
+    private TagRepository tagRepo;
 
     public void loadReviews(Model model){
         model.addAttribute("reviews", reviewRepo.findAll());
@@ -37,8 +43,8 @@ public class ReviewDetailsService {
 
     public void saveReview(String id, Review review, Tags tags){
         review.setUser(repo.getById(Long.parseLong(id)));
-        for (String tag : tags.getTagsString().split(" ")) {
-            review.addTag(new Tag(tag));
+        for (String tag : tags.getTagsString().split(" ")) {  //extract tags from string
+            review.addTag(Objects.requireNonNullElseGet(tagRepo.isContains(tag), () -> new Tag(tag)));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
         reviewRepo.save(review);
@@ -47,6 +53,10 @@ public class ReviewDetailsService {
     public void getReviewByID(String id, Model model){
         Review review = reviewRepo.getById(Long.parseLong(id));
         model.addAttribute("review", review);
+    }
+
+    public void removeReviewByID(String id){
+        reviewRepo.deleteReviewByID(Long.parseLong(id));
     }
 
     private String markdownToHTML(String markdown) {
