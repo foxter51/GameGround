@@ -1,0 +1,26 @@
+<div th:fragment="header">
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a th:href="@{/}" class="navbar-brand d-flex align-items-center">
+                <strong>GameGround</strong>
+            </a>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link" th:href="@{/}" id="homeLabel">Home</a>
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link" th:href="@{/users_list}">Users list</a>
+                </th:block>
+                <th:block sec:authorize="isAuthenticated()">
+                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${currentUserID})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+                    <a class="nav-link" sec:authentication="principal.authorities"></a>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
+                    </form>
+                </th:block>
+                <th:block sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}"><button class="btn btn-outline-primary me-2" id="logButtonLabel">Login</button></a>
+                    <a th:href="@{/register}"><button class="btn btn-primary" id="regButtonLabel">Register</button></a>
+                </th:block>
+            </nav>
+        </div>
+    </div>
+</div>

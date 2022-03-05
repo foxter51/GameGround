@@ -8,25 +8,10 @@
     <script src="https://kit.fontawesome.com/b7f4bdb099.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-dark">
-    <header>
-        <div class="navbar navbar-dark bg-dark shadow-sm">
-            <div class="container">
-                <a th:href="@{/}" class="navbar-brand d-flex align-items-center">
-                    <strong>GameGround Admin Panel</strong>
-                </a>
-                <nav class="nav nav-masthead justify-content-center float-md-end">
-                    <a class="nav-link" th:href="@{/}">Home</a>
-                    <a class="nav-link" th:text="${#authentication.getPrincipal().getFullName()}"></a>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
-                    </form>
-                </nav>
-            </div>
-        </div>
-    </header>
+<header th:insert="blocks/header :: header"></header>
 
     <main class="text-center w-100 h-100 p-3 mx-auto flex-column text-white">
-        <h1>Users list</h1>
+        <h1>GameGround Admin Panel</h1>
         <form th:action="@{/user_control}" method="post">
             <div align="left">
                 <button name="button" th:value="Block" type="submit" class="btn-close-white" style="margin-right: 10px" disabled><i class="fa-solid fa-lock"></i></button>
@@ -63,10 +48,6 @@
             </div>
         </form>
     </main>
-    <footer class="flex-shrink-0 py-4 bg-dark text-white-50 shadow" style="position: fixed; bottom: 0; width: 100%">
-        <div class="container text-center">
-            <small>All rights are reserved. 2022</small>
-        </div>
-    </footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

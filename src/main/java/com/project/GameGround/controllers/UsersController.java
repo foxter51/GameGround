@@ -21,7 +21,8 @@ public class UsersController {
     private CheckboxesService checkboxesService;
 
     @GetMapping("/users_list")
-    public String userList(Model model){
+    public String userList(Model model, Authentication auth){
+        userDetailsService.sendCurrentUserID(model, auth);
         userDetailsService.sendUsersList(model);
         return "users";
     }

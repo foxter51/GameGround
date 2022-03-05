@@ -15,31 +15,7 @@
     <script th:src="@{/js/switch.js}" type="text/javascript"></script>
 </head>
 <body>
-<header>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a th:href="@{/}" class="navbar-brand d-flex align-items-center">
-                <strong>GameGround</strong>
-            </a>
-            <nav class="nav nav-masthead justify-content-center float-md-end">
-                <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/users_list}">Users list</a>
-                </th:block>
-                <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:text="${#authentication.getPrincipal().getFullName()}"></a>
-                    <a class="nav-link" sec:authentication="principal.authorities"></a>
-                    <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
-                    </form>
-                </th:block>
-                <th:block sec:authorize="isAnonymous()">
-                    <a th:href="@{/login}"><button class="btn btn-outline-primary me-2" id="logButtonLabel">Login</button></a>
-                    <a th:href="@{/register}"><button class="btn btn-primary" id="regButtonLabel">Register</button></a>
-                </th:block>
-            </nav>
-        </div>
-    </div>
-</header>
+<header th:insert="blocks/header :: header"></header>
 <main>
     <div class="container py-5">
     <div class="row" th:object="${userProfile}">
@@ -136,29 +112,29 @@
                             <form th:action="@{/profile/{id}(id=${currentUserID})}" method="post" th:object="${createReview}">
 
                                 <div class="form-group">
-                                    <label for="title">Name:</label>
+                                    <label for="title" id="titleLabel">Review name:</label>
                                     <input type="text" id="title" placeholder="Name" autocomplete="off" class="form-control"
                                            th:field="*{reviewName}" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="genreName">Genre:</label>
+                                    <label for="genreName" name="genre">Genre:</label>
                                     <input type="text" id="genreName" placeholder="Genre" autocomplete="off" class="form-control"
                                            th:field="*{groupName}" required/>
                                 </div>
 
                                 <div class="form-group" th:object="${Tags}">
-                                    <label for="tagList">Tags (ex: #game #play...):</label>
+                                    <label for="tagList" name="tags">Tags (ex: #game #play...):</label>
                                     <input type="text" id="tagList" placeholder="Tags" autocomplete="off" class="form-control"
                                            th:field="*{tagsString}" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="content">Content:</label>
+                                    <label for="content" id="contentLabel">Content:</label>
                                     <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
                                               th:field="*{text}" autocomplete="off"></textarea>
                                 </div>
-                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <button class="btn btn-primary" type="submit" id="reviewButton">Create</button>
                             </form>
                         </div>
                     </div>
@@ -184,10 +160,6 @@
         let simplemde = new SimpleMDE({element: document.getElementById("content")});
     </script>
 </main>
-<footer class="flex-shrink-0 py-4 bg-dark text-white-50 shadow">
-    <div class="container text-center">
-        <small id="footerLabel">All rights are reserved. 2022</small>
-    </div>
-</footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>
