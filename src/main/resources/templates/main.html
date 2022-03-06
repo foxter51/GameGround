@@ -19,7 +19,7 @@
         <div class="row">
             <div class="card mb-4">
                 <div class="card-body">
-                    <a class="mb-0" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
+                    <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
                     <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
                     <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                 </div>

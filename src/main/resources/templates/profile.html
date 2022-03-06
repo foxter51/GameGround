@@ -16,8 +16,7 @@
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
-<main>
-    <div class="container py-5">
+<main class="container py-5">
     <div class="row" th:object="${userProfile}">
         <div class="col-lg-4">
             <div class="card mb-4">
@@ -28,45 +27,45 @@
                 </div>
             </div>
             <div class="col-lg-12">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-3" name="cardCol">
-                            <p class="mb-0" id="nameLabel">Full Name</p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3" name="cardCol">
+                                <p class="mb-0" id="nameLabel">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></p>
+                            </div>
                         </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3" name="cardCol">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${userProfile.email}"></p>
+                            </div>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3" name="cardCol">
-                            <p class="mb-0">Email</p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3" name="cardCol">
+                                <p class="mb-0" id="regLabel">Registered</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${userProfile.registrationDate}"></p>
+                            </div>
                         </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0" th:text="${userProfile.email}"></p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3" name="cardCol">
-                            <p class="mb-0" id="regLabel">Registered</p>
-                        </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0" th:text="${userProfile.registrationDate}"></p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3" name="cardCol">
-                            <p class="mb-0" id="lastLoginLabel">Last login</p>
-                        </div>
-                        <div class="col-sm-9">
-                            <p class="text-muted mb-0" th:text="${userProfile.lastLoginDate}"></p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3" name="cardCol">
+                                <p class="mb-0" id="lastLoginLabel">Last login</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${userProfile.lastLoginDate}"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
         <div class="col-lg-8">
@@ -134,24 +133,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
         <div class="row" th:each="review: ${reviews}">
             <div class="row">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <a class="mb-0" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
+                        <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a><br>
                         <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
                         <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                         <div class="float-end">
-                            <form th:action="@{/profile/review_edit/{id}(id=${review.user.id})}" method="post" style="display: inline">
+                            <form th:action="@{/profile/{userID}/review_edit/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
                                 <div id="editReview" style="display: inline; margin-right: 30px">
-                                    <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-pencil"></i></button>
+                                    <button name="button" type="submit" class="btn-close-white"><i class="fa-solid fa-pencil"></i></button>
                                 </div>
                             </form>
-                            <form th:action="@{/profile/review_remove/{id}(id=${review.user.id})}" method="post" style="display: inline">
+                            <form th:action="@{/profile/{userID}/review_remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
                                 <div id="deleteReview" style="display: inline">
-                                    <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-xmark"></i></i></button>
+                                    <button name="button" type="submit" class="btn-close-white"><i class="fa-solid fa-xmark"></i></i></button>
                                 </div>
                             </form>
                         </div>
@@ -159,7 +158,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <script>
         if([[${currentUserID}]] !== [[${profileUserID}]]){

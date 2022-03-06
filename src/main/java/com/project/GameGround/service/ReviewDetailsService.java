@@ -1,8 +1,10 @@
 package com.project.GameGround.service;
 
 import com.project.GameGround.Tags;
+import com.project.GameGround.entities.Comment;
 import com.project.GameGround.entities.Review;
 import com.project.GameGround.entities.Tag;
+import com.project.GameGround.repositories.CommentRepository;
 import com.project.GameGround.repositories.ReviewRepository;
 import com.project.GameGround.repositories.TagRepository;
 import com.project.GameGround.repositories.UserRepository;
@@ -14,6 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -28,6 +34,9 @@ public class ReviewDetailsService {
     @Autowired
     private TagRepository tagRepo;
 
+    @Autowired
+    private CommentRepository commentRepo;
+
     public void loadReviews(Model model){
         model.addAttribute("reviews", reviewRepo.findAll());
     }
@@ -37,8 +46,7 @@ public class ReviewDetailsService {
     }
 
     public void createReview(Model model){
-        Review review = new Review();
-        model.addAttribute("createReview", review);
+        model.addAttribute("createReview", new Review());
         model.addAttribute("Tags", new Tags());
     }
 
@@ -48,11 +56,15 @@ public class ReviewDetailsService {
             review.addTag(Objects.requireNonNullElseGet(tagRepo.isContains(tag), () -> new Tag(tag)));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
+        review.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         reviewRepo.save(review);
     }
 
     public void getReviewByID(String id, Model model){
         Review review = reviewRepo.getById(Long.parseLong(id));
+        List<Comment> comments = review.getComments();
+        Collections.reverse(comments);
+        review.setComments(comments);
         model.addAttribute("review", review);
     }
 
@@ -64,6 +76,27 @@ public class ReviewDetailsService {
         Review review = reviewRepo.getById(Long.parseLong(id));
         ra.addFlashAttribute("updateReview", review);
         ra.addFlashAttribute("profileID", profileID);
+    }
+
+    public void editReview(Review review, Model model){
+        StringBuilder tags = new StringBuilder();
+        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));
+        model.addAttribute("Tags", new Tags(tags.toString()));
+        model.addAttribute("updateReview", review);
+    }
+
+    public void addComment(Model model){
+        model.addAttribute("newComment", new Comment());
+    }
+
+    public void saveComment(String reviewID, String userID, Comment comment){
+        comment.setUser(repo.getById(Long.parseLong(userID)));
+        comment.setReviewID(Long.parseLong(reviewID));
+        comment.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        Comment savedComment = commentRepo.save(comment);
+        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        review.addComment(savedComment);
+        reviewRepo.save(review);
     }
 
     private String markdownToHTML(String markdown) {

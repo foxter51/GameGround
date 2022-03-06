@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -31,6 +34,8 @@ public class CommentRepositoryTest {
         Comment comment = new Comment();
         comment.setText("Test comment");
         comment.setUser(repo.getById((long) 1));
+        comment.setReviewID((long)1);
+        comment.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         Comment savedComment = commentRepo.save(comment);
         Comment existComment = entityManager.find(Comment.class, savedComment.getId());
         assertThat(existComment.getId()).isEqualTo(comment.getId());

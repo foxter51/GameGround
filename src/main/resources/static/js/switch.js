@@ -91,6 +91,7 @@ function setRussian(){
     $("#content").attr('placeholder', 'Текст');
     $("#reviewButton").text('Создать');
     $("#reviewUpdateButton").text('Обновить');
+    $("#addCommentButton").text('Добавить');
     $("#rate").text('Рейтинг: ');
     $("#author").text('Автор: ');
     $("#footerLabel").text('Все права защищены. 2022');
@@ -129,6 +130,7 @@ function setEnglish(){
     $("#content").attr('placeholder', 'Content');
     $("#reviewButton").text('Create');
     $("#reviewUpdateButton").text('Update');
+    $("#addCommentButton").text('Add');
     $("#rate").text('Rate: ');
     $("#author").text('Author: ');
     $("#footerLabel").text('All rights are reserved. 2022');

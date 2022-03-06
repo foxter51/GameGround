@@ -35,26 +35,15 @@ public class ProfileController {
         return "redirect:/profile/{id}";
     }
 
-    @RequestMapping("/profile/review_remove/{id}")
-    public String reviewRemove(@RequestParam(name="button") String reviewID, @PathVariable("id") String profileID){
+    @PostMapping("/profile/{userID}/review_remove/{reviewID}")
+    public String reviewRemove(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID){
         reviewDetailsService.removeReviewByID(reviewID);
-        return "redirect:/profile/{id}";
+        return "redirect:/profile/{userID}";
     }
 
-    @RequestMapping("/profile/review_edit/{id}")
-    public String reviewEdit(@RequestParam(name="button") String reviewID, @PathVariable("id") String profileID, Model model, RedirectAttributes ra){
-        reviewDetailsService.updateReviewByID(reviewID, ra, profileID);
+    @RequestMapping("/profile/{userID}/review_edit/{reviewID}")
+    public String reviewEdit(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, Model model, RedirectAttributes ra){
+        reviewDetailsService.updateReviewByID(reviewID, ra, userID);
         return "redirect:/edit_page";
-    }
-
-    @GetMapping("/edit_page")
-    public String editPage(@ModelAttribute("updateReview") Review review, @ModelAttribute("profileID")String profileID, Model model, Authentication auth){
-        userDetailsService.getProfileByID(profileID, model);
-        userDetailsService.sendCurrentUserID(model, auth);
-        StringBuilder tags = new StringBuilder();
-        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));
-        model.addAttribute("Tags", new Tags(tags.toString()));
-        model.addAttribute("updateReview", review);
-        return "editPage";
     }
 }

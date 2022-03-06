@@ -14,34 +14,55 @@
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
-<main>
-    <div class="container py-5">
-        <div class="row" th:object="${review}">
+<main class="container py-5">
+    <div th:object="${review}">
+        <div class="row">
             <div class="card mb-4">
                 <div class="card-body text-center">
                     <h1 th:text="${review.reviewName}"></h1>
                     <h2 class="mb-0" style="display: inline" name="genre">Genre: </h2><h2 class="mb-0" th:text="${review.groupName}" style="display: inline"></h2><br>
                     <h3 class="mb-0" style="display: inline" name="tags">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
-                    <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p><br><br>
+                    <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p>
                     <div>
                         <h4 class="mb-0" style="display: inline" id="rate">Review rate: </h4><h4 style="display: inline" th:text="${review.rate}"></h4><br>
-                        <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}"></a></h4>
+                        <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
+                        <p class="text-muted" th:text="${review.publishDate}"></p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row" th:each="comment: ${review.comments}" style="max-width: 60%">
-            <div class="col">
+        <div class="row">
+            <div class="container">
+                <div class="row" sec:authorize="isAuthenticated()">
+                    <div class="col-6">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <form th:action="@{/review/add_comment/{reviewID}/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
+                                    <div class="form-group">
+                                        <label for="commentField" class="col-sm-2">
+                                            <span class="h6 small bg-dark text-muted pt-1 pl-2 pr-2">Comment</span>
+                                        </label>
+                                        <textarea type="text" rows="4" id="commentField" placeholder="Comment" class="form-control mt-n3" th:field="*{text}" autocomplete="off" required></textarea>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit" id="addCommentButton">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <a class="mb-0" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a><br>
-                            <p class="mb-0" th:text="${comment.text}"></p>
+                    <div class="container" th:each="comment: ${review.comments}">
+                        <div class="col-9 float-end">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
+                                    <p class="mb-0" th:text="${comment.text}"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </main>

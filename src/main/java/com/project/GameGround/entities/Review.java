@@ -37,8 +37,11 @@ public class Review {
     private float rate;
 
     @OneToMany
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
+
+    @Column(name="date", nullable = false, length = 20)
+    private String publishDate;
 
     public void addTag(Tag tag){
         this.tags.add(tag);
