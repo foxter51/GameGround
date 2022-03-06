@@ -12,6 +12,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Objects;
 
@@ -57,6 +58,12 @@ public class ReviewDetailsService {
 
     public void removeReviewByID(String id){
         reviewRepo.deleteReviewByID(Long.parseLong(id));
+    }
+
+    public void updateReviewByID(String id, RedirectAttributes ra, String profileID){
+        Review review = reviewRepo.getById(Long.parseLong(id));
+        ra.addFlashAttribute("updateReview", review);
+        ra.addFlashAttribute("profileID", profileID);
     }
 
     private String markdownToHTML(String markdown) {

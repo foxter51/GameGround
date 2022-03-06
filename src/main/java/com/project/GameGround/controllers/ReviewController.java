@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ReviewController {
@@ -24,11 +22,5 @@ public class ReviewController {
         userDetailsService.sendCurrentUserID(model, auth);
         reviewDetailsService.getReviewByID(id, model);
         return "review";
-    }
-
-    @RequestMapping("/review_control/{id}")
-    public String reviewRemove(@RequestParam(name="button") String reviewID, @PathVariable("id") String profileID){
-        reviewDetailsService.removeReviewByID(reviewID);
-        return "redirect:/profile/"+profileID;
     }
 }

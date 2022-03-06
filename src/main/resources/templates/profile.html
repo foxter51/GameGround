@@ -104,7 +104,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
-                            <form th:action="@{/profile/{id}(id=${currentUserID})}" method="post" th:object="${createReview}">
+                            <form th:action="@{/profile/save/{id}(id=${currentUserID})}" method="post" th:object="${createReview}">
 
                                 <div class="form-group">
                                     <label for="title" id="titleLabel">Review name:</label>
@@ -144,10 +144,12 @@
                         <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
                         <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                         <div class="float-end">
-                            <form th:action="@{/review_control/{id}(id=${review.user.id})}" method="post">
+                            <form th:action="@{/profile/review_edit/{id}(id=${review.user.id})}" method="post" style="display: inline">
                                 <div id="editReview" style="display: inline; margin-right: 30px">
                                     <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-pencil"></i></button>
                                 </div>
+                            </form>
+                            <form th:action="@{/profile/review_remove/{id}(id=${review.user.id})}" method="post" style="display: inline">
                                 <div id="deleteReview" style="display: inline">
                                     <button name="button" th:value="${review.id}" type="submit" class="btn-close-white"><i class="fa-solid fa-xmark"></i></i></button>
                                 </div>
