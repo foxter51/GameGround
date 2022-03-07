@@ -1,28 +1,19 @@
 package com.project.GameGround.service;
 
-import com.project.GameGround.Tags;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
-import com.project.GameGround.entities.Review;
-import com.project.GameGround.entities.Tag;
-import com.project.GameGround.repositories.ReviewRepository;
 import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -35,9 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     @Autowired
     private RoleRepository roleRepo;
-
-    @Autowired
-    private ReviewRepository reviewRepo;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

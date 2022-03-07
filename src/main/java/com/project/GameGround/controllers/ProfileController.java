@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     @RequestMapping("/profile/{userID}/review_edit/{reviewID}")
-    public String reviewEdit(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, Model model, RedirectAttributes ra){
+    public String reviewEdit(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, RedirectAttributes ra){
         reviewDetailsService.updateReviewByID(reviewID, ra, userID);
         return "redirect:/edit_page";
     }

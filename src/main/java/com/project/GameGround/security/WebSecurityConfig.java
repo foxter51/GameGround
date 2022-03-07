@@ -13,14 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.sql.DataSource;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configuring Spring Security
-
-    @Autowired
-    private DataSource dataSource;
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -41,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {  //configu
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth){
         auth.authenticationProvider(authenticationProvider());
     }
 
