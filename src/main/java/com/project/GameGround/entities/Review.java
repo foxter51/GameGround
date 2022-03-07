@@ -36,6 +36,13 @@ public class Review {
     @Column(name = "review_rate")
     private float rate;
 
+    @Column(name = "rate_count")
+    private int rateCount;
+
+    @OneToMany
+    @JoinColumn(name = "review_id")
+    private List<RatedBy> blockedToRate = new ArrayList<>();
+
     @OneToMany
     @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
@@ -49,5 +56,9 @@ public class Review {
 
     public void addComment(Comment comment){
         this.comments.add(comment);
+    }
+
+    public void addBlockedToRate(RatedBy ratedBy){
+        blockedToRate.add(ratedBy);
     }
 }

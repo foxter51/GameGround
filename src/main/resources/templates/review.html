@@ -24,13 +24,49 @@
                     <h3 class="mb-0" style="display: inline" name="tags">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
                     <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p>
                     <div>
-                        <h4 class="mb-0" style="display: inline" id="rate">Review rate: </h4><h4 style="display: inline" th:text="${review.rate}"></h4><br>
+                        <h4 class="mb-0" style="display: inline" id="rate">Review rate: </h4><div style="display: inline">
+                        <div id="reviewRate">
+                            <i class="fa-regular fa-star fa-2xl" id="pStar1" name="pStar"></i>
+                            <i class="fa-regular fa-star fa-2xl" id="pStar2" name="pStar"></i>
+                            <i class="fa-regular fa-star fa-2xl" id="pStar3" name="pStar"></i>
+                            <i class="fa-regular fa-star fa-2xl" id="pStar4" name="pStar"></i>
+                            <i class="fa-regular fa-star fa-2xl" id="pStar5" name="pStar"></i>
+                            <script>
+                                let quantity = Math.floor([[${review.rate}]]);
+                                switch (quantity){
+                                    case 5:
+                                        $("#pStar5").removeClass("fa-regular").addClass("fa-solid");
+                                    case 4:
+                                        $("#pStar4").removeClass("fa-regular").addClass("fa-solid");
+                                    case 3:
+                                        $("#pStar3").removeClass("fa-regular").addClass("fa-solid");
+                                    case 2:
+                                        $("#pStar2").removeClass("fa-regular").addClass("fa-solid");
+                                    case 1:
+                                        $("#pStar1").removeClass("fa-regular").addClass("fa-solid");
+                                        break;
+                                }
+                            </script>
+                        </div>
+                    </div><br>
                         <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
                         <p class="text-muted" th:text="${review.publishDate}"></p>
                     </div>
                 </div>
             </div>
+             <div id="rateReview" class="row" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
+                <div class="col-3">
+                    <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post">
+                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1"></i></button>
+                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2"></i></button>
+                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3"></i></button>
+                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="4"><i class="fa-regular fa-star fa-2xl" id="rStar4"></i></button>
+                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="5"><i class="fa-regular fa-star fa-2xl" id="rStar5"></i></button>
+                    </form>
+                </div>
+             </div>
         </div>
+        <hr><br>
         <div class="row">
             <div class="container">
                 <div class="row" sec:authorize="isAuthenticated()">
@@ -40,9 +76,9 @@
                                 <form th:action="@{/review/add_comment/{reviewID}/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
                                     <div class="form-group">
                                         <label for="commentField" class="col-sm-2">
-                                            <span class="h6 small bg-dark text-muted pt-1 pl-2 pr-2">Comment</span>
+                                            <span class="h6 small bg-dark text-muted pt-1 pl-2 pr-2" id="commentLabel">Comment</span>
                                         </label>
-                                        <textarea type="text" rows="4" id="commentField" placeholder="Comment" class="form-control mt-n3" th:field="*{text}" autocomplete="off" required></textarea>
+                                        <textarea type="text" rows="4" id="commentField" class="form-control mt-n3" th:field="*{text}" autocomplete="off" required></textarea>
                                     </div>
                                     <button class="btn btn-primary" type="submit" id="addCommentButton">Add</button>
                                 </form>

@@ -51,6 +51,7 @@ public class ReviewRepositoryTest {
         review.setUser(repo.getById((long) 1));
         review.addComment(commentRepo.getById((long) 1));
         review.setRate((float)5.0);
+        review.setRateCount(1);
         review.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         Review savedReview = reviewRepo.save(review);
         Review existReview = entityManager.find(Review.class, savedReview.getId());

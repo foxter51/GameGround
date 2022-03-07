@@ -1,29 +1,8 @@
 $(function (){
-    $("#reviewForm").hide();
-    $("#modeCheck").change(function (){
-        if($('#modeCheck').prop('checked')) {
-            localStorage.setItem('darkMode', 'true');
-            setDarkMode();
-            transitionAfterChange()
-        } else{
-            localStorage.setItem('darkMode', 'false');
-            removeDarkMode();
-            transitionAfterChange()
-        }
-    });
-    $("#languageCheck").change(function (){
-        if($('#languageCheck').prop('checked')) {
-            localStorage.setItem('lang', 'true');
-            setRussian();
-        } else{
-            localStorage.setItem('lang', 'false');
-            setEnglish();
-        }
-    });
-    $("#writeReview").click(function (){
-        $("#writeReview").hide();
-        $("#reviewForm").show();
-    });
+    writeReviewEvent();
+    darkModeSwitchEvent();
+    languageSwitchEvent();
+    starsHoverEvent();
 });
 
 window.addEventListener('load', function(){
@@ -42,6 +21,40 @@ window.addEventListener('load', function(){
         $("#languageCheck").prop('false');
     }
 });
+
+function writeReviewEvent(){
+    $("#reviewForm").hide();
+    $("#writeReview").click(function (){
+        $("#writeReview").hide();
+        $("#reviewForm").show();
+    });
+}
+
+function darkModeSwitchEvent(){
+    $("#modeCheck").change(function (){
+        if($('#modeCheck').prop('checked')) {
+            localStorage.setItem('darkMode', 'true');
+            setDarkMode();
+            transitionAfterChange()
+        } else{
+            localStorage.setItem('darkMode', 'false');
+            removeDarkMode();
+            transitionAfterChange()
+        }
+    });
+}
+
+function languageSwitchEvent(){
+    $("#languageCheck").change(function (){
+        if($('#languageCheck').prop('checked')) {
+            localStorage.setItem('lang', 'true');
+            setRussian();
+        } else{
+            localStorage.setItem('lang', 'false');
+            setEnglish();
+        }
+    });
+}
 
 function setDarkMode(){
     $('body').addClass('bg-dark text-white');
@@ -62,13 +75,13 @@ function setRussian(){
     $('[name="cardCol"]').removeClass("col-sm-3").addClass("col-sm-4");
     $("#homeLabel").text('Главная');
     $("#reviewsLabel").text('Обзоры');
-    $("#regFormLabel").text('Форма регистрации');
+    $("#regFormLabel").text('Регистрация');
     $("#authFirst").text('Имя');
     $("#authLast").text('Фамилия');
     $("#authPass").text('Пароль');
     $("#regButton").text('Регистрация');
     $("#orLabel").text('ИЛИ');
-    $("#logFormLabel").text('Форма входа');
+    $("#logFormLabel").text('Авторизация');
     $("#badLogLabel").text('Неверные данные или Вы были заблокированы!');
     $("#logButton").text('Войти');
     $("#logButtonLabel").text('Вход');
@@ -91,6 +104,7 @@ function setRussian(){
     $("#content").attr('placeholder', 'Текст');
     $("#reviewButton").text('Создать');
     $("#reviewUpdateButton").text('Обновить');
+    $("#commentLabel").text('Комментарий');
     $("#addCommentButton").text('Добавить');
     $("#rate").text('Рейтинг: ');
     $("#author").text('Автор: ');
@@ -101,13 +115,13 @@ function setEnglish(){
     $('[name="cardCol"]').removeClass("col-sm-4").addClass("col-sm-3");
     $("#homeLabel").text('Home');
     $("#reviewsLabel").text('Reviews');
-    $("#regFormLabel").text('Registration form');
+    $("#regFormLabel").text('Registration');
     $("#authFirst").text('First name');
     $("#authLast").text('Last name');
     $("#authPass").text('Password');
     $("#regButton").text('Register');
     $("#orLabel").text('OR');
-    $("#logFormLabel").text('Login form');
+    $("#logFormLabel").text('Login');
     $("#badLogLabel").text('Bad credentials or you have been blocked!');
     $("#logButton").text('Login');
     $("#logButtonLabel").text('Login');
@@ -130,9 +144,66 @@ function setEnglish(){
     $("#content").attr('placeholder', 'Content');
     $("#reviewButton").text('Create');
     $("#reviewUpdateButton").text('Update');
+    $("#commentLabel").text('Comment');
     $("#addCommentButton").text('Add');
     $("#rate").text('Rate: ');
     $("#author").text('Author: ');
     $("#footerLabel").text('All rights are reserved. 2022');
+}
+
+function starsHoverEvent(){
+    $("#rateReview").hover(function (){
+        $("#rStar1").hover(function (){
+            fillStars(this.id)
+        }, function (){
+            $("#rStar1").removeClass("fa-solid").addClass("fa-regular");
+        });
+        $("#rStar2").hover(function (){
+            fillStars(this.id);
+        }, function (){
+            $("#rStar2").removeClass("fa-solid").addClass("fa-regular");
+        });
+        $("#rStar3").hover(function (){
+            fillStars(this.id);
+        }, function (){
+            $("#rStar3").removeClass("fa-solid").addClass("fa-regular");
+        });
+        $("#rStar4").hover(function (){
+            fillStars(this.id);
+        }, function (){
+            $("#rStar4").removeClass("fa-solid").addClass("fa-regular");
+        });
+        $("#rStar5").hover(function (){
+            fillStars(this.id);
+        }, function (){
+            $("#rStar5").removeClass("fa-solid").addClass("fa-regular");
+        });
+    }, function (){
+        emptyStars();
+    });
+}
+
+function fillStars(starID){
+    switch (starID){
+        case 'rStar5':
+            $("#rStar5").removeClass("fa-regular").addClass("fa-solid");
+        case 'rStar4':
+            $("#rStar4").removeClass("fa-regular").addClass("fa-solid");
+        case 'rStar3':
+            $("#rStar3").removeClass("fa-regular").addClass("fa-solid");
+        case 'rStar2':
+            $("#rStar2").removeClass("fa-regular").addClass("fa-solid");
+        case 'rStar1':
+            $("#rStar1").removeClass("fa-regular").addClass("fa-solid");
+            break;
+    }
+}
+
+function emptyStars(){
+    $("#rStar1").removeClass("fa-solid").addClass("fa-regular");
+    $("#rStar2").removeClass("fa-solid").addClass("fa-regular");
+    $("#rStar3").removeClass("fa-solid").addClass("fa-regular");
+    $("#rStar4").removeClass("fa-solid").addClass("fa-regular");
+    $("#rStar5").removeClass("fa-solid").addClass("fa-regular");
 }
 
