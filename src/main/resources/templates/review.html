@@ -11,6 +11,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script th:src="@{/js/showRate.js}" type="text/javascript"></script>
+    <script th:src="@{/js/starsEvents.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -24,27 +26,7 @@
                     <h3 class="mb-0" style="display: inline" name="tags">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
                     <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p>
                     <div id="reviewRate">
-                        <i class="fa-regular fa-star fa-2xl" id="pStar1" name="pStar"></i>
-                        <i class="fa-regular fa-star fa-2xl" id="pStar2" name="pStar"></i>
-                        <i class="fa-regular fa-star fa-2xl" id="pStar3" name="pStar"></i>
-                        <i class="fa-regular fa-star fa-2xl" id="pStar4" name="pStar"></i>
-                        <i class="fa-regular fa-star fa-2xl" id="pStar5" name="pStar"></i>
-                        <script>
-                            let quantity = Math.floor([[${review.rate}]]);
-                            switch (quantity){
-                                case 5:
-                                    $("#pStar5").removeClass("fa-regular").addClass("fa-solid");
-                                case 4:
-                                    $("#pStar4").removeClass("fa-regular").addClass("fa-solid");
-                                case 3:
-                                    $("#pStar3").removeClass("fa-regular").addClass("fa-solid");
-                                case 2:
-                                    $("#pStar2").removeClass("fa-regular").addClass("fa-solid");
-                                case 1:
-                                    $("#pStar1").removeClass("fa-regular").addClass("fa-solid");
-                                    break;
-                            }
-                        </script>
+                        <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
                     </div><br>
                         <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
                         <p class="text-muted" th:text="${review.publishDate}"></p>
@@ -77,7 +59,7 @@
                                         </label>
                                         <textarea type="text" rows="4" id="commentField" class="form-control mt-n3" th:field="*{text}" autocomplete="off" required></textarea>
                                     </div>
-                                    <button class="btn btn-primary" type="submit" id="addCommentButton">Add</button>
+                                    <button class="btn btn-primary" style="margin-top: 16px" type="submit" id="addCommentButton">Add</button>
                                 </form>
                             </div>
                         </div>
