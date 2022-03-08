@@ -7,13 +7,13 @@
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link" th:href="@{/}" id="homeLabel">Home</a>
                 <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/users_list}">Users list</a>
+                    <a class="nav-link" th:href="@{/users_list}" id="controlPanelLabel">Control panel</a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" name="profile" th:href="@{/profile/{id}(id=${currentUserID})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+                    <a class="nav-link" th:href="@{/profile/{id}(id=${currentUserID})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
                     <a class="nav-link" sec:authentication="principal.authorities"></a>
                     <form th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn-close-white"><i class="fa-solid fa-door-open"></i></button>
+                        <button type="submit" style="background: transparent; border:none"><i class="fa-solid fa-door-open fa-xl text-white" name="signs"></i></button>
                     </form>
                 </th:block>
                 <th:block sec:authorize="isAnonymous()">

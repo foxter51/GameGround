@@ -35,11 +35,11 @@ function darkModeSwitchEvent(){
         if($('#modeCheck').prop('checked')) {
             localStorage.setItem('darkMode', 'true');
             setDarkMode();
-            transitionAfterChange()
+            transitionAfterChange();
         } else{
             localStorage.setItem('darkMode', 'false');
             removeDarkMode();
-            transitionAfterChange()
+            transitionAfterChange();
         }
     });
 }
@@ -59,11 +59,13 @@ function languageSwitchEvent(){
 function setDarkMode(){
     $('body').addClass('bg-dark text-white');
     $(".card").addClass('bg-dark text-white border border-white');
+    $('[name="signs"]').removeClass('text-dark').addClass("text-white");
 }
 
 function removeDarkMode(){
     $('body').removeClass('bg-dark text-white');
     $(".card").removeClass('bg-dark text-white border border-white');
+    $('[name="signs"]').removeClass('text-white').addClass("text-dark");
 }
 
 function transitionAfterChange(){
@@ -86,6 +88,7 @@ function setRussian(){
     $("#logButton").text('Войти');
     $("#logButtonLabel").text('Вход');
     $("#regButtonLabel").text('Регистрация');
+    $("#controlPanelLabel").text('Админ панель');
     $("#roleLabel").text('Редактор');
     $("#nameLabel").text('Полное имя');
     $("#regLabel").text('Регистрация');
@@ -106,7 +109,6 @@ function setRussian(){
     $("#reviewUpdateButton").text('Обновить');
     $("#commentLabel").text('Комментарий');
     $("#addCommentButton").text('Добавить');
-    $("#rate").text('Рейтинг: ');
     $("#author").text('Автор: ');
     $("#footerLabel").text('Все права защищены. 2022');
 }
@@ -126,6 +128,7 @@ function setEnglish(){
     $("#logButton").text('Login');
     $("#logButtonLabel").text('Login');
     $("#regButtonLabel").text('Register');
+    $("#controlPanelLabel").text('Control panel');
     $("#roleLabel").text('Editor');
     $("#nameLabel").text('Full name');
     $("#regLabel").text('Registered');
@@ -146,7 +149,6 @@ function setEnglish(){
     $("#reviewUpdateButton").text('Update');
     $("#commentLabel").text('Comment');
     $("#addCommentButton").text('Add');
-    $("#rate").text('Rate: ');
     $("#author").text('Author: ');
     $("#footerLabel").text('All rights are reserved. 2022');
 }

@@ -40,7 +40,8 @@ public class ReviewDetailsService {
     }
 
     public void loadReviewsByID(String id, Model model){
-        model.addAttribute("reviews", reviewRepo.getReviewsByUserID(Long.parseLong(id)));
+        List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(id));
+        model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
     }
 
     public void createReview(Model model){
@@ -60,9 +61,6 @@ public class ReviewDetailsService {
 
     public void getReviewByID(String id, Model model){
         Review review = reviewRepo.getById(Long.parseLong(id));
-        List<Comment> comments = review.getComments();
-        Collections.reverse(comments);
-        review.setComments(comments);
         model.addAttribute("review", review);
     }
 
@@ -99,10 +97,10 @@ public class ReviewDetailsService {
 
     public void addRatingPossibility(String reviewID, Model model){
         Long currentUserID = (Long) model.getAttribute("currentUserID");
-        model.addAttribute("ratePossibility", !isContainsCurrentUser(reviewID, currentUserID));
+        model.addAttribute("ratePossibility", !isUserRated(reviewID, currentUserID));
     }
 
-    public boolean isContainsCurrentUser(String reviewID, Long currentUserID){
+    public boolean isUserRated(String reviewID, Long currentUserID){
         for(RatedBy ratedBy : reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate()){
             if(Objects.equals(ratedBy.getUser().getId(), currentUserID)){
                 return true;

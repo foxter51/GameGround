@@ -8,6 +8,8 @@ import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +43,17 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         if(currentUser != null){
             String email = getUserEmail(currentUser);
             model.addAttribute("currentUserID", repo.findByEmail(email).getId());
+            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.findByEmail(email)).getAuthorities()));
         }
+    }
+
+    public boolean isAdmin(Collection<? extends GrantedAuthority> roles){
+        for(GrantedAuthority role : roles){
+            if(role.getAuthority().equals("ADMIN")){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void sendProfileUserID(String id, Model model){

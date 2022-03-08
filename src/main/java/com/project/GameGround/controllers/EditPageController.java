@@ -23,6 +23,7 @@ public class EditPageController {
     public String editPage(@ModelAttribute("updateReview") Review review, @ModelAttribute("profileID")String profileID, Model model, Authentication auth){
         userDetailsService.getProfileByID(profileID, model);
         userDetailsService.sendCurrentUserID(model, auth);
+        userDetailsService.sendProfileUserID(profileID, model);
         reviewDetailsService.editReview(review, model);
         return "editPage";
     }
