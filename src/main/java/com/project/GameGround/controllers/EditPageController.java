@@ -21,10 +21,8 @@ public class EditPageController {
 
     @GetMapping("/edit_page")
     public String editPage(@ModelAttribute("updateReview") Review review, @ModelAttribute("profileID")String profileID, Model model, Authentication auth){
-        userDetailsService.getProfileByID(profileID, model);
         userDetailsService.sendCurrentUserID(model, auth);
-        userDetailsService.sendProfileUserID(profileID, model);
-        reviewDetailsService.editReview(review, model);
+        reviewDetailsService.loadReviewToUpdate(review, model);
         return "editPage";
     }
 }

@@ -92,6 +92,11 @@
 			<artifactId>font-awesome</artifactId>
 			<version>5.11.2</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.furstenheim</groupId>
+			<artifactId>copy_down</artifactId>
+			<version>1.0</version>
+		</dependency>
 
 		<!--security-->
 		<dependency>

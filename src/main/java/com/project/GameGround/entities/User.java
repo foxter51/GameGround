@@ -47,4 +47,8 @@ public class User {
     public void addRole(Role role){
         this.roles.add(role);
     }
+
+    public void removeAdminRole(){
+        this.roles.removeIf(role -> role.getName().equals("ADMIN"));
+    }
 }

@@ -20,18 +20,18 @@ public class ProfileController {
     private ReviewDetailsService reviewDetailsService;
 
     @GetMapping("/profile/{id}")
-    public String profilePage(@PathVariable("id") String id, Model model, Authentication auth){
-        userDetailsService.getProfileByID(id, model);
+    public String profilePage(@PathVariable("id") String userID, Model model, Authentication auth){
+        userDetailsService.getProfileByID(userID, model);
         userDetailsService.sendCurrentUserID(model, auth);
-        reviewDetailsService.loadReviewsByID(id, model);
-        userDetailsService.sendProfileUserID(id, model);
+        userDetailsService.sendCurrentUserAuthorities(model, auth);
+        reviewDetailsService.loadReviewsByID(userID, model);
         reviewDetailsService.createReview(model);
         return "profile";
     }
 
-    @PostMapping("/profile/save/{id}")
-    public String updProfilePage(@PathVariable ("id") String id, Review review, @ModelAttribute("Tags") Tags tags){
-        reviewDetailsService.saveReview(id, review, tags);
+    @PostMapping("/profile/{id}/save")
+    public String updProfilePage(@PathVariable ("id") String userID, Review review, @ModelAttribute("Tags") Tags tags){
+        reviewDetailsService.saveReview(userID, review, tags);
         return "redirect:/profile/{id}";
     }
 
@@ -42,8 +42,8 @@ public class ProfileController {
     }
 
     @RequestMapping("/profile/{userID}/review_edit/{reviewID}")
-    public String reviewEdit(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, RedirectAttributes ra){
-        reviewDetailsService.updateReviewByID(reviewID, ra, userID);
+    public String reviewUpdate(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, RedirectAttributes ra){
+        reviewDetailsService.sendReviewToUpdate(reviewID, ra, userID);
         return "redirect:/edit_page";
     }
 }

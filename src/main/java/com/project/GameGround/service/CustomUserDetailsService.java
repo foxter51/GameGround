@@ -39,27 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         return new CustomUserDetails(user);  //found user
     }
 
-    public void sendCurrentUserID(Model model, Authentication currentUser){
-        if(currentUser != null){
-            String email = getUserEmail(currentUser);
-            model.addAttribute("currentUserID", repo.findByEmail(email).getId());
-            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.findByEmail(email)).getAuthorities()));
-        }
-    }
-
-    public boolean isAdmin(Collection<? extends GrantedAuthority> roles){
-        for(GrantedAuthority role : roles){
-            if(role.getAuthority().equals("ADMIN")){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void sendProfileUserID(String id, Model model){
-        model.addAttribute("profileUserID", id);
-    }
-
     public void saveUser(User user, Model model){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
@@ -74,13 +53,22 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         else model.addAttribute("register", "User with this e-mail has already been registered!");
     }
 
-    public void getProfileByID(String id, Model model){
-        model.addAttribute("userProfile", repo.getById(Long.parseLong(id)));
+    public void getProfileByID(String userID, Model model){
+        model.addAttribute("userProfile", repo.getById(Long.parseLong(userID)));
     }
 
-    public void sendUsersList(Model model){
-        List<User> users = repo.findAll();
-        model.addAttribute("users", users);
+    public void sendCurrentUserID(Model model, Authentication currentUser){
+        if(currentUser != null){
+            String email = getUserEmail(currentUser);
+            model.addAttribute("currentUserID", repo.findByEmail(email).getId());
+        }
+    }
+
+    public void sendCurrentUserAuthorities(Model model, Authentication currentUser){
+        if(currentUser != null){
+            String email = getUserEmail(currentUser);
+            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.findByEmail(email)).getAuthorities()));
+        }
     }
 
     public boolean isCustomUserDetails(Authentication auth){
@@ -89,5 +77,18 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     public String getUserEmail(Authentication auth){
         return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");
+    }
+
+    public boolean isAdmin(Collection<? extends GrantedAuthority> roles){
+        for(GrantedAuthority role : roles){
+            if(role.getAuthority().equals("ADMIN")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void sendUsersList(Model model){
+        model.addAttribute("users", repo.findAll());
     }
 }

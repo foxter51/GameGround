@@ -14,9 +14,10 @@
         <h1>GameGround Admin Panel</h1>
         <form th:action="@{/user_control}" method="post">
             <div align="left">
-                <button name="button" th:value="Block" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock"></i></button>
-                <button name="button" th:value="Unblock" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock-open"></i></button>
-                <button name="button" th:value="Delete" type="submit" style="background: transparent; color: white; border: none" disabled><i class="fa-solid fa-xmark"></i></button>
+                <button name="button" th:value="Block" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock fa-lg"></i></button>
+                <button name="button" th:value="Unblock" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock-open fa-lg"></i></button>
+                <button name="button" th:value="Delete" type="submit" style="background: transparent; color: white; border: none" disabled><i class="fa-solid fa-xmark fa-lg"></i></button>
+                <button name="button" th:value="SetAdmin" type="submit" style="background: transparent; color: white; border: none" disabled><i class="fa-solid fa-crown fa-lg"></i></button>
             </div>
             <div>
                 <table class="table table-dark table-striped">
@@ -30,6 +31,7 @@
                         <th>Registration date</th>
                         <th>Last login date</th>
                         <th>Status</th>
+                        <th>Roles</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,6 +44,7 @@
                         <td th:text="${user.registrationDate}"></td>
                         <td th:text="${user.lastLoginDate}"></td>
                         <td th:text="${user.status}"></td>
+                        <td th:each="role: ${user.roles}" th:text="${role.name}"></td>
                     </tr>
                     </tbody>
                 </table>

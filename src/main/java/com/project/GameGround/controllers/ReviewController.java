@@ -26,7 +26,7 @@ public class ReviewController {
         return "review";
     }
 
-    @PostMapping("/review/add_comment/{reviewID}/{userID}")
+    @PostMapping("/review/{reviewID}/add_comment/{userID}")
     public String commentCreation(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, Comment comment){
         reviewDetailsService.saveComment(reviewID, userID, comment);
         return "redirect:/review/{reviewID}";

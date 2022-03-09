@@ -52,7 +52,7 @@
                     <div class="col-6">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form th:action="@{/review/add_comment/{reviewID}/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
+                                <form th:action="@{/review/{reviewID}/add_comment/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
                                     <div class="form-group">
                                         <label for="commentField" class="col-sm-2">
                                             <span class="h6 small text-muted pt-1 pl-2 pr-2" id="commentLabel">Comment</span>

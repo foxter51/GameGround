@@ -105,7 +105,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
-                            <form th:action="@{/profile/save/{id}(id=${profileUserID})}" method="post" th:object="${createReview}">
+                            <form th:action="@{/profile/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}">
                                 <div class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></div>
                                 <div class="form-group">
                                     <label for="title" id="titleLabel">Review name:</label>
@@ -167,7 +167,7 @@
         </div>
     </div>
     <script>
-        if([[${currentUserID}]] !== [[${profileUserID}]] && [[${isAdmin}]] === false){
+        if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
             $("#writeReview").hide();
             $("#editReview").hide();
             $("#deleteReview").hide();

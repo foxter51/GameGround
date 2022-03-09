@@ -3,6 +3,7 @@ package com.project.GameGround.service;
 import com.project.GameGround.Tags;
 import com.project.GameGround.entities.*;
 import com.project.GameGround.repositories.*;
+import io.github.furstenheim.CopyDown;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -35,22 +36,13 @@ public class ReviewDetailsService {
     @Autowired
     private RatingRepository ratingRepo;
 
-    public void loadReviews(Model model){
-        model.addAttribute("reviews", reviewRepo.findAll());
-    }
-
-    public void loadReviewsByID(String id, Model model){
-        List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(id));
-        model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
-    }
-
     public void createReview(Model model){
         model.addAttribute("createReview", new Review());
         model.addAttribute("Tags", new Tags());
     }
 
-    public void saveReview(String id, Review review, Tags tags){
-        review.setUser(repo.getById(Long.parseLong(id)));
+    public void saveReview(String userID, Review review, Tags tags){
+        review.setUser(repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().split(" ")) {  //extract tags from string
             review.addTag(Objects.requireNonNullElseGet(tagRepo.isContains(tag), () -> new Tag(tag)));  //if tag already exists we use it, else create
         }
@@ -59,25 +51,35 @@ public class ReviewDetailsService {
         reviewRepo.save(review);
     }
 
-    public void getReviewByID(String id, Model model){
-        Review review = reviewRepo.getById(Long.parseLong(id));
+    public void loadReviews(Model model){
+        model.addAttribute("reviews", reviewRepo.findAll());
+    }
+
+    public void loadReviewsByID(String userID, Model model){
+        List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(userID));
+        model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
+    }
+
+    public void getReviewByID(String reviewID, Model model){
+        Review review = reviewRepo.getById(Long.parseLong(reviewID));
         model.addAttribute("review", review);
     }
 
-    public void removeReviewByID(String id){
-        reviewRepo.deleteReviewByID(Long.parseLong(id));
+    public void removeReviewByID(String reviewID){
+        reviewRepo.deleteReviewByID(Long.parseLong(reviewID));
     }
 
-    public void updateReviewByID(String id, RedirectAttributes ra, String profileID){
-        Review review = reviewRepo.getById(Long.parseLong(id));
+    public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){
+        Review review = reviewRepo.getById(Long.parseLong(reviewID));
         ra.addFlashAttribute("updateReview", review);
         ra.addFlashAttribute("profileID", profileID);
     }
 
-    public void editReview(Review review, Model model){
+    public void loadReviewToUpdate(Review review, Model model){
         StringBuilder tags = new StringBuilder();
         review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));
         model.addAttribute("Tags", new Tags(tags.toString()));
+        review.setText(new CopyDown().convert(review.getText()));
         model.addAttribute("updateReview", review);
     }
 
@@ -101,8 +103,9 @@ public class ReviewDetailsService {
     }
 
     public boolean isUserRated(String reviewID, Long currentUserID){
-        for(RatedBy ratedBy : reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate()){
-            if(Objects.equals(ratedBy.getUser().getId(), currentUserID)){
+        List<RatedBy> usersRated = reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate();
+        for(RatedBy user : usersRated){
+            if(Objects.equals(user.getUser().getId(), currentUserID)){
                 return true;
             }
         }
@@ -115,8 +118,8 @@ public class ReviewDetailsService {
         float rateCount = review.getRateCount();
         review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));
         review.setRateCount((int)(rateCount+1));
-        RatedBy savedRatedBy = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID))));
-        review.addBlockedToRate(savedRatedBy);
+        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID))));
+        review.addBlockedToRate(user);  //remember user rated
         reviewRepo.save(review);
     }
 
