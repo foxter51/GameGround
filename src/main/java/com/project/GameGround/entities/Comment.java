@@ -19,7 +19,7 @@ public class Comment {
     private String text;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @Column(name="date", nullable = false, length = 20)
