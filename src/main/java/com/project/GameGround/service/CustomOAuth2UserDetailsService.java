@@ -34,7 +34,11 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
     public void createUserAfterOAuth(String email, String name, AuthProvider provider){
         User user = new User();
         user.setEmail(email);
-        user.setFirstName(name);
+        if(name.contains(" ")){
+            user.setFirstName(name.split(" ", 2)[0]);
+            user.setLastName(name.split(" ", 2)[1]);
+        }
+        else user.setFirstName(name);
         user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setStatus("Unblocked");

@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface RoleRepository extends JpaRepository<Role, Long> {  //interface to communicate with database
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
     @Query("SELECT role FROM Role role WHERE role.name=?1")
     Role findRoleByName(String name);
 }
