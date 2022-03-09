@@ -20,16 +20,20 @@
     <div th:object="${review}">
         <div class="row">
             <div class="card mb-4">
-                <div class="card-body text-center">
-                    <h1 th:text="${review.reviewName}"></h1>
-                    <h2 class="mb-0" style="display: inline" name="genre">Genre: </h2><h2 class="mb-0" th:text="${review.groupName}" style="display: inline"></h2><br>
-                    <h3 class="mb-0" style="display: inline" name="tags">Tags: </h3><div th:each="tag: ${review.tags}" style="display: inline"><h3 class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></h3></div>
+                <div class="card-body">
+                    <div class="container">
+                        <h1 th:text="${review.reviewName}"></h1>
+                        <h3 class="mb-0" style="display: inline" name="genre">Genre: </h3><h3 class="mb-0" th:text="${review.groupName}" style="display: inline"></h3><br>
+                        <h6 class="mb-0 text-muted" style="display: inline" name="tags">Tags: </h6><div th:each="tag: ${review.tags}" style="display: inline"><h6 class="mb-0 text-muted" th:text="${tag.tagName}+' '" style="display: inline"></h6></div>
+                    </div>
                     <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p>
-                    <div id="reviewRate">
-                        <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
-                    </div><br>
+                    <div class="container">
+                        <div id="reviewRate">
+                            <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
+                        </div><br>
                         <h4 class="mb-0" style="display: inline" id="author">Author: </h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
                         <p class="text-muted" th:text="${review.publishDate}"></p>
+                    </div>
                     </div>
                 </div>
             </div>
