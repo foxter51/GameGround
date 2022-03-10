@@ -24,34 +24,34 @@
                     <div class="row">
                         <form th:action="@{/profile/{id}/save/(id=${profileID})}" method="post" th:object="${updateReview}">
                             <div class="form-group" hidden>
-                                <label for="title" id="idLabel">Review name:</label>
+                                <label for="title">Review name:</label>
                                 <input type="text" id="idField" placeholder="Name" autocomplete="off" class="form-control"
                                        th:field="*{id}" required/>
                             </div>
                             <div class="form-group">
-                                <label for="title" id="titleLabel">Review name:</label>
-                                <input type="text" id="title" placeholder="Name" autocomplete="off" class="form-control"
+                                <label for="title" th:text="#{titleLabel}"></label>
+                                <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
                                        th:field="*{reviewName}" required/>
                             </div>
 
                             <div class="form-group">
-                                <label for="genreName" name="genre">Genre:</label>
-                                <input type="text" id="genreName" placeholder="Genre" autocomplete="off" class="form-control"
+                                <label for="genreName" th:text="#{genreLabel}"></label>
+                                <input type="text" id="genreName" th:placeholder="#{genrePlaceholder}" autocomplete="off" class="form-control"
                                        th:field="*{groupName}" required/>
                             </div>
 
                             <div class="form-group" th:object="${Tags}">
-                                <label for="tagList" name="tags">Tags (ex: #game #play...):</label>
-                                <input type="text" id="tagList" placeholder="Tags" autocomplete="off" class="form-control"
+                                <label for="tagList" th:text="#{tagLabel}"></label>
+                                <input type="text" id="tagList" th:placeholder="#{tagPlaceholder}" autocomplete="off" class="form-control"
                                        th:field="*{tagsString}" required/>
                             </div>
 
                             <div class="form-group">
-                                <label for="content" id="contentLabel">Content:</label>
-                                <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
+                                <label for="content" th:text="#{contentLabel}"></label>
+                                <textarea type="text" rows="4" id="content" th:placeholder="#{contentPlaceholder}" class="form-control"
                                           th:field="*{text}" autocomplete="off"></textarea>
                             </div>
-                            <button class="btn btn-primary" type="submit" id="reviewUpdateButton">Update</button>
+                            <button class="btn btn-primary" type="submit" th:text="#{reviewUpdateButton}"></button>
                         </form>
                     </div>
                 </div>

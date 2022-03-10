@@ -19,7 +19,7 @@ public class ProfileController {
     @Autowired
     private ReviewDetailsService reviewDetailsService;
 
-    @GetMapping("/profile/{id}")
+    @RequestMapping("/profile/{id}")
     public String profilePage(@PathVariable("id") String userID, Model model, Authentication auth){
         userDetailsService.getProfileByID(userID, model);
         userDetailsService.sendCurrentUserID(model, auth);

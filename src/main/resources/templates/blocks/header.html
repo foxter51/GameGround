@@ -5,9 +5,9 @@
                 <strong>GameGround</strong>
             </a>
             <nav class="nav nav-masthead justify-content-center float-md-end">
-                <a class="nav-link" th:href="@{/}" id="homeLabel">Home</a>
+                <a class="nav-link" th:href="@{/}" th:text="#{homeLabel}"></a>
                 <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/users_list}" id="controlPanelLabel">Control panel</a>
+                    <a class="nav-link" th:href="@{/users_list}" th:text="#{controlPanelLabel}"></a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/profile/{id}(id=${currentUserID})}" th:text="${#authentication.getPrincipal().getFullName()}"></a>
@@ -17,8 +17,8 @@
                     </form>
                 </th:block>
                 <th:block sec:authorize="isAnonymous()">
-                    <a th:href="@{/login}"><button class="btn btn-outline-primary me-2" id="logButtonLabel">Login</button></a>
-                    <a th:href="@{/register}"><button class="btn btn-primary" id="regButtonLabel">Register</button></a>
+                    <a th:href="@{/login}"><button class="btn btn-outline-primary me-2" th:text="#{logButtonLabel}"></button></a>
+                    <a th:href="@{/register}"><button class="btn btn-primary" th:text="#{regButtonLabel}"></button></a>
                 </th:block>
             </nav>
         </div>

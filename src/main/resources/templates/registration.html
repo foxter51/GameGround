@@ -12,19 +12,19 @@
 <header th:insert="blocks/header :: header"></header>
 
     <main class="text-center w-100 h-100 p-3 mx-auto flex-column">
-        <h1 id="regFormLabel">Registration form</h1>
+        <h1 th:text="#{regFormLabel}"></h1>
 
         <form th:action="@{/}" method="post" th:object="${user}" style="margin: 30px auto 30px auto; max-width: 500px">
             <div>
                 <div class="form-group row" style="margin: 10px 0 10px 0">
-                    <label class="col-form-label col-4" id="authFirst">First name</label>
+                    <label class="col-form-label col-4" th:text="#{authFirst}"></label>
                     <div class="col-8">
                         <input type="text" class="form-control" th:field="*{firstName}" minlength="2" maxlength="32" required/>
                     </div>
                 </div>
 
                 <div class="form-group row" style="margin: 10px 0 10px 0">
-                    <label class="col-form-label col-4" id="authLast">Last name</label>
+                    <label class="col-form-label col-4" th:text="#{authLast}"></label>
                     <div class="col-8">
                         <input type="text" class="form-control" th:field="*{lastName}" minlength="2" maxlength="32" required/>
                     </div>
@@ -38,19 +38,19 @@
                 </div>
 
                 <div class="form-group row" style="margin: 10px 0 10px 0">
-                    <label class="col-form-label col-4" id="authPass">Password</label>
+                    <label class="col-form-label col-4" th:text="#{authPass}"></label>
                     <div class="col-8">
                         <input type="password" class="form-control" th:field="*{password}" name="password" required minlength="1" maxlength="32"/>
                     </div>
                 </div>
 
                 <div>
-                    <button type="submit" class="btn btn-primary" id="regButton">Register</button>
+                    <button type="submit" class="btn btn-primary" th:text="#{regButton}"></button>
                 </div>
             </div>
         </form>
         <div class="mb-4 mx-auto w-25">
-            <h6 class=" text-uppercase" id="orLabel">or</h6>
+            <h6 class=" text-uppercase" th:text="#{orLabel}"></h6>
             <hr data-content="AND" class="hr-text">
         </div>
         <div class="container px-4 w-25">

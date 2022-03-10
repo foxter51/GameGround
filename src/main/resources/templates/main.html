@@ -9,24 +9,48 @@
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script th:src="@{/js/switch.js}" type="text/javascript"></script>
     <script th:src="@{/js/showRate.js}" type="text/javascript"></script>
+    <script th:src="@{/js/activeFilters.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
 
 <main class="container py-5">
     <h3 align="center" th:text="${register}"></h3>
-    <h2 id="reviewsLabel">Reviews</h2><hr><br>
-    <div class="row" th:each="review: ${reviews}" style="max-width: 70%">
-        <div class="row">
+    <h2 th:text="#{reviewsLabel}"></h2><hr><br>
+    <div class="row">
+        <div class="col-lg-3">
             <div class="card mb-4">
-                <div class="card-body">
-                    <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
-                    <div id="reviewRate" style="display: inline" class="float-end">
-                        <script>displayRate([[${review.rate}]], "")</script>
+                <div class="card-body text-center">
+                    <div class="col">
+                        <h3 th:text="#{sortLabel}"></h3>
+                        <div class="list-group">
+                            <a th:href="@{/}" class="list-group-item list-group-item-action list-group-item-dark" id="dateASC" th:text="#{date.ASC}"></a>
+                            <a th:href="@{/sort=dateDSC}" class="list-group-item list-group-item-action list-group-item-dark" id="dateDSC" th:text="#{date.DSC}"></a>
+                            <a th:href="@{/sort=ratingASC}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingASC" th:text="#{rating.ASC}"></a>
+                            <a th:href="@{/sort=ratingDSC}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingDSC" th:text="#{rating.DSC}"></a>
+                        </div>
+                        <h3 th:text="#{filterLabel}"></h3>
+                        <div class="list-group">
+                            <a th:href="@{/filter=rating_GE4}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingGE4" th:text="#{rating.GE4}"></a>
+                        </div>
                     </div>
-                    <br>
-                    <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                    <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" style="max-width: 70%">
+            <div class="col-lg-12 float-end">
+                <div class="col-lg-12" th:each="review: ${reviews}">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
+                            <div id="reviewRate" style="display: inline" class="float-end">
+                                <script>displayRate([[${review.rate}]], "")</script>
+                            </div>
+                            <br>
+                            <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                            <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

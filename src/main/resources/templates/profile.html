@@ -25,7 +25,7 @@
                 <div class="card-body text-center">
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                     <h5 class="my-3" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></h5>
-                    <p class="text-muted mb-1" id="roleLabel">Editor</p>
+                    <p class="text-muted mb-1" th:text="#{roleLabel}"></p>
                 </div>
             </div>
             <div class="col-lg-12">
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3" name="cardCol">
-                                <p class="mb-0" id="nameLabel">Full Name</p>
+                                <p class="mb-0" th:text="#{nameLabel}"></p>
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></p>
@@ -51,7 +51,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-sm-3" name="cardCol">
-                                <p class="mb-0" id="regLabel">Registered</p>
+                                <p class="mb-0" th:text="#{regLabel}"></p>
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0" th:text="${userProfile.registrationDate}"></p>
@@ -60,7 +60,7 @@
                         <hr>
                         <div class="row">
                             <div class="col-sm-3" name="cardCol">
-                                <p class="mb-0" id="lastLoginLabel">Last login</p>
+                                <p class="mb-0" th:text="#{lastLoginLabel}"></p>
                             </div>
                             <div class="col-sm-9">
                                 <p class="text-muted mb-0" th:text="${userProfile.lastLoginDate}"></p>
@@ -75,24 +75,24 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-3">
-                            <p class="mb-0" id="darkModeLabel">Dark mode</p>
+                            <p class="mb-0" th:text="#{darkModeLabel}"></p>
                         </div>
                         <div class="col-sm-9">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="modeCheck"/>
-                                <label class="form-check-label" for="modeCheck" id="checkOptMode">On</label>
+                                <label class="form-check-label" for="modeCheck" th:text="#{checkOptMode}"></label>
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-sm-3">
-                            <p class="mb-0" id="langLabel">Language</p>
+                            <p class="mb-0" th:text="#{langLabel}"></p>
                         </div>
                         <div class="col-sm-9">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="languageCheck"/>
-                                <label class="form-check-label" for="languageCheck" id="checkOptLang">Russian</label>
+                                <label class="form-check-label" for="languageCheck" th:text="#{checkOptLang}"></label>
                             </div>
                         </div>
                     </div>
@@ -108,29 +108,29 @@
                             <form th:action="@{/profile/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}">
                                 <div class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></div>
                                 <div class="form-group">
-                                    <label for="title" id="titleLabel">Review name:</label>
-                                    <input type="text" id="title" placeholder="Name" autocomplete="off" class="form-control"
+                                    <label for="title" th:text="#{titleLabel}"></label>
+                                    <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
                                            th:field="*{reviewName}" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="genreName" name="genre">Genre:</label>
-                                    <input type="text" id="genreName" placeholder="Genre" autocomplete="off" class="form-control"
+                                    <label for="genreName" th:text="#{genreLabel}"></label>
+                                    <input type="text" id="genreName" th:placeholder="#{genrePlaceholder}" autocomplete="off" class="form-control"
                                            th:field="*{groupName}" required/>
                                 </div>
 
                                 <div class="form-group" th:object="${Tags}">
-                                    <label for="tagList" name="tags">Tags (ex: #game #play...):</label>
-                                    <input type="text" id="tagList" placeholder="Tags" autocomplete="off" class="form-control"
+                                    <label for="tagList" th:text="#{tagLabel}"></label>
+                                    <input type="text" id="tagList" th:placeholder="#{tagPlaceholder}" autocomplete="off" class="form-control"
                                            th:field="*{tagsString}" required/>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="content" id="contentLabel">Content:</label>
-                                    <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
+                                    <label for="content" th:text="#{contentLabel}"></label>
+                                    <textarea type="text" rows="4" id="content" th:placeholder="#{contentPlaceholder}" class="form-control"
                                               th:field="*{text}" autocomplete="off"></textarea>
                                 </div>
-                                <button class="btn btn-primary" type="submit" id="reviewButton">Create</button>
+                                <button class="btn btn-primary" type="submit" th:text="#{reviewButton}"></button>
                             </form>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
             </div>
         </div>
         <div th:if="${reviews != null}">
-            <h3 id="reviewsLabel">Reviews</h3>
+            <h3 th:text="#{reviewsLabel}"></h3>
             <hr><br>
             <div class="col-lg-12" th:each="review: ${reviews}">
                 <div class="card mb-4">
@@ -147,8 +147,8 @@
                         <div id="reviewRate" style="display: inline" class="float-end">
                             <script>displayRate([[${review.rate}]], "")</script>
                         </div><br>
-                        <p class="mb-0" style="display: inline" name="genre">Genre: </p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                        <p class="mb-0" style="display: inline" name="tags">Tags: </p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                        <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                        <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                         <div class="float-end">
                             <form th:action="@{/profile/{userID}/review_edit/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
                                 <div id="editReview" style="display: inline; margin-right: 30px">

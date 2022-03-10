@@ -17,4 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Modifying
     @Query("DELETE FROM Review review WHERE review.id = ?1")
     void deleteReviewByID(Long id);
+
+    @Query("SELECT review FROM Review review WHERE review.rate>=4")
+    List<Review> getReviewsRatingGE4();
 }

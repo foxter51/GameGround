@@ -8,6 +8,7 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -50,8 +51,24 @@ public class ReviewDetailsService {
         reviewRepo.save(review);
     }
 
-    public void loadReviews(Model model){
-        model.addAttribute("reviews", reviewRepo.findAll());
+    public void loadReviews(Model model, String sortBy){
+        switch(sortBy){
+            case "dateASC":
+                model.addAttribute("reviews", reviewRepo.findAll());
+                break;
+            case "dateDSC":
+                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "id")));
+                break;
+            case "ratingASC":
+                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.ASC, "rate")));
+                break;
+            case "ratingDSC":
+                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "rate")));
+                break;
+            case "ratingGE4":
+                model.addAttribute("reviews", reviewRepo.getReviewsRatingGE4());
+                break;
+        }
     }
 
     public void loadReviewsByID(String userID, Model model){
