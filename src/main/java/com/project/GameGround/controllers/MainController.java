@@ -25,6 +25,7 @@ public class MainController {
     public String mainPageSort(@PathVariable("filter")String filter, Model model, Authentication currentUser){
         userDetailsService.sendCurrentUserID(model, currentUser);
         reviewDetailsService.loadReviews(model, filter);
+        reviewDetailsService.getLast5Tags(model);
         return "main";
     }
 }

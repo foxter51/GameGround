@@ -67,6 +67,10 @@ public class ReviewDetailsService {
             case "filter=ratingGE4":
                 reviews = reviewRepo.getReviewsRatingGE4();
                 break;
+            default:  //find by tag
+                reviews = reviewRepo.findAll();
+                reviews.removeIf(review -> !isContainsTag(review.getTags(), sortBy));
+                break;
         }
         model.addAttribute("reviews", reviews);
     }
@@ -153,6 +157,20 @@ public class ReviewDetailsService {
         RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID))));
         review.addBlockedToRate(user);  //remember user rated
         reviewRepo.save(review);
+    }
+
+    public void getLast5Tags(Model model){
+        Set<Tag> last5tags = tagRepo.findFirst5ByOrderByIdDesc();
+        model.addAttribute("last5tags", last5tags.size()>0 ? last5tags : null);
+    }
+
+    public boolean isContainsTag(Set<Tag> tags, String tagName){
+        for(Tag tag : tags){
+            if(tag.getTagName().equals(tagName)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private String markdownToHTML(String markdown) {
