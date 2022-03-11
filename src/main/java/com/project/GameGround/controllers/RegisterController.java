@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegisterController {
@@ -20,8 +21,8 @@ public class RegisterController {
     }
 
     @PostMapping("/")
-    public String processRegistration(User user, Model model){
-        userDetailsService.saveUser(user, model);
-        return "main";
+    public String processRegistration(User user, RedirectAttributes ra){
+        userDetailsService.saveUser(user, ra);
+        return "redirect:/sort=dateASC";
     }
 }

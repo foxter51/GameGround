@@ -24,14 +24,14 @@
                     <div class="col">
                         <h3 th:text="#{sortLabel}"></h3>
                         <div class="list-group">
-                            <a th:href="@{/}" class="list-group-item list-group-item-action list-group-item-dark" id="dateASC" th:text="#{date.ASC}"></a>
+                            <a th:href="@{/sort=dateASC}" class="list-group-item list-group-item-action list-group-item-dark" id="dateASC" th:text="#{date.ASC}"></a>
                             <a th:href="@{/sort=dateDSC}" class="list-group-item list-group-item-action list-group-item-dark" id="dateDSC" th:text="#{date.DSC}"></a>
                             <a th:href="@{/sort=ratingASC}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingASC" th:text="#{rating.ASC}"></a>
                             <a th:href="@{/sort=ratingDSC}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingDSC" th:text="#{rating.DSC}"></a>
                         </div>
                         <h3 th:text="#{filterLabel}"></h3>
                         <div class="list-group">
-                            <a th:href="@{/filter=rating_GE4}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingGE4" th:text="#{rating.GE4}"></a>
+                            <a th:href="@{/filter=ratingGE4}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingGE4" th:text="#{rating.GE4}"></a>
                         </div>
                     </div>
                 </div>

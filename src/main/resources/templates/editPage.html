@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="row">
                         <form th:action="@{/profile/{id}/save/(id=${profileID})}" method="post" th:object="${updateReview}">
-                            <div class="form-group" hidden>
+                            <div class="form-group" >
                                 <label for="title">Review name:</label>
                                 <input type="text" id="idField" placeholder="Name" autocomplete="off" class="form-control"
                                        th:field="*{id}" required/>

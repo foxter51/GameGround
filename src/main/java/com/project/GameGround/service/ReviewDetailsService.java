@@ -14,9 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ReviewDetailsService {
@@ -52,27 +50,45 @@ public class ReviewDetailsService {
     }
 
     public void loadReviews(Model model, String sortBy){
+        List<Review> reviews = null;
         switch(sortBy){
-            case "dateASC":
-                model.addAttribute("reviews", reviewRepo.findAll());
+            case "sort=dateASC":
+                reviews = reviewRepo.findAll();
                 break;
-            case "dateDSC":
-                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "id")));
+            case "sort=dateDSC":
+                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
-            case "ratingASC":
-                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.ASC, "rate")));
+            case "sort=ratingASC":
+                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.ASC, "rate"));
                 break;
-            case "ratingDSC":
-                model.addAttribute("reviews", reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "rate")));
+            case "sort=ratingDSC":
+                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "rate"));
                 break;
-            case "ratingGE4":
-                model.addAttribute("reviews", reviewRepo.getReviewsRatingGE4());
+            case "filter=ratingGE4":
+                reviews = reviewRepo.getReviewsRatingGE4();
                 break;
         }
+        model.addAttribute("reviews", reviews);
     }
 
-    public void loadReviewsByID(String userID, Model model){
+    public void loadReviewsByID(String userID, Model model, String sortBy){
         List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(userID));
+        switch(sortBy){
+            case "sort=dateASC":
+                break;
+            case "sort=dateDSC":
+                reviews.sort(Comparator.comparing(Review::getId).reversed());
+                break;
+            case "sort=ratingASC":
+                reviews.sort(Comparator.comparing(Review::getRate));
+                break;
+            case "sort=ratingDSC":
+                reviews.sort(Comparator.comparing(Review::getRate).reversed());
+                break;
+            case "filter=ratingGE4":
+                reviews.removeIf(review -> review.getRate() < 4);
+                break;
+        }
         model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
     }
 

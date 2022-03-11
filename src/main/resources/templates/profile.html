@@ -15,6 +15,7 @@
     <script th:src="@{/js/switch.js}" type="text/javascript"></script>
     <script th:src="@{/js/showRate.js}" type="text/javascript"></script>
     <script th:src="@{/js/writeReviewEvent.js}" type="text/javascript"></script>
+    <script th:src="@{/js/activeFilters.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -140,26 +141,51 @@
         <div th:if="${reviews != null}">
             <h3 th:text="#{reviewsLabel}"></h3>
             <hr><br>
-            <div class="col-lg-12" th:each="review: ${reviews}">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
-                        <div id="reviewRate" style="display: inline" class="float-end">
-                            <script>displayRate([[${review.rate}]], "")</script>
-                        </div><br>
-                        <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                        <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
-                        <div class="float-end">
-                            <form th:action="@{/profile/{userID}/review_edit/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
-                                <div id="editReview" style="display: inline; margin-right: 30px">
-                                    <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <div class="col">
+                                <h3 th:text="#{sortLabel}"></h3>
+                                <div class="list-group">
+                                    <a th:href="@{/profile/{userID}/sort=dateASC(userID=${userProfile.id})}" class="list-group-item list-group-item-action list-group-item-dark" id="dateASC" th:text="#{date.ASC}"></a>
+                                    <a th:href="@{/profile/{userID}/sort=dateDSC(userID=${userProfile.id})}" class="list-group-item list-group-item-action list-group-item-dark" id="dateDSC" th:text="#{date.DSC}"></a>
+                                    <a th:href="@{/profile/{userID}/sort=ratingASC(userID=${userProfile.id})}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingASC" th:text="#{rating.ASC}"></a>
+                                    <a th:href="@{/profile/{userID}/sort=ratingDSC(userID=${userProfile.id})}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingDSC" th:text="#{rating.DSC}"></a>
                                 </div>
-                            </form>
-                            <form th:action="@{/profile/{userID}/review_remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
-                                <div id="deleteReview" style="display: inline">
-                                    <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
+                                <h3 th:text="#{filterLabel}"></h3>
+                                <div class="list-group">
+                                    <a th:href="@{/profile/{userID}/filter=ratingGE4(userID=${userProfile.id})}" class="list-group-item list-group-item-action list-group-item-dark" id="ratingGE4" th:text="#{rating.GE4}"></a>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="col-lg-12 float-end">
+                        <div class="col-lg-12" th:each="review: ${reviews}">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
+                                    <div id="reviewRate" style="display: inline" class="float-end">
+                                        <script>displayRate([[${review.rate}]], "")</script>
+                                    </div><br>
+                                    <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                                    <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                                    <div class="float-end">
+                                        <form th:action="@{/profile/{userID}/review_edit/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
+                                            <div id="editReview" style="display: inline; margin-right: 30px">
+                                                <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+                                            </div>
+                                        </form>
+                                        <form th:action="@{/profile/{userID}/review_remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
+                                            <div id="deleteReview" style="display: inline">
+                                                <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

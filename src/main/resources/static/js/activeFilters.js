@@ -3,22 +3,22 @@ $(function (){
 });
 
 function setActiveFilter(){
-    let currentFilter = ($(location).attr('href')).split('/', 4)[3];
-    switch (currentFilter){
-        case '':
-            $("#dateASC").addClass("active");
-            break;
-        case 'sort=dateDSC':
+    let currentHref = $(location).attr('href');
+    switch (true){
+        case currentHref.includes('sort=dateDSC'):
             $("#dateDSC").addClass("active");
             break;
-        case 'sort=ratingASC':
+        case currentHref.includes('sort=ratingASC'):
             $("#ratingASC").addClass("active");
             break;
-        case 'sort=ratingDSC':
+        case currentHref.includes('sort=ratingDSC'):
             $("#ratingDSC").addClass("active");
             break;
-        case 'filter=rating_GE4':
+        case currentHref.includes('filter=ratingGE4'):
             $("#ratingGE4").addClass("active");
+            break;
+        default:
+            $("#dateASC").addClass("active");
             break;
     }
 }

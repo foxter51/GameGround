@@ -17,7 +17,7 @@ public class ReviewController {
     @Autowired
     private ReviewDetailsService reviewDetailsService;
 
-    @GetMapping("/review/{id}")
+    @RequestMapping("/review/{id}")
     public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
         userDetailsService.sendCurrentUserID(model, auth);
         reviewDetailsService.getReviewByID(reviewID, model);
@@ -32,7 +32,7 @@ public class ReviewController {
         return "redirect:/review/{reviewID}";
     }
 
-    @RequestMapping("/review/review/{reviewID}/add_rate/{userID}")
+    @PostMapping("/review/review/{reviewID}/add_rate/{userID}")
     public String addRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @RequestParam(name = "rStar")String starValue){
         reviewDetailsService.changeRate(reviewID, userID, starValue);
         return "redirect:/review/{reviewID}";

@@ -20,11 +20,16 @@ public class ProfileController {
     private ReviewDetailsService reviewDetailsService;
 
     @RequestMapping("/profile/{id}")
-    public String profilePage(@PathVariable("id") String userID, Model model, Authentication auth){
+    public String profilePage(@PathVariable("id")String userID){
+        return "redirect:/profile/{id}/sort=dateASC";
+    }
+
+    @RequestMapping("/profile/{id}/{filter}")
+    public String profilePageSort(@PathVariable("id") String userID, @PathVariable("filter") String filter, Model model, Authentication auth){
         userDetailsService.getProfileByID(userID, model);
         userDetailsService.sendCurrentUserID(model, auth);
         userDetailsService.sendCurrentUserAuthorities(model, auth);
-        reviewDetailsService.loadReviewsByID(userID, model);
+        reviewDetailsService.loadReviewsByID(userID, model, filter);
         reviewDetailsService.createReview(model);
         return "profile";
     }
@@ -41,7 +46,7 @@ public class ProfileController {
         return "redirect:/profile/{userID}";
     }
 
-    @RequestMapping("/profile/{userID}/review_edit/{reviewID}")
+    @PostMapping("/profile/{userID}/review_edit/{reviewID}")
     public String reviewUpdate(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, RedirectAttributes ra){
         reviewDetailsService.sendReviewToUpdate(reviewID, ra, userID);
         return "redirect:/edit_page";

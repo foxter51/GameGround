@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         return new CustomUserDetails(user);  //found user
     }
 
-    public void saveUser(User user, Model model){
+    public void saveUser(User user, RedirectAttributes ra){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
         user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
@@ -47,9 +48,9 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         user.addRole(roleRepo.findRoleByName("USER"));
         if(repo.findByEmail(user.getEmail()) == null){
             repo.save(user);
-            model.addAttribute("register", "Successful registration!");
+            ra.addFlashAttribute("register", "Successful registration!");
         }
-        else model.addAttribute("register", "User with this e-mail has already been registered!");
+        else ra.addFlashAttribute("register", "User with this e-mail has already been registered!");
     }
 
     public void getProfileByID(String userID, Model model){

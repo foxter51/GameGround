@@ -17,37 +17,14 @@ public class MainController {
     private ReviewDetailsService reviewDetailsService;
 
     @GetMapping("/")
-    public String mainPage(Model model, Authentication currentUser){
-        userDetailsService.sendCurrentUserID(model, currentUser);
-        reviewDetailsService.loadReviews(model, "dateASC");
-        return "main";
+    public String mainPage(){
+        return "redirect:/sort=dateASC";
     }
 
-    @GetMapping("/sort=dateDSC")
-    public String sortByDateDSC(Model model, Authentication currentUser){
+    @RequestMapping("/{filter}")
+    public String mainPageSort(@PathVariable("filter")String filter, Model model, Authentication currentUser){
         userDetailsService.sendCurrentUserID(model, currentUser);
-        reviewDetailsService.loadReviews(model, "dateDSC");
-        return "main";
-    }
-
-    @GetMapping("/sort=ratingASC")
-    public String sortByRatingASC(Model model, Authentication currentUser){
-        userDetailsService.sendCurrentUserID(model, currentUser);
-        reviewDetailsService.loadReviews(model, "ratingASC");
-        return "main";
-    }
-
-    @GetMapping("/sort=ratingDSC")
-    public String sortByRatingDSC(Model model, Authentication currentUser){
-        userDetailsService.sendCurrentUserID(model, currentUser);
-        reviewDetailsService.loadReviews(model, "ratingDSC");
-        return "main";
-    }
-
-    @GetMapping("/filter=rating_GE4")
-    public String filterByRatingGE4(Model model, Authentication currentUser){
-        userDetailsService.sendCurrentUserID(model, currentUser);
-        reviewDetailsService.loadReviews(model, "ratingGE4");
+        reviewDetailsService.loadReviews(model, filter);
         return "main";
     }
 }
