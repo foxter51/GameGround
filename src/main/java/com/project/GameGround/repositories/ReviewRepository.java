@@ -20,4 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT review FROM Review review WHERE review.rate>=4")
     List<Review> getReviewsRatingGE4();
+
+    @Query(value = "SELECT * FROM reviews WHERE MATCH (`review_name`, `group_name`, `review_text`) AGAINST (?1)", nativeQuery = true)
+    List<Review> search(String request);
 }

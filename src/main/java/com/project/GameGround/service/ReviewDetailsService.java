@@ -96,6 +96,13 @@ public class ReviewDetailsService {
         model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
     }
 
+    public void loadReviewBySearch(Model model, String request){
+        List<Review> foundReviews = reviewRepo.search(request);
+        model.addAttribute("searchResult", foundReviews.size() > 0);
+        model.addAttribute("searchRequest", request);
+        model.addAttribute("reviews", foundReviews.size()>0 ? foundReviews : null);
+    }
+
     public void getReviewByID(String reviewID, Model model){
         Review review = reviewRepo.getById(Long.parseLong(reviewID));
         model.addAttribute("review", review);
@@ -171,6 +178,10 @@ public class ReviewDetailsService {
             }
         }
         return false;
+    }
+
+    public List<Review> search(String request){
+        return reviewRepo.search("request");
     }
 
     private String markdownToHTML(String markdown) {
