@@ -5,6 +5,7 @@ import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.CustomUserDetailsService;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,8 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/{id}/save")
-    public String updProfilePage(@PathVariable ("id") String userID, Review review, @ModelAttribute("Tags") Tags tags){
-        reviewDetailsService.saveReview(userID, review, tags);
+    public String updProfilePage(@PathVariable ("id") String userID, Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
+        reviewDetailsService.saveReview(userID, review, tags, starValue);
         return "redirect:/profile/{id}";
     }
 

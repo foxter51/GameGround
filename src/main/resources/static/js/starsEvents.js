@@ -1,36 +1,63 @@
+let cancelEmptyStars = true;
+
 $(function (){
+    starsClickEvent();
     starsHoverEvent();
 });
 
 function starsHoverEvent(){
     $("#rateReview").hover(function (){
+        cancelEmptyStars = true;
         $("#rStar1").hover(function (){
             fillStars(this.id)
         }, function (){
-            $("#rStar1").removeClass("fa-solid").addClass("fa-regular");
+            if(cancelEmptyStars) $("#rStar1").removeClass("fa-solid").addClass("fa-regular");
         });
         $("#rStar2").hover(function (){
             fillStars(this.id);
         }, function (){
-            $("#rStar2").removeClass("fa-solid").addClass("fa-regular");
+            if(cancelEmptyStars) $("#rStar2").removeClass("fa-solid").addClass("fa-regular");
         });
         $("#rStar3").hover(function (){
             fillStars(this.id);
         }, function (){
-            $("#rStar3").removeClass("fa-solid").addClass("fa-regular");
+            if(cancelEmptyStars) $("#rStar3").removeClass("fa-solid").addClass("fa-regular");
         });
         $("#rStar4").hover(function (){
             fillStars(this.id);
         }, function (){
-            $("#rStar4").removeClass("fa-solid").addClass("fa-regular");
+            if(cancelEmptyStars) $("#rStar4").removeClass("fa-solid").addClass("fa-regular");
         });
         $("#rStar5").hover(function (){
             fillStars(this.id);
         }, function (){
-            $("#rStar5").removeClass("fa-solid").addClass("fa-regular");
+            if(cancelEmptyStars) $("#rStar5").removeClass("fa-solid").addClass("fa-regular");
         });
     }, function (){
-        emptyStars();
+        if(cancelEmptyStars){
+            emptyStars();
+        }
+    });
+}
+
+function starsClickEvent(){
+    $("#rateReview").click(function(){
+        cancelEmptyStars=false;
+        $("#rStar1").click(function (){
+            fillStars(this.id)
+        });
+        $("#rStar2").click(function (){
+            fillStars(this.id);
+        });
+        $("#rStar3").click(function (){
+            fillStars(this.id);
+        });
+        $("#rStar4").click(function (){
+            fillStars(this.id);
+        });
+        $("#rStar5").click(function (){
+            fillStars(this.id);
+        });
     });
 }
 

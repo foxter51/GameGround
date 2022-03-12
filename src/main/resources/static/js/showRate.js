@@ -7,5 +7,5 @@ function displayRate(quantity, size){
             i < quantity ? stars += '<i class="fa-solid fa-star '+size+'"></i>' : stars += '<i class="fa-regular fa-star '+size+'"></i>';
         }
         return stars;
-    }).removeAttr('id')
+    }).removeAttr('id');
 }

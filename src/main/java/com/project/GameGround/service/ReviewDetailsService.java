@@ -39,13 +39,14 @@ public class ReviewDetailsService {
         model.addAttribute("Tags", new Tags());
     }
 
-    public void saveReview(String userID, Review review, Tags tags){
+    public void saveReview(String userID, Review review, Tags tags, Integer starValue){
         review.setUser(repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().split(" ")) {  //extract tags from string
             review.addTag(Objects.requireNonNullElseGet(tagRepo.isContains(tag), () -> new Tag(tag)));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
         review.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        review.setAuthorRate(starValue);
         reviewRepo.save(review);
     }
 

@@ -29,9 +29,18 @@
                     </div>
                     <br><br><p style="max-width: 70%; margin: auto" th:utext="${review.text}"></p>
                     <div class="container">
-                        <div id="reviewRate">
-                            <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
-                        </div><br>
+                        <div>
+                            <label for="reviewRate"><strong th:text="#{authorRate}"></strong>
+                                <div id="reviewRate">
+                                    <script>displayRate([[${review.authorRate}]], 'fa-2xl')</script>
+                                </div>
+                            </label><br><br>
+                            <label for="reviewRate"><strong th:text="#{reviewRating}"></strong>
+                                <div id="reviewRate">
+                                    <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
+                                </div>
+                            </label><br><br>
+                        </div>
                         <h4 class="mb-0" style="display: inline" th:text="#{author}"></h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
                         <p class="text-muted" th:text="${review.publishDate}"></p>
                     </div>
