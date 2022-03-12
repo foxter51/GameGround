@@ -19,7 +19,7 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage(){
-        return "redirect:/sort=dateASC";
+        return "redirect:/sort=dateDSC";
     }
 
     @RequestMapping("/{filter}")

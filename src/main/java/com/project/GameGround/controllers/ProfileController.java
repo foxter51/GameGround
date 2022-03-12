@@ -21,7 +21,7 @@ public class ProfileController {
 
     @RequestMapping("/profile/{id}")
     public String profilePage(@PathVariable("id")String userID){
-        return "redirect:/profile/{id}/sort=dateASC";
+        return "redirect:/profile/{id}/sort=dateDSC";
     }
 
     @RequestMapping("/profile/{id}/{filter}")
