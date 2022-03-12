@@ -19,9 +19,13 @@ public class RatedBy {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    public RatedBy(Long reviewID, User user){
+    @Column(name = "type")
+    private String rateType;
+
+    public RatedBy(Long reviewID, User user, String rateType){
         this.reviewID = reviewID;
         this.user = user;
+        this.rateType = rateType;
     }
 
     public RatedBy() {}

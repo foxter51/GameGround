@@ -27,7 +27,7 @@ public class RatingRepositoryTest {
 
     @Test
     public void testCreateRating(){
-        RatedBy ratedBy = new RatedBy((long)2, repo.getById((long)1));
+        RatedBy ratedBy = new RatedBy((long)2, repo.getById((long)1), "RATING");
         RatedBy savedRatedBy = ratingRepo.save(ratedBy);
         RatedBy existRatedBy = entityManager.find(RatedBy.class, savedRatedBy.getId());
         assertThat(existRatedBy.getId()).isEqualTo(ratedBy.getId());

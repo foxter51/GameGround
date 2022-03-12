@@ -37,4 +37,10 @@ public class ReviewController {
         reviewDetailsService.changeRate(reviewID, userID, starValue);
         return "redirect:/review/{reviewID}";
     }
+
+    @PostMapping("/review/review/{reviewID}/like/{userID}")
+    public String likeReview(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
+        reviewDetailsService.likeReview(reviewID, userID);
+        return "redirect:/review/{reviewID}";
+    }
 }

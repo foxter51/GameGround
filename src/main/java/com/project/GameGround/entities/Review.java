@@ -33,6 +33,9 @@ public class Review {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Column(name = "author_rate")
+    private int authorRate;
+
     @Column(name = "review_rate")
     private float rate;
 

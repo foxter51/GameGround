@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/b7f4bdb099.js" crossorigin="anonymous"></script>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script th:src="@{/js/switch.js}" type="text/javascript"></script>
     <script th:src="@{/webjars/popper.js/1.16.1/dist/popper.min.js}" type="module"></script>
@@ -37,16 +38,32 @@
                     </div>
                 </div>
             </div>
-             <div id="rateReview" class="row" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
-                <div class="col-3">
-                    <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post">
-                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1"></i></button>
-                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2"></i></button>
-                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3"></i></button>
-                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="4"><i class="fa-regular fa-star fa-2xl" id="rStar4"></i></button>
-                        <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="5"><i class="fa-regular fa-star fa-2xl" id="rStar5"></i></button>
-                    </form>
-                </div>
+             <div class="row">
+                 <div id="rateReview" class="col-3" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
+                     <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post">
+                         <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></button>
+                         <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></button>
+                         <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></button>
+                         <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="4"><i class="fa-regular fa-star fa-2xl" id="rStar4" name="signs"></i></button>
+                         <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="5"><i class="fa-regular fa-star fa-2xl" id="rStar5" name="signs"></i></button>
+                     </form>
+                 </div>
+                 <div id="likeReview" class="col" sec:authorize="isAuthenticated()" th:if="${likePossibility == true}">
+                     <form th:action="@{review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" class="float-end">
+                         <button type="submit" style="background: transparent; color: white; border: none"><i class="fa-regular fa-heart fa-2xl" name="signs" id="likeButton"></i></button>
+                         <script>
+                             $(function (){
+                                 $("#likeButton").hover(
+                                     function (){
+                                         $(this).removeClass("fa-regular").addClass("fa-solid");
+                                     },
+                                     function (){
+                                         $(this).removeClass("fa-solid").addClass("fa-regular");
+                                     });
+                             });
+                         </script>
+                     </form>
+                 </div>
              </div>
         </div>
         <div class="row">

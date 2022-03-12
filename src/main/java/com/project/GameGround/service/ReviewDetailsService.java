@@ -142,13 +142,14 @@ public class ReviewDetailsService {
 
     public void addRatingPossibility(String reviewID, Model model){
         Long currentUserID = (Long) model.getAttribute("currentUserID");
-        model.addAttribute("ratePossibility", !isUserRated(reviewID, currentUserID));
+        model.addAttribute("ratePossibility", !isUserRated(reviewID, currentUserID, "RATING"));
+        model.addAttribute("likePossibility", !isUserRated(reviewID, currentUserID, "LIKE"));
     }
 
-    public boolean isUserRated(String reviewID, Long currentUserID){
+    public boolean isUserRated(String reviewID, Long currentUserID, String rateType){
         List<RatedBy> usersRated = reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate();
         for(RatedBy user : usersRated){
-            if(Objects.equals(user.getUser().getId(), currentUserID)){
+            if(Objects.equals(user.getUser().getId(), currentUserID) && user.getRateType().equals(rateType)){
                 return true;
             }
         }
@@ -161,8 +162,16 @@ public class ReviewDetailsService {
         float rateCount = review.getRateCount();
         review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));
         review.setRateCount((int)(rateCount+1));
-        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID))));
+        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "RATING"));
         review.addBlockedToRate(user);  //remember user rated
+        reviewRepo.save(review);
+    }
+
+    public void likeReview(String reviewID, String userID){
+        repo.incrementLike(Long.parseLong(userID));
+        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "LIKE"));
+        review.addBlockedToRate(user);
         reviewRepo.save(review);
     }
 
@@ -178,10 +187,6 @@ public class ReviewDetailsService {
             }
         }
         return false;
-    }
-
-    public List<Review> search(String request){
-        return reviewRepo.search("request");
     }
 
     private String markdownToHTML(String markdown) {

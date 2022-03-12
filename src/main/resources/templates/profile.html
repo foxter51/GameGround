@@ -27,6 +27,7 @@
                 <div class="card-body text-center">
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                     <h5 class="my-3" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></h5>
+                    <i class="fa-solid fa-heart fa-xl" name="signs"></i><strong th:text="' '+${userProfile.likesQuantity}" style="display: inline"></strong>
                     <p class="text-muted mb-1" th:text="#{roleLabel}"></p>
                 </div>
             </div>
