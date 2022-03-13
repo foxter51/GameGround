@@ -12,7 +12,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="review_id", nullable = false)
+    @Column(name="review_id")
     private Long reviewID;
 
     @Column(name="comment_text", nullable = false)
