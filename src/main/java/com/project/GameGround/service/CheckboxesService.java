@@ -55,10 +55,10 @@ public class CheckboxesService {
         User user = null;
         for(Long userID : ID){
             user = repo.getById(userID);
-            if(isContainsRoleAdmin(user)){
+            if(isContainsRoleAdmin(user)){  //if user is admin -> remove admin role
                 user.removeAdminRole();
             }
-            else user.addRole(roleRepo.findRoleByName("ADMIN"));
+            else user.addRole(roleRepo.findRoleByName("ADMIN"));  //if user is not admin -> add admin role
         }
         assert user != null;
         repo.save(user);
@@ -74,7 +74,7 @@ public class CheckboxesService {
         return false;
     }
 
-    public String isOnMyselfAction(List<Long> ID, Authentication auth){
+    public String isOnMyselfAction(List<Long> ID, Authentication auth){  //check if user blocked or deleted himself to logout
         String email = getUserEmail(auth);
         if(ID.contains(repo.findByEmail(email).getId())){
             SecurityContextHolder.getContext().setAuthentication(null);

@@ -30,6 +30,6 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
     void unblockById(Long id);
 
     @Modifying
-    @Query("UPDATE User user SET user.likesQuantity=user.likesQuantity+1 WHERE user.id = ?1")
+    @Query("UPDATE User user SET user.likesQuantity=user.likesQuantity+1 WHERE user.id = ?1")  //increment user likes
     void incrementLike(Long id);
 }

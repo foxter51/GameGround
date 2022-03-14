@@ -22,10 +22,10 @@ public class Tag {
     public Tag() {}
 
     public void removeTagMistakes(String tagName){
-        if(tagName.split("#").length > 2 || tagName.endsWith("#")){
+        if(tagName.split("#").length > 2 || tagName.endsWith("#")){  //if tag contains more than one "#"
             tagName = "#" + tagName.replace("#", "");
         }
-        if(!(tagName.contains("#"))){
+        if(!(tagName.contains("#"))){  //if tag doesn't contains "#"
             tagName = "#" + tagName;
         }
         this.tagName = tagName;

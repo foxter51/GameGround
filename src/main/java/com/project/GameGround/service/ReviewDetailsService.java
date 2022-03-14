@@ -50,7 +50,7 @@ public class ReviewDetailsService {
         reviewRepo.save(review);
     }
 
-    public void loadReviews(Model model, String sortBy){
+    public void loadReviews(Model model, String sortBy){  //load all reviews depending on sort type
         List<Review> reviews = null;
         switch(sortBy){
             case "sort=dateASC":
@@ -75,7 +75,7 @@ public class ReviewDetailsService {
         model.addAttribute("reviews", reviews);
     }
 
-    public void loadReviewsByID(String userID, Model model, String sortBy){
+    public void loadReviewsByID(String userID, Model model, String sortBy){  //load reviews by id depending on sort type
         List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(userID));
         switch(sortBy){
             case "sort=dateASC":
@@ -96,7 +96,7 @@ public class ReviewDetailsService {
         model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
     }
 
-    public void loadReviewBySearch(Model model, String request){
+    public void loadReviewBySearch(Model model, String request){  //load reviews as a search result
         List<Review> foundReviews = reviewRepo.search(request);
         model.addAttribute("searchResult", foundReviews.size() > 0);
         model.addAttribute("searchRequest", request);
@@ -112,13 +112,13 @@ public class ReviewDetailsService {
         reviewRepo.deleteReviewByID(Long.parseLong(reviewID));
     }
 
-    public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){
+    public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){  //get old review to update
         Review review = reviewRepo.getById(Long.parseLong(reviewID));
         ra.addFlashAttribute("updateReview", review);
         ra.addFlashAttribute("profileID", profileID);
     }
 
-    public void loadReviewToUpdate(Review review, Model model){
+    public void loadReviewToUpdate(Review review, Model model){  //loading review to update
         StringBuilder tags = new StringBuilder();
         review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));  //get old tags
         model.addAttribute("Tags", new Tags(tags.toString()));
@@ -140,13 +140,13 @@ public class ReviewDetailsService {
         reviewRepo.save(review);
     }
 
-    public void addRatingPossibility(String reviewID, Model model){
+    public void addRatingPossibility(String reviewID, Model model){  //get possibility to rate
         Long currentUserID = (Long) model.getAttribute("currentUserID");
         model.addAttribute("ratePossibility", !isUserRated(reviewID, currentUserID, "RATING"));
         model.addAttribute("likePossibility", !isUserRated(reviewID, currentUserID, "LIKE"));
     }
 
-    public boolean isUserRated(String reviewID, Long currentUserID, String rateType){
+    public boolean isUserRated(String reviewID, Long currentUserID, String rateType){  //check if user rated to give him possibility
         List<RatedBy> usersRated = reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate();
         for(RatedBy user : usersRated){
             if(Objects.equals(user.getUser().getId(), currentUserID) && user.getRateType().equals(rateType)){
@@ -160,7 +160,7 @@ public class ReviewDetailsService {
         Review review = reviewRepo.getById(Long.parseLong(reviewID));
         float rate = review.getRate();
         float rateCount = review.getRateCount();
-        review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));
+        review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));  //count new review rate
         review.setRateCount((int)(rateCount+1));
         RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "RATING"));
         review.addBlockedToRate(user);  //remember user rated
@@ -171,7 +171,7 @@ public class ReviewDetailsService {
         repo.incrementLike(Long.parseLong(userID));
         Review review = reviewRepo.getById(Long.parseLong(reviewID));
         RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "LIKE"));
-        review.addBlockedToRate(user);
+        review.addBlockedToRate(user);  //remember user liked
         reviewRepo.save(review);
     }
 
