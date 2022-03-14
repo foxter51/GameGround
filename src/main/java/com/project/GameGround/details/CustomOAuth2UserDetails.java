@@ -14,14 +14,8 @@ public class CustomOAuth2UserDetails implements OAuth2User {  //implement authen
     private final User user;
 
     public CustomOAuth2UserDetails(OAuth2User oAuth2User, User user) {
-        if(user.getStatus().equals("Unblocked")){
-            this.oAuth2User = oAuth2User;
-            this.user = user;
-        }
-        else{
-            this.oAuth2User=null;
-            this.user=null;
-        }
+        this.oAuth2User = oAuth2User;
+        this.user = user;
     }
 
     @Override
