@@ -16,8 +16,18 @@ public class Tag {
     private String tagName;
 
     public Tag(String tagName) {
-        this.tagName = tagName;
+        removeTagMistakes(tagName);
     }
 
     public Tag() {}
+
+    public void removeTagMistakes(String tagName){
+        if(tagName.split("#").length > 2 || tagName.endsWith("#")){
+            tagName = "#" + tagName.replace("#", "");
+        }
+        if(!(tagName.contains("#"))){
+            tagName = "#" + tagName;
+        }
+        this.tagName = tagName;
+    }
 }
