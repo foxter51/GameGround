@@ -31,7 +31,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             userDetailsService.createUserAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
         }
         else{  //if exists
-            if(repo.findByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);
+            if(repo.findByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);  //if user blocked - logout
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
         }
         response.sendRedirect("/");

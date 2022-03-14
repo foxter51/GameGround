@@ -15,11 +15,12 @@
 <header th:insert="blocks/header :: header"></header>
 
 <main class="container py-5">
+    <h3 align="center" th:if="${register == true}" th:text="#{SuccessRegister}"></h3>
+    <h3 align="center" th:if="${register == false}" th:text="#{RegisterFail}"></h3>
     <div th:insert="blocks/searchBar :: searchBar"></div>
     <div class="w-75 mx-auto" th:if="${last5tags != null}">
         <div class="d-inline p-5" th:each="tag: ${last5tags}"><a th:text="${tag.tagName}" th:href="@{/{tag}(tag=${tag.tagName})}" class="text-decoration-none"></a></div>
     </div>
-    <h3 align="center" th:text="${register}"></h3>
     <h2 th:text="#{reviewsLabel}"></h2><hr><br>
     <div th:if="${searchResult != null}">
         <div th:if="${searchResult == true}"><h2  th:text="#{searchResults}+' '+${searchRequest}"></h2><hr><br></div>

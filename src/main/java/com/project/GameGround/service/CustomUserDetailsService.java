@@ -48,9 +48,9 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         user.addRole(roleRepo.findRoleByName("USER"));
         if(repo.findByEmail(user.getEmail()) == null){
             repo.save(user);
-            ra.addFlashAttribute("register", "Successful registration!");
+            ra.addFlashAttribute("register", true);
         }
-        else ra.addFlashAttribute("register", "User with this e-mail has already been registered!");
+        else ra.addFlashAttribute("register", false);
     }
 
     public void getProfileByID(String userID, Model model){
