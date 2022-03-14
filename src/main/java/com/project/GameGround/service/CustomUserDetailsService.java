@@ -72,14 +72,6 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         }
     }
 
-    public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof CustomUserDetails;
-    }
-
-    public String getUserEmail(Authentication auth){
-        return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");
-    }
-
     public boolean isAdmin(Collection<? extends GrantedAuthority> roles){
         for(GrantedAuthority role : roles){
             if(role.getAuthority().equals("ADMIN")){
@@ -91,5 +83,13 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     public void sendUsersList(Model model){
         model.addAttribute("users", repo.findAll());
+    }
+
+    public String getUserEmail(Authentication auth){
+        return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");  //get user email depending on the login type
+    }
+
+    public boolean isCustomUserDetails(Authentication auth){
+        return auth.getPrincipal() instanceof CustomUserDetails;
     }
 }

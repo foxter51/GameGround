@@ -121,9 +121,9 @@ public class ReviewDetailsService {
 
     public void loadReviewToUpdate(Review review, Model model){
         StringBuilder tags = new StringBuilder();
-        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));
+        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));  //get old tags
         model.addAttribute("Tags", new Tags(tags.toString()));
-        review.setText(new CopyDown().convert(review.getText()));
+        review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
         model.addAttribute("updateReview", review);
     }
 
