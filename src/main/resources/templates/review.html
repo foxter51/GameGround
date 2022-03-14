@@ -48,7 +48,7 @@
                 </div>
             </div>
              <div class="row">
-                 <div id="rateReview" class="col-3" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
+                 <div id="rateReview" class="col" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
                      <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post">
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></button>
@@ -79,7 +79,7 @@
             <div class="container" sec:authorize="isAuthenticated()">
                 <hr><br>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6" id="addCommentSection">
                         <div class="card mb-4">
                             <div class="card-body">
                                 <form th:action="@{/review/{reviewID}/add_comment/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="row">
                     <div class="container" th:each="comment: ${review.comments}">
-                        <div class="col-9 float-end">
+                        <div class="col-9 float-end" id="commentsSection">
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
@@ -107,6 +107,12 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    if(screen.width<=1440){
+                        $("#addCommentSection").removeClass("col-6").addClass("col");
+                        $("#commentsSection").removeClass("col-9 float-end").addClass("col");
+                    }
+                </script>
             </div>
         </div>
     </div>

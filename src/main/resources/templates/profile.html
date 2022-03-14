@@ -177,8 +177,8 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="col-lg-12 float-end">
-                        <div class="col-lg-12" th:each="review: ${reviews}">
+                    <div class="col-lg-12 float-end" style="width: 100%">
+                        <div class="col" th:each="review: ${reviews}">
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
