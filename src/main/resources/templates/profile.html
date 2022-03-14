@@ -111,8 +111,9 @@
                         <div class="row">
                             <form th:action="@{/profile/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}">
                                 <div class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></div>
+
                                 <div class="form-group" hidden>
-                                    <input type="text" id="idField" autocomplete="off" th:field="*{id}"/>
+                                    <input type="text" autocomplete="off" th:field="*{id}"/>
                                 </div>
 
                                 <div class="form-group">
