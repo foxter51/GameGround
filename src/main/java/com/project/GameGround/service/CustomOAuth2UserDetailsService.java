@@ -28,7 +28,7 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
         OAuth2User OAuthUser = super.loadUser(userRequest);
         User user = repo.findByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
-        return new CustomOAuth2UserDetails(OAuthUser, user);  //returns new user after successful auth
+        return null;  //returns new user after successful auth
     }
 
     public void createUserAfterOAuth(String email, String name, AuthProvider provider){
