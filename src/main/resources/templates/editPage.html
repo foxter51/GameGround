@@ -25,9 +25,9 @@
                     <div class="row">
                         <form th:action="@{/profile/{id}/save/(id=${profileID})}" method="post" th:object="${updateReview}">
                             <div class="form-group" hidden>
-                                <input type="text" id="idField" placeholder="Name" autocomplete="off" class="form-control"
-                                       th:field="*{id}" required/>
+                                <input type="text" id="idField" autocomplete="off" th:field="*{id}"/>
                             </div>
+
                             <div class="form-group">
                                 <label for="title" th:text="#{titleLabel}"></label>
                                 <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
@@ -55,11 +55,11 @@
                             <div class="form-group">
                                 <label for="rateReview" th:text="#{authorRate}"></label><br>
                                 <div id="rateReview">
-                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="1"/><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></label>
-                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="2"/><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></label>
-                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="3"/><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></label>
-                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="4"/><i class="fa-regular fa-star fa-2xl" id="rStar4" name="signs"></i></label>
-                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="5"/><i class="fa-regular fa-star fa-2xl" id="rStar5" name="signs"></i></label>
+                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="1" required/><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></label>
+                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="2" required/><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></label>
+                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="3" required/><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></label>
+                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="4" required/><i class="fa-regular fa-star fa-2xl" id="rStar4" name="signs"></i></label>
+                                    <label><input type="radio" style="position: absolute; opacity: 0;" name="rStar" th:value="5" required/><i class="fa-regular fa-star fa-2xl" id="rStar5" name="signs"></i></label>
                                 </div><br>
                             </div>
 
