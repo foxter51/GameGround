@@ -2,7 +2,6 @@ package com.project.GameGround.service;
 
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
-import com.project.GameGround.entities.RatedBy;
 import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;

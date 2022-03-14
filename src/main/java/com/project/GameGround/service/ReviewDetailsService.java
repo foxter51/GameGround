@@ -69,8 +69,7 @@ public class ReviewDetailsService {
                 reviews = reviewRepo.getReviewsRatingGE4();
                 break;
             default:  //find by tag
-                reviews = reviewRepo.findAll();
-                reviews.removeIf(review -> !isContainsTag(review.getTags(), sortBy));
+                reviews = reviewRepo.getReviewsByTag(sortBy);
                 break;
         }
         model.addAttribute("reviews", reviews);
@@ -91,7 +90,7 @@ public class ReviewDetailsService {
                 reviews.sort(Comparator.comparing(Review::getRate).reversed());
                 break;
             case "filter=ratingGE4":
-                reviews.removeIf(review -> review.getRate() < 4);
+                reviews = reviewRepo.getReviewsRatingGE4ByID(Long.parseLong(userID));
                 break;
         }
         model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
