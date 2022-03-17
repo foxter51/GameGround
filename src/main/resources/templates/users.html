@@ -12,7 +12,7 @@
 
     <main class="text-center w-100 h-100 p-3 mx-auto flex-column text-white">
         <h1>GameGround Admin Panel</h1>
-        <form th:action="@{/user_control}" method="post">
+        <form th:action="@{/users/control}" method="post">
             <div align="left">
                 <button name="button" th:value="Block" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock fa-lg"></i></button>
                 <button name="button" th:value="Unblock" type="submit" style="margin-right: 10px; background: transparent; color: white; border: none" disabled><i class="fa-solid fa-lock-open fa-lg"></i></button>

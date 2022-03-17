@@ -34,7 +34,7 @@ public class CheckboxesService {
             case "SetAdmin":
                 return setAdminAction(ID, auth);
         }
-        return "redirect:/users_list";
+        return "redirect:/users/list";
     }
 
     public String blockAction(List<Long> ID, Authentication auth){
@@ -79,7 +79,7 @@ public class CheckboxesService {
         if(ID.contains(repo.findByEmail(email).getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
-        } else return "redirect:/users_list";
+        } else return "redirect:/users/list";
     }
 
     public String getUserEmail(Authentication auth){

@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-public class MainController {
+public class MainPageController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 

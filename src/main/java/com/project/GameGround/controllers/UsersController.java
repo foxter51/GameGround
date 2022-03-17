@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UsersController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -20,14 +21,14 @@ public class UsersController {
     @Autowired
     private CheckboxesService checkboxesService;
 
-    @GetMapping("/users_list")
+    @GetMapping("/list")
     public String userList(Model model, Authentication auth){
         userDetailsService.sendCurrentUserID(model, auth);
         userDetailsService.sendUsersList(model);
         return "users";
     }
 
-    @RequestMapping("/user_control")
+    @RequestMapping("/control")
     public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
         return checkboxesService.doCheckboxAction(ID, button, auth);
     }
