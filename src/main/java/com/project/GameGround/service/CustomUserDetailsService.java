@@ -1,5 +1,6 @@
 package com.project.GameGround.service;
 
+import com.project.GameGround.Constants;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.repositories.RoleRepository;
@@ -35,14 +36,15 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         if(user == null){
             throw new UsernameNotFoundException("User not found!");
         }
-        repo.updateLoginDate(email, new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update user last login date
+        repo.updateLoginDate(email, new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));  //update user last login date
         return new CustomUserDetails(user);  //found user
     }
 
     public void saveUser(User user, RedirectAttributes ra){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-        user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
+        user.setRegistrationDate(dateTimeFormat.format(new Date()));
+        user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleRepo.findRoleByName("USER"));

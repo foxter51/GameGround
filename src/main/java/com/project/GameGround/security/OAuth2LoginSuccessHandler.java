@@ -1,5 +1,6 @@
 package com.project.GameGround.security;
 
+import com.project.GameGround.Constants;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.service.CustomOAuth2UserDetailsService;
@@ -32,7 +33,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
         else{  //if exists
             if(repo.findByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);  //if user blocked - logout
-            repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));  //update login date
+            repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));  //update login date
         }
         response.sendRedirect("/");
     }

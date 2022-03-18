@@ -1,5 +1,6 @@
 package com.project.GameGround.service;
 
+import com.project.GameGround.Constants;
 import com.project.GameGround.Tags;
 import com.project.GameGround.entities.*;
 import com.project.GameGround.repositories.*;
@@ -46,7 +47,7 @@ public class ReviewDetailsService {
             if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagRepo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
-        review.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        review.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         review.setAuthorRate(starValue);
         reviewRepo.save(review);
     }
@@ -134,7 +135,7 @@ public class ReviewDetailsService {
     public void saveComment(String reviewID, String userID, Comment comment){
         comment.setUser(repo.getById(Long.parseLong(userID)));
         comment.setReviewID(Long.parseLong(reviewID));
-        comment.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        comment.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         Comment savedComment = commentRepo.save(comment);
         Review review = reviewRepo.getById(Long.parseLong(reviewID));
         review.addComment(savedComment);

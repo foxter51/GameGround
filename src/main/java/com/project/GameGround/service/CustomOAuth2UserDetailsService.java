@@ -1,5 +1,6 @@
 package com.project.GameGround.service;
 
+import com.project.GameGround.Constants;
 import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
@@ -39,8 +40,9 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setLastName(name.split(" ", 2)[1]);
         }
         else user.setFirstName(name);  //else set only name
-        user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-        user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
+        user.setRegistrationDate(dateTimeFormat.format(new Date()));
+        user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
         user.addRole(roleRepo.findRoleByName("USER"));
