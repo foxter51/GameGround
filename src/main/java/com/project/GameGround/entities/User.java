@@ -4,6 +4,10 @@ import com.project.GameGround.security.AuthProvider;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,15 +19,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
+    @NotEmpty
+    @Max(32)
     @Column(nullable = false, unique = true, length = 32)
     private String email;
 
+    @NotBlank
+    @Max(64)
     @Column(length = 64)
     private String password;
 
+    @NotBlank
+    @Max(32)
     @Column(nullable = false, length = 32)
     private String firstName;
 
+    @Max(32)
     @Column(length = 32)
     private String lastName;
 

@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
@@ -36,7 +38,7 @@ public class ProfileController {
     }
 
     @PostMapping("/{id}/save")
-    public String updProfilePage(@PathVariable ("id") String userID, Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
+    public String updProfilePage(@PathVariable ("id") String userID, @Valid Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
         reviewDetailsService.saveReview(userID, review, tags, starValue);
         return "redirect:/profile/{id}";
     }

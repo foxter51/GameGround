@@ -42,7 +42,8 @@ public class ReviewDetailsService {
     public void saveReview(String userID, Review review, Tags tags, Integer starValue){
         review.setUser(repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().trim().split(" ")) {  //extract tags from string
-            if(tag.length() > 1) review.addTag(Objects.requireNonNullElseGet(tagRepo.isContains(tag), () -> new Tag(tag)));  //if tag already exists we use it, else create
+            Tag newTag = new Tag(tag);
+            if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagRepo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
         review.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));

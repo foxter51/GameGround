@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +20,13 @@ public class Review {
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
+    @NotBlank
+    @Max(64)
     @Column(name="review_name", nullable = false, length = 64)
     private String reviewName;
 
+    @NotBlank
+    @Max(32)
     @Column(name="group_name", nullable = false, length = 32)
     private String groupName;
 
@@ -28,6 +34,7 @@ public class Review {
     @JoinTable(name = "reviews_tags", joinColumns = @JoinColumn(name = "review_id"), inverseJoinColumns = @JoinColumn(name="tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
+    @NotBlank
     @Column(name="review_text", nullable = false)
     private String text;
 
