@@ -23,7 +23,7 @@ import java.util.*;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {  //implements getting user information from database
 
-    @Autowired  //object loads automatically(doesn't need initializing)
+    @Autowired
     private UserRepository repo;
 
     @Autowired
