@@ -78,7 +78,7 @@ public class ReviewDetailsService {
     }
 
     public void loadReviewsByID(String userID, Model model, String sortBy){  //load reviews by id depending on sort type
-        List<Review> reviews = reviewRepo.getReviewsByUserID(Long.parseLong(userID));
+        List<Review> reviews = reviewRepo.getReviewByUserId(Long.parseLong(userID));
         switch(sortBy){
             case "sort=dateASC":
                 break;
@@ -111,7 +111,7 @@ public class ReviewDetailsService {
     }
 
     public void removeReviewByID(String reviewID){
-        reviewRepo.deleteReviewByID(Long.parseLong(reviewID));
+        reviewRepo.deleteById(Long.parseLong(reviewID));
     }
 
     public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){  //get old review to update
@@ -180,15 +180,6 @@ public class ReviewDetailsService {
     public void getLast5Tags(Model model){
         Set<Tag> last5tags = tagRepo.findFirst5ByOrderByIdDesc();
         model.addAttribute("last5tags", last5tags.size()>0 ? last5tags : null);
-    }
-
-    public boolean isContainsTag(Set<Tag> tags, String tagName){
-        for(Tag tag : tags){
-            if(tag.getTagName().equals(tagName)){
-                return true;
-            }
-        }
-        return false;
     }
 
     private String markdownToHTML(String markdown) {

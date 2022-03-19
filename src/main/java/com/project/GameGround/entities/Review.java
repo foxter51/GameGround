@@ -30,7 +30,7 @@ public class Review {
     @Column(name="group_name", nullable = false, length = 32)
     private String groupName;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "reviews_tags", joinColumns = @JoinColumn(name = "review_id"), inverseJoinColumns = @JoinColumn(name="tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
@@ -51,11 +51,11 @@ public class Review {
     @Column(name = "rate_count")
     private int rateCount;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "review_id")
     private List<RatedBy> blockedToRate = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
 

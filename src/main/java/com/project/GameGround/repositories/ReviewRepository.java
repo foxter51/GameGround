@@ -11,12 +11,10 @@ import java.util.List;
 @Transactional
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query("SELECT review FROM Review review WHERE review.user.id = ?1")
-    List<Review> getReviewsByUserID(Long id);
+    List<Review> getReviewByUserId(Long id);  //get all user's reviews
 
     @Modifying
-    @Query("DELETE FROM Review review WHERE review.id = ?1")
-    void deleteReviewByID(Long id);
+    void deleteById(Long id);  //delete review by id
 
     @Query("SELECT review FROM Review review WHERE review.rate>=4")  //get reviews by rating >=4
     List<Review> getReviewsRatingGE4();
