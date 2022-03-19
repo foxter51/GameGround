@@ -24,7 +24,7 @@ public class TagRepositoryTest {
 
     @Test
     public void testCreateTag(){
-        Tag tag = new Tag("#game");
+        Tag tag = new Tag("#gamegame");
         Tag savedTag = tagRepo.save(tag);
         Tag existTag = entityManager.find(Tag.class, savedTag.getId());
         assertThat(existTag.getId()).isEqualTo(tag.getId());

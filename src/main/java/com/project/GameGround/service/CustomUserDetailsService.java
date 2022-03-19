@@ -32,7 +32,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repo.findByEmail(email);  //searching for user in database
+        User user = repo.getByEmail(email);  //searching for user in database
         if(user == null){
             throw new UsernameNotFoundException("User not found!");
         }
@@ -47,8 +47,8 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
-        user.addRole(roleRepo.findRoleByName("USER"));
-        if(repo.findByEmail(user.getEmail()) == null){
+        user.addRole(roleRepo.getRoleByName("USER"));
+        if(repo.getByEmail(user.getEmail()) == null){
             repo.save(user);
             ra.addFlashAttribute("register", true);  //send message if register success
         }
@@ -62,14 +62,14 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
     public void sendCurrentUserID(Model model, Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
-            model.addAttribute("currentUserID", repo.findByEmail(email).getId());
+            model.addAttribute("currentUserID", repo.getByEmail(email).getId());
         }
     }
 
     public void sendCurrentUserAuthorities(Model model, Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
-            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.findByEmail(email)).getAuthorities()));
+            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.getByEmail(email)).getAuthorities()));
         }
     }
 

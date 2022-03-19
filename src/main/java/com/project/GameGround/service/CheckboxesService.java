@@ -58,7 +58,7 @@ public class CheckboxesService {
             if(isContainsRoleAdmin(user)){  //if user is admin -> remove admin role
                 user.removeAdminRole();
             }
-            else user.addRole(roleRepo.findRoleByName("ADMIN"));  //if user is not admin -> add admin role
+            else user.addRole(roleRepo.getRoleByName("ADMIN"));  //if user is not admin -> add admin role
         }
         assert user != null;
         repo.save(user);
@@ -76,7 +76,7 @@ public class CheckboxesService {
 
     public String isOnMyselfAction(List<Long> ID, Authentication auth){  //check if user blocked or deleted himself to logout
         String email = getUserEmail(auth);
-        if(ID.contains(repo.findByEmail(email).getId())){
+        if(ID.contains(repo.getByEmail(email).getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
         } else return "redirect:/users/list";

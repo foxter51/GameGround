@@ -28,7 +28,7 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
         OAuth2User OAuthUser = super.loadUser(userRequest);
-        User user = repo.findByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
+        User user = repo.getByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
         return new CustomOAuth2UserDetails(OAuthUser, user);  //returns new user after successful auth
     }
 
@@ -45,7 +45,7 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
         user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
-        user.addRole(roleRepo.findRoleByName("USER"));
+        user.addRole(roleRepo.getRoleByName("USER"));
         repo.save(user);
     }
 }

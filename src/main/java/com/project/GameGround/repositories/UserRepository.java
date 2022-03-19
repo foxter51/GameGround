@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {  //interface to communicate with database
 
-    @Query("SELECT user FROM User user WHERE user.email = ?1")  //request to find by email
-    User findByEmail(String email);
+    User getByEmail(String email);  //request to find by email
 
     @Modifying
     @Query("UPDATE User user SET user.lastLoginDate = ?2 WHERE user.email = ?1")  //request to modify last login date

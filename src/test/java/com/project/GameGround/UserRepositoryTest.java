@@ -34,15 +34,15 @@ public class UserRepositoryTest {
     @Test
     public void testCreateUser(){
         User user = new User();
-        user.setEmail("invisiblepanda@mail.ru");
+        user.setEmail("invisiblepanda@gmail.com");
         user.setPassword(new BCryptPasswordEncoder().encode("test2022"));
         user.setFirstName("John");
         user.setLastName("Yeak");
-        user.setRegistrationDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-        user.setLastLoginDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        user.setRegistrationDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
+        user.setLastLoginDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
-        user.addRole(roleRepo.findRoleByName("USER"));
+        user.addRole(roleRepo.getRoleByName("USER"));
         User savedUser = repo.save(user);
         User existUser = entityManager.find(User.class, savedUser.getId());
         assertThat(existUser.getEmail()).isEqualTo(user.getEmail());
@@ -51,7 +51,7 @@ public class UserRepositoryTest {
     @Test
     public void testFindByEmail(){
         String email = "invisiblepanda04@gmail.com";
-        User user =  repo.findByEmail(email);
+        User user =  repo.getByEmail(email);
         assertThat(user).isNotNull();
     }
 }

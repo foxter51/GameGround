@@ -35,7 +35,7 @@ public class CommentRepositoryTest {
         comment.setText("Test comment");
         comment.setUser(repo.getById((long) 1));
         comment.setReviewID((long)1);
-        comment.setPublishDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+        comment.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         Comment savedComment = commentRepo.save(comment);
         Comment existComment = entityManager.find(Comment.class, savedComment.getId());
         assertThat(existComment.getId()).isEqualTo(comment.getId());

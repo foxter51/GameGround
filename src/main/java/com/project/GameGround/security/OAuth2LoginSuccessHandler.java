@@ -28,11 +28,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {  //on success auth
         CustomOAuth2UserDetails oAuth2User = (CustomOAuth2UserDetails)authentication.getPrincipal();
-        if(repo.findByEmail(oAuth2User.getEmail()) == null){  //if user doesn't exist
+        if(repo.getByEmail(oAuth2User.getEmail()) == null){  //if user doesn't exist
             userDetailsService.createUserAfterOAuth(oAuth2User.getEmail(), oAuth2User.getAttribute("name"), AuthProvider.OTHERS);  //add him to DB
         }
         else{  //if exists
-            if(repo.findByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);  //if user blocked - logout
+            if(repo.getByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);  //if user blocked - logout
             repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));  //update login date
         }
         response.sendRedirect("/");
