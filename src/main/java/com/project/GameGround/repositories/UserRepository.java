@@ -18,8 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
     void updateLoginDate(String email, String last_login_date);
 
     @Modifying
-    @Query("DELETE FROM User user WHERE user.id = ?1")  //request to delete user
-    void deleteById(Long id);
+    void deleteById(Long id);  //request to delete user
 
     @Modifying
     @Query("UPDATE User user SET user.status = 'Blocked' WHERE user.id = ?1")  //request to block user
