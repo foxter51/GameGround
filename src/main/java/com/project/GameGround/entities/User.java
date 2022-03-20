@@ -67,10 +67,12 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Review> reviews = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private List<Comment> comments = new ArrayList<>();
 
+    @ToString.Exclude
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private List<RatedBy> blockedToRate = new ArrayList<>();
