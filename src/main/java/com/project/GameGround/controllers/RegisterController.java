@@ -29,6 +29,6 @@ public class RegisterController {
             return "redirect:/register";
         }
         userDetailsService.saveUser(user, ra);
-        return "redirect:/sort=dateASC";
+        return "redirect:/sort=dateDSC";
     }
 }
