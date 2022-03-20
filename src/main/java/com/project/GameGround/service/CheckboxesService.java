@@ -76,7 +76,8 @@ public class CheckboxesService {
 
     public String isOnMyselfAction(List<Long> ID, Authentication auth){  //check if user blocked or deleted himself to logout
         String email = getUserEmail(auth);
-        if(ID.contains(repo.getByEmail(email).getId())){
+        User currentUser = repo.getByEmail(email);
+        if(currentUser == null || ID.contains(currentUser.getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
         } else return "redirect:/users/list";

@@ -38,6 +38,7 @@
                             <label for="reviewRate"><strong th:text="#{reviewRating}"></strong>
                                 <div id="reviewRate">
                                     <script>displayRate([[${review.rate}]], 'fa-2xl')</script>
+                                    <p class="mb-0 text-muted" th:text="'('+ ${review.rateCount}+' '+#{marks} +')'"></p>
                                 </div>
                             </label><br><br>
                         </div>
