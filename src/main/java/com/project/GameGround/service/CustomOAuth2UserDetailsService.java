@@ -36,8 +36,8 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
         User user = new User();
         user.setEmail(email);
         if(name.contains(" ")){  //if oauth2 user has last name -> get it
-            user.setFirstName(name.split(" ", 2)[0]);
-            user.setLastName(name.split(" ", 2)[1]);
+            user.setFirstName(name.split(" ", 2)[Constants.firstNamePart]);
+            user.setLastName(name.split(" ", 2)[Constants.secondNamePart]);
         }
         else user.setFirstName(name);  //else set only name
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
