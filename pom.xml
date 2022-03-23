@@ -62,16 +62,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.3.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
 			<version>5.1.3</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>font-awesome</artifactId>
@@ -86,11 +80,6 @@
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>popper.js</artifactId>
 			<version>1.16.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>font-awesome</artifactId>
-			<version>5.11.2</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.furstenheim</groupId>
