@@ -23,7 +23,7 @@ public class RegisterController {
         return "registration";
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public String processRegistration(@Valid User user, BindingResult bindingResult, RedirectAttributes ra){
         if(bindingResult.hasErrors()){
             return "redirect:/register";
