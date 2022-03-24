@@ -104,6 +104,11 @@
             </div>
             <div class="text-center">
                 <button id="writeReview" style="background: transparent; border:none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+                <script>
+                    if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
+                        $("#writeReview").hide();
+                    }
+                </script>
             </div>
             <div class="col-lg-12" id="reviewForm">
                 <div class="card mb-4">
@@ -203,6 +208,12 @@
                                                 <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
                                             </div>
                                         </form>
+                                        <script>
+                                            if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
+                                                $("#editReview").hide().removeAttr("id");
+                                                $("#deleteReview").hide().removeAttr("id");
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -212,13 +223,6 @@
             </div>
         </div>
     </div>
-    <script>
-        if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
-            $("#writeReview").hide();
-            $("#editReview").hide();
-            $("#deleteReview").hide();
-        }
-    </script>
     <script>
         let simplemde = new SimpleMDE({element: document.getElementById("content")});
     </script>
