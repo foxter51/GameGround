@@ -2,6 +2,7 @@ package com.project.GameGround;
 
 import com.project.GameGround.entities.RatedBy;
 import com.project.GameGround.repositories.RatingRepository;
+import com.project.GameGround.repositories.ReviewRepository;
 import com.project.GameGround.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class RatingRepositoryTest {
     private UserRepository repo;
 
     @Autowired
+    private ReviewRepository reviewRepo;
+
+    @Autowired
     private RatingRepository ratingRepo;
 
     @Autowired
@@ -27,7 +31,7 @@ public class RatingRepositoryTest {
 
     @Test
     public void testCreateRating(){
-        RatedBy ratedBy = new RatedBy((long)2, repo.getById((long)1), "RATING");
+        RatedBy ratedBy = new RatedBy((long)1, repo.getById((long)1), "RATING");
         RatedBy savedRatedBy = ratingRepo.save(ratedBy);
         RatedBy existRatedBy = entityManager.find(RatedBy.class, savedRatedBy.getId());
         assertThat(existRatedBy.getId()).isEqualTo(ratedBy.getId());

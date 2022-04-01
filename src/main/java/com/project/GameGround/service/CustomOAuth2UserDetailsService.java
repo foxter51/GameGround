@@ -1,8 +1,6 @@
 package com.project.GameGround.service;
 
 import com.project.GameGround.Constants;
-import com.project.GameGround.repositories.RoleRepository;
-import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
@@ -20,15 +18,15 @@ import java.util.Date;
 public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
 
     @Autowired
-    private UserRepository repo;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleDetailsService roleDetailsService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
         OAuth2User OAuthUser = super.loadUser(userRequest);
-        User user = repo.getByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
+        User user = userDetailsService.repo.getByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
         return new CustomOAuth2UserDetails(OAuthUser, user);  //returns new user after successful auth
     }
 
@@ -45,7 +43,7 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
         user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
-        user.addRole(roleRepo.getRoleByName("USER"));
-        repo.save(user);
+        user.addRole(roleDetailsService.repo.getRoleByName("USER"));
+        userDetailsService.repo.save(user);
     }
 }

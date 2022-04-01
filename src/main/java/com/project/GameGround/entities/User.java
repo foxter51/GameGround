@@ -52,14 +52,12 @@ public class User {
     private String status;
 
     @Enumerated(EnumType.STRING)
-    @Column
     private AuthProvider authProvider;
 
-    @Column(name = "likes_quantity")
     private int likesQuantity;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
+    @JoinTable
     private Set<Role> roles = new HashSet<>();
 
     @ToString.Exclude

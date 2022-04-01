@@ -4,8 +4,6 @@ import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.entities.Role;
 import com.project.GameGround.entities.User;
-import com.project.GameGround.repositories.RoleRepository;
-import com.project.GameGround.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,10 +15,10 @@ import java.util.List;
 public class CheckboxesService {
 
     @Autowired
-    private UserRepository repo;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleDetailsService roleDetailsService;
 
     public String doCheckboxAction(List<Long> ID, String button, Authentication auth){
         switch (button) {
@@ -38,30 +36,30 @@ public class CheckboxesService {
     }
 
     public String blockAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> repo.blockById(id));
+        ID.forEach(id -> userDetailsService.repo.blockById(id));
         return isOnMyselfAction(ID, auth);
     }
 
     public void unblockAction(List<Long> ID){
-        ID.forEach(id -> repo.unblockById(id));
+        ID.forEach(id -> userDetailsService.repo.unblockById(id));
     }
 
     public String deleteAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> repo.deleteById(id));
+        ID.forEach(id -> userDetailsService.repo.deleteById(id));
         return isOnMyselfAction(ID, auth);
     }
 
     public String setAdminAction(List<Long> ID, Authentication auth){
         User user = null;
         for(Long userID : ID){
-            user = repo.getById(userID);
+            user = userDetailsService.repo.getById(userID);
             if(isContainsRoleAdmin(user)){  //if user is admin -> remove admin role
                 user.removeAdminRole();
             }
-            else user.addRole(roleRepo.getRoleByName("ADMIN"));  //if user is not admin -> add admin role
+            else user.addRole(roleDetailsService.repo.getRoleByName("ADMIN"));  //if user is not admin -> add admin role
         }
         assert user != null;
-        repo.save(user);
+        userDetailsService.repo.save(user);
         return isOnMyselfAction(ID, auth);
     }
 
@@ -76,7 +74,7 @@ public class CheckboxesService {
 
     public String isOnMyselfAction(List<Long> ID, Authentication auth){  //check if user blocked or deleted himself to logout
         String email = getUserEmail(auth);
-        User currentUser = repo.getByEmail(email);
+        User currentUser = userDetailsService.repo.getByEmail(email);
         if(currentUser == null || ID.contains(currentUser.getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";

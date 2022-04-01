@@ -1,7 +1,6 @@
 package com.project.GameGround.entities;
 
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -16,39 +15,35 @@ import java.util.Set;
 @Table(name="reviews")
 public class Review {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
     @Max(64)
-    @Column(name="review_name", nullable = false, length = 64)
+    @Column(nullable = false, length = 64)
     private String reviewName;
 
     @NotBlank
     @Max(32)
-    @Column(name="group_name", nullable = false, length = 32)
+    @Column(nullable = false, length = 32)
     private String groupName;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(name = "reviews_tags", joinColumns = @JoinColumn(name = "review_id"), inverseJoinColumns = @JoinColumn(name="tag_id"))
+    @JoinTable
     private Set<Tag> tags = new HashSet<>();
 
     @NotBlank
-    @Column(name="review_text", nullable = false)
+    @Column(nullable = false)
     private String text;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private User user;
 
-    @Column(name = "author_rate")
     private int authorRate;
 
-    @Column(name = "review_rate")
     private float rate;
 
-    @Column(name = "rate_count")
     private int rateCount;
 
     @OneToMany(cascade = CascadeType.REMOVE)
@@ -59,7 +54,7 @@ public class Review {
     @JoinColumn(name = "review_id")
     private List<Comment> comments = new ArrayList<>();
 
-    @Column(name="date", nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String publishDate;
 
     public void addTag(Tag tag){

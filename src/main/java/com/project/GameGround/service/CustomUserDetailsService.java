@@ -3,7 +3,6 @@ package com.project.GameGround.service;
 import com.project.GameGround.Constants;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.details.CustomUserDetails;
-import com.project.GameGround.repositories.RoleRepository;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
@@ -22,13 +21,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {  //implements getting user information from database
+public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository repo;
+    protected UserRepository repo;
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleDetailsService roleDetailsService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -47,7 +46,7 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
         user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
-        user.addRole(roleRepo.getRoleByName("USER"));
+        user.addRole(roleDetailsService.repo.getRoleByName("USER"));
         if(repo.getByEmail(user.getEmail()) == null){
             repo.save(user);
             ra.addFlashAttribute("register", true);  //send message if register success
@@ -57,13 +56,6 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     public void getProfileByID(String userID, Model model){
         model.addAttribute("userProfile", repo.getById(Long.parseLong(userID)));
-    }
-
-    public void sendCurrentUserID(Model model, Authentication currentUser){
-        if(currentUser != null){
-            String email = getUserEmail(currentUser);
-            model.addAttribute("currentUserID", repo.getByEmail(email).getId());
-        }
     }
 
     public void sendCurrentUserAuthorities(Model model, Authentication currentUser){
@@ -84,6 +76,14 @@ public class CustomUserDetailsService implements UserDetailsService {  //impleme
 
     public void sendUsersList(Model model){
         model.addAttribute("users", repo.findAll());
+    }
+
+    public Long getCurrentUserID(Authentication currentUser){
+        if(currentUser != null){
+            String email = getUserEmail(currentUser);
+            return repo.getByEmail(email).getId();
+        }
+        return null;
     }
 
     public String getUserEmail(Authentication auth){

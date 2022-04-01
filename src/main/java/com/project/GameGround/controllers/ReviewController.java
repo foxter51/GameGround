@@ -1,7 +1,6 @@
 package com.project.GameGround.controllers;
 
 import com.project.GameGround.entities.Comment;
-import com.project.GameGround.service.CustomUserDetailsService;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,18 +14,15 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private ReviewDetailsService reviewDetailsService;
 
     @RequestMapping("/{id}")
     public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
-        userDetailsService.sendCurrentUserID(model, auth);
         reviewDetailsService.getReviewByID(reviewID, model);
         reviewDetailsService.addComment(model);
-        reviewDetailsService.addRatingPossibility(reviewID, model);
+        reviewDetailsService.addRatingPossibility(reviewID, model, auth);
         return "review";
     }
 

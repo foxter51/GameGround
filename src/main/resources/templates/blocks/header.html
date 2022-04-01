@@ -10,7 +10,7 @@
                     <a class="nav-link" th:href="@{/users/list}" th:text="#{controlPanelLabel}"></a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/profile/{id}/(id=${currentUserID})}"><b th:text="${#authentication.getPrincipal().getFullName()}"></b></a>
+                    <a class="nav-link" th:href="@{/profile/{id}/(id=${#authentication.getPrincipal().getId()})}"><b th:text="${#authentication.getPrincipal().getFullName()}"></b></a>
                     <a class="nav-link" sec:authorize="hasAuthority('ADMIN')"><strong>ADMIN</strong></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" style="background: transparent; border:none"><i class="fa-solid fa-door-open fa-xl text-white"></i></button>

@@ -30,7 +30,6 @@ public class ProfileController {
     @RequestMapping("/{id}/{filter}")
     public String profilePageSort(@PathVariable("id") String userID, @PathVariable("filter") String filter, Model model, Authentication auth){
         userDetailsService.getProfileByID(userID, model);
-        userDetailsService.sendCurrentUserID(model, auth);
         userDetailsService.sendCurrentUserAuthorities(model, auth);
         reviewDetailsService.loadReviewsByID(userID, model, filter);
         reviewDetailsService.createReview(model);

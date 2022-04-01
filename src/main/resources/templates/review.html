@@ -50,7 +50,7 @@
             </div>
              <div class="row">
                  <div id="rateReview" class="col" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
-                     <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post">
+                     <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></button>
@@ -59,7 +59,7 @@
                      </form>
                  </div>
                  <div id="likeReview" class="col" sec:authorize="isAuthenticated()" th:if="${likePossibility == true}">
-                     <form th:action="@{review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" class="float-end">
+                     <form th:action="@{review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post" class="float-end">
                          <button type="submit" style="background: transparent; color: white; border: none"><i class="fa-regular fa-heart fa-2xl" name="signs" id="likeButton"></i></button>
                          <script>
                              $(function (){
@@ -83,7 +83,7 @@
                     <div class="col-6" id="addCommentSection">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <form th:action="@{/review/{reviewID}/add_comment/{userID}(reviewID=${review.id}, userID=${currentUserID})}" method="post" th:object="${newComment}">
+                                <form th:action="@{/review/{reviewID}/add_comment/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post" th:object="${newComment}">
                                     <div class="form-group">
                                         <label for="commentField" class="col-sm-2">
                                             <span class="h6 small text-muted pt-1 pl-2 pr-2" th:text="#{commentLabel}"></span>

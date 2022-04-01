@@ -13,17 +13,17 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="review_id")
+    @Column(name = "review_id")
     private Long reviewID;
 
     @NotBlank
-    @Column(name="comment_text", nullable = false)
+    @Column(nullable = false)
     private String text;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private User user;
 
-    @Column(name="date", nullable = false, length = 20)
+    @Column(nullable = false, length = 20)
     private String publishDate;
 }

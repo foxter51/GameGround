@@ -56,4 +56,8 @@ public class CustomUserDetails implements UserDetails {  //implement authenticat
     public String getFullName() {
         return user.getFirstName() + " " +user.getLastName();
     }
+
+    public Long getId(){
+        return user.getId();
+    }
 }

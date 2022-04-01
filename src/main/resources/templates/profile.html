@@ -105,7 +105,7 @@
             <div class="text-center">
                 <button id="writeReview" style="background: transparent; border:none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
                 <script>
-                    if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
+                    if([[${#authentication.getPrincipal().getId()}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
                         $("#writeReview").hide();
                     }
                 </script>
@@ -209,7 +209,7 @@
                                             </div>
                                         </form>
                                         <script>
-                                            if([[${currentUserID}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
+                                            if([[${#authentication.getPrincipal().getId()}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
                                                 $("#editReview").hide().removeAttr("id");
                                                 $("#deleteReview").hide().removeAttr("id");
                                             }

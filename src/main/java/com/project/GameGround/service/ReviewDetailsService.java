@@ -10,6 +10,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,19 +22,19 @@ import java.util.*;
 public class ReviewDetailsService {
 
     @Autowired
-    private UserRepository repo;
+    protected ReviewRepository repo;
 
     @Autowired
-    private ReviewRepository reviewRepo;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private TagRepository tagRepo;
+    private TagDetailsService tagDetailsService;
 
     @Autowired
-    private CommentRepository commentRepo;
+    private CommentDetailsService commentDetailsService;
 
     @Autowired
-    private RatingRepository ratingRepo;
+    private RatingDetailsService ratingDetailsService;
 
     public void createReview(Model model){
         model.addAttribute("createReview", new Review());
@@ -41,44 +42,44 @@ public class ReviewDetailsService {
     }
 
     public void saveReview(String userID, Review review, Tags tags, Integer starValue){
-        review.setUser(repo.getById(Long.parseLong(userID)));
+        review.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().trim().split(" ")) {  //extract tags from string
             Tag newTag = new Tag(tag);
-            if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagRepo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
+            if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagDetailsService.repo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
         review.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         review.setAuthorRate(starValue);
-        reviewRepo.save(review);
+        repo.save(review);
     }
 
     public void loadReviews(Model model, String sortBy){  //load all reviews depending on sort type
-        List<Review> reviews = null;
+        List<Review> reviews;
         switch(sortBy){
             case "sort=dateASC":
-                reviews = reviewRepo.findAll();
+                reviews = repo.findAll();
                 break;
             case "sort=dateDSC":
-                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
+                reviews = repo.findAll(Sort.by(Sort.Direction.DESC, "id"));
                 break;
             case "sort=ratingASC":
-                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.ASC, "rate"));
+                reviews = repo.findAll(Sort.by(Sort.Direction.ASC, "rate"));
                 break;
             case "sort=ratingDSC":
-                reviews = reviewRepo.findAll(Sort.by(Sort.Direction.DESC, "rate"));
+                reviews = repo.findAll(Sort.by(Sort.Direction.DESC, "rate"));
                 break;
             case "filter=ratingGE4":
-                reviews = reviewRepo.getReviewsRatingGE4();
+                reviews = repo.getReviewsRatingGE4();
                 break;
             default:  //find by tag
-                reviews = reviewRepo.getReviewsByTag(sortBy);
+                reviews = repo.getReviewsByTag(sortBy);
                 break;
         }
         model.addAttribute("reviews", reviews);
     }
 
     public void loadReviewsByID(String userID, Model model, String sortBy){  //load reviews by id depending on sort type
-        List<Review> reviews = reviewRepo.getReviewByUserId(Long.parseLong(userID));
+        List<Review> reviews = repo.getReviewByUserId(Long.parseLong(userID));
         switch(sortBy){
             case "sort=dateASC":
                 break;
@@ -92,30 +93,30 @@ public class ReviewDetailsService {
                 reviews.sort(Comparator.comparing(Review::getRate).reversed());
                 break;
             case "filter=ratingGE4":
-                reviews = reviewRepo.getReviewsRatingGE4ByID(Long.parseLong(userID));
+                reviews = repo.getReviewsRatingGE4ByID(Long.parseLong(userID));
                 break;
         }
         model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
     }
 
     public void loadReviewBySearch(Model model, String request){  //load reviews as a search result
-        List<Review> foundReviews = reviewRepo.search(request);
+        List<Review> foundReviews = repo.search(request);
         model.addAttribute("searchResult", foundReviews.size() > 0);
         model.addAttribute("searchRequest", request);
         model.addAttribute("reviews", foundReviews.size()>0 ? foundReviews : null);
     }
 
     public void getReviewByID(String reviewID, Model model){
-        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        Review review = repo.getById(Long.parseLong(reviewID));
         model.addAttribute("review", review);
     }
 
     public void removeReviewByID(String reviewID){
-        reviewRepo.deleteById(Long.parseLong(reviewID));
+        repo.deleteById(Long.parseLong(reviewID));
     }
 
     public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){  //get old review to update
-        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        Review review = repo.getById(Long.parseLong(reviewID));
         ra.addFlashAttribute("updateReview", review);
         ra.addFlashAttribute("profileID", profileID);
     }
@@ -133,52 +134,52 @@ public class ReviewDetailsService {
     }
 
     public void saveComment(String reviewID, String userID, Comment comment){
-        comment.setUser(repo.getById(Long.parseLong(userID)));
+        comment.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
         comment.setReviewID(Long.parseLong(reviewID));
         comment.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
-        Comment savedComment = commentRepo.save(comment);
-        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        Comment savedComment = commentDetailsService.repo.save(comment);
+        Review review = repo.getById(Long.parseLong(reviewID));
         review.addComment(savedComment);
-        reviewRepo.save(review);
+        repo.save(review);
     }
 
-    public void addRatingPossibility(String reviewID, Model model){  //get possibility to rate
-        Long currentUserID = (Long) model.getAttribute("currentUserID");
-        model.addAttribute("ratePossibility", !isUserRated(reviewID, currentUserID, "RATING"));
-        model.addAttribute("likePossibility", !isUserRated(reviewID, currentUserID, "LIKE"));
+    public void addRatingPossibility(String reviewID, Model model, Authentication auth){  //get possibility to rate
+        Long currentUserID = userDetailsService.getCurrentUserID(auth);
+        model.addAttribute("ratePossibility", isUserNotRated(reviewID, currentUserID, "RATING"));
+        model.addAttribute("likePossibility", isUserNotRated(reviewID, currentUserID, "LIKE"));
     }
 
-    public boolean isUserRated(String reviewID, Long currentUserID, String rateType){  //check if user rated to give him possibility
-        List<RatedBy> usersRated = reviewRepo.getById(Long.parseLong(reviewID)).getBlockedToRate();
+    public boolean isUserNotRated(String reviewID, Long currentUserID, String rateType){  //check if user rated to give him possibility
+        List<RatedBy> usersRated = repo.getById(Long.parseLong(reviewID)).getBlockedToRate();
         for(RatedBy user : usersRated){
             if(Objects.equals(user.getUser().getId(), currentUserID) && user.getRateType().equals(rateType)){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public void changeRate(String reviewID, String userID, String starValue){
-        Review review = reviewRepo.getById(Long.parseLong(reviewID));
+        Review review = repo.getById(Long.parseLong(reviewID));
         float rate = review.getRate();
         float rateCount = review.getRateCount();
         review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));  //count new review rate
         review.setRateCount((int)(rateCount+1));
-        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "RATING"));
+        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "RATING"));
         review.addBlockedToRate(user);  //remember user rated
-        reviewRepo.save(review);
+        repo.save(review);
     }
 
     public void likeReview(String reviewID, String userID){
-        repo.incrementLike(Long.parseLong(userID));
-        Review review = reviewRepo.getById(Long.parseLong(reviewID));
-        RatedBy user = ratingRepo.save(new RatedBy(Long.parseLong(reviewID), repo.getById(Long.parseLong(userID)), "LIKE"));
+        userDetailsService.repo.incrementLike(Long.parseLong(userID));
+        Review review = repo.getById(Long.parseLong(reviewID));
+        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "LIKE"));
         review.addBlockedToRate(user);  //remember user liked
-        reviewRepo.save(review);
+        repo.save(review);
     }
 
     public void getLast5Tags(Model model){
-        Set<Tag> last5tags = tagRepo.findFirst5ByOrderByIdDesc();
+        Set<Tag> last5tags = tagDetailsService.repo.findFirst5ByOrderByIdDesc();
         model.addAttribute("last5tags", last5tags.size()>0 ? last5tags : null);
     }
 

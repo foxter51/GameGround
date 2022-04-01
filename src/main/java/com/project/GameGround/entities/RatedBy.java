@@ -12,14 +12,13 @@ public class RatedBy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="review_id")
+    @Column(name = "review_id")
     private Long reviewID;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private User user;
 
-    @Column(name = "type")
     private String rateType;
 
     public RatedBy(Long reviewID, User user, String rateType){
