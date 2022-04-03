@@ -123,6 +123,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<arguments>
+						<argument>-Djasypt.encryptor.password=test2022</argument>
+					</arguments>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.github.ulisesbocchio</groupId>
