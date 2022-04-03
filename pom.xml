@@ -121,15 +121,11 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<argLine>-Djasypt.encryptor.password=test2022</argLine>
+					<compilerArgs>
+						<arg>-Djasypt.encryptor.password=test2022</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
