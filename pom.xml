@@ -129,9 +129,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
 				<configuration>
-					<compilerArgs>
-						<arg>JASYPT_ENCRYPTOR_PASSWORD=test2022</arg>
-					</compilerArgs>
+					<source>1.8</source>
+					<target>1.8</target>
+					<verbose>true</verbose>
 				</configuration>
 			</plugin>
 			<plugin>
