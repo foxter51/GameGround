@@ -129,7 +129,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
 				<configuration>
-					<compilerArgument>-Djasypt.encryptor.password=test2022</compilerArgument>
+					<compilerArgs>
+						<arg>JASYPT_ENCRYPTOR_PASSWORD=test2022</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
