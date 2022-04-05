@@ -28,7 +28,7 @@ public class RegisterController {
         if(bindingResult.hasErrors()){
             return "redirect:/register";
         }
-        userDetailsService.saveUser(user, ra);
+        ra.addFlashAttribute("register", userDetailsService.saveUser(user)); //send message if register success
         return "redirect:/sort=dateDSC";
     }
 }

@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -39,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);  //found user
     }
 
-    public void saveUser(User user, RedirectAttributes ra){
+    public boolean saveUser(User user){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
         user.setRegistrationDate(dateTimeFormat.format(new Date()));
@@ -49,20 +47,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
         if(repo.getByEmail(user.getEmail()) == null){
             repo.save(user);
-            ra.addFlashAttribute("register", true);  //send message if register success
+            return true;
         }
-        else ra.addFlashAttribute("register", false);  //send message if register failed
+        return false;
     }
 
-    public void getProfileByID(String userID, Model model){
-        model.addAttribute("userProfile", repo.getById(Long.parseLong(userID)));
+    public User getProfileByID(String userID){
+        return repo.getById(Long.parseLong(userID));
     }
 
-    public void sendCurrentUserAuthorities(Model model, Authentication currentUser){
+    public boolean getCurrentUserAuthorities(Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
-            model.addAttribute("isAdmin", isAdmin(new CustomUserDetails(repo.getByEmail(email)).getAuthorities()));
+            return isAdmin(new CustomUserDetails(repo.getByEmail(email)).getAuthorities());
         }
+        return false;
     }
 
     public boolean isAdmin(Collection<? extends GrantedAuthority> roles){
@@ -74,8 +73,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return false;
     }
 
-    public void sendUsersList(Model model){
-        model.addAttribute("users", repo.findAll());
+    public List<User> getUsersList(){
+        return repo.findAll();
     }
 
     public Long getCurrentUserID(Authentication currentUser){

@@ -1,11 +1,14 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class MainPageController {
@@ -20,15 +23,18 @@ public class MainPageController {
 
     @RequestMapping("/{filter}")
     public String mainPageSort(@PathVariable("filter")String filter, Model model){
-        reviewDetailsService.loadReviews(model, filter);
-        reviewDetailsService.getLast5Tags(model);
+        model.addAttribute("reviews", reviewDetailsService.loadReviews(filter));
+        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
         return "main";
     }
 
     @GetMapping("/search")
     public String mainPageSearch(@Param("request")String request, Model model){
-        reviewDetailsService.loadReviewBySearch(model, request);
-        reviewDetailsService.getLast5Tags(model);
+        List<Review> reviews = reviewDetailsService.loadReviewBySearch(request);
+        model.addAttribute("searchResult", reviews.size() > 0);
+        model.addAttribute("searchRequest", request);
+        model.addAttribute("reviews", reviews.size()>0 ? reviews : null);
+        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
         return "main";
     }
 }

@@ -1,5 +1,6 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.Tags;
 import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,8 @@ public class EditPageController {
         if(bindingResult.hasErrors()){
             return "redirect:/profile/"+profileID;
         }
-        reviewDetailsService.loadReviewToUpdate(review, model);
+        model.addAttribute("Tags", reviewDetailsService.getOldTags(review));
+        model.addAttribute("updateReview", reviewDetailsService.loadReviewToUpdate(review));
         return "editPage";
     }
 }

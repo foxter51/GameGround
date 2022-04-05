@@ -10,10 +10,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,11 +33,6 @@ public class ReviewDetailsService {
     @Autowired
     private RatingDetailsService ratingDetailsService;
 
-    public void createReview(Model model){
-        model.addAttribute("createReview", new Review());
-        model.addAttribute("Tags", new Tags());
-    }
-
     public void saveReview(String userID, Review review, Tags tags, Integer starValue){
         review.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().trim().split(" ")) {  //extract tags from string
@@ -53,7 +45,7 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public void loadReviews(Model model, String sortBy){  //load all reviews depending on sort type
+    public List<Review> loadReviews(String sortBy){  //load all reviews depending on sort type
         List<Review> reviews;
         switch(sortBy){
             case "sort=dateASC":
@@ -75,10 +67,10 @@ public class ReviewDetailsService {
                 reviews = repo.getReviewsByTag(sortBy);
                 break;
         }
-        model.addAttribute("reviews", reviews);
+        return reviews.size() > 0 ? reviews : null;
     }
 
-    public void loadReviewsByID(String userID, Model model, String sortBy){  //load reviews by id depending on sort type
+    public List<Review> loadReviewsByID(String userID, String sortBy){  //load reviews by id depending on sort type
         List<Review> reviews = repo.getReviewByUserId(Long.parseLong(userID));
         switch(sortBy){
             case "sort=dateASC":
@@ -96,41 +88,34 @@ public class ReviewDetailsService {
                 reviews = repo.getReviewsRatingGE4ByID(Long.parseLong(userID));
                 break;
         }
-        model.addAttribute("reviews", reviews.size() > 0 ? reviews : null);
+        return reviews.size() > 0 ? reviews : null;
     }
 
-    public void loadReviewBySearch(Model model, String request){  //load reviews as a search result
-        List<Review> foundReviews = repo.search(request);
-        model.addAttribute("searchResult", foundReviews.size() > 0);
-        model.addAttribute("searchRequest", request);
-        model.addAttribute("reviews", foundReviews.size()>0 ? foundReviews : null);
+    public List<Review> loadReviewBySearch(String request){  //load reviews as a search result
+        return repo.search(request);
     }
 
-    public void getReviewByID(String reviewID, Model model){
-        Review review = repo.getById(Long.parseLong(reviewID));
-        model.addAttribute("review", review);
+    public Review getReviewByID(String reviewID){
+        return repo.getById(Long.parseLong(reviewID));
     }
 
     public void removeReviewByID(String reviewID){
         repo.deleteById(Long.parseLong(reviewID));
     }
 
-    public void sendReviewToUpdate(String reviewID, RedirectAttributes ra, String profileID){  //get old review to update
-        Review review = repo.getById(Long.parseLong(reviewID));
-        ra.addFlashAttribute("updateReview", review);
-        ra.addFlashAttribute("profileID", profileID);
+    public Review getReviewToUpdate(String reviewID){  //get old review to update
+        return repo.getById(Long.parseLong(reviewID));
     }
 
-    public void loadReviewToUpdate(Review review, Model model){  //loading review to update
+    public Tags getOldTags(Review review){
         StringBuilder tags = new StringBuilder();
         review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));  //get old tags
-        model.addAttribute("Tags", new Tags(tags.toString()));
-        review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
-        model.addAttribute("updateReview", review);
+        return new Tags(tags.toString());
     }
 
-    public void addComment(Model model){
-        model.addAttribute("newComment", new Comment());
+    public Review loadReviewToUpdate(Review review){  //loading review to update
+        review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
+        return review;
     }
 
     public void saveComment(String reviewID, String userID, Comment comment){
@@ -141,12 +126,6 @@ public class ReviewDetailsService {
         Review review = repo.getById(Long.parseLong(reviewID));
         review.addComment(savedComment);
         repo.save(review);
-    }
-
-    public void addRatingPossibility(String reviewID, Model model, Authentication auth){  //get possibility to rate
-        Long currentUserID = userDetailsService.getCurrentUserID(auth);
-        model.addAttribute("ratePossibility", isUserNotRated(reviewID, currentUserID, "RATING"));
-        model.addAttribute("likePossibility", isUserNotRated(reviewID, currentUserID, "LIKE"));
     }
 
     public boolean isUserNotRated(String reviewID, Long currentUserID, String rateType){  //check if user rated to give him possibility
@@ -178,9 +157,9 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public void getLast5Tags(Model model){
+    public Set<Tag> getLast5Tags(){
         Set<Tag> last5tags = tagDetailsService.repo.findFirst5ByOrderByIdDesc();
-        model.addAttribute("last5tags", last5tags.size()>0 ? last5tags : null);
+        return last5tags.size()>0 ? last5tags : null;
     }
 
     private String markdownToHTML(String markdown) {
