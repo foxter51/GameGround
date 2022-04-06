@@ -1,8 +1,10 @@
 package com.project.GameGround.controllers;
 
+import com.project.GameGround.dto.CommentDTO;
 import com.project.GameGround.entities.Comment;
 import com.project.GameGround.service.CustomUserDetailsService;
 import com.project.GameGround.service.ReviewDetailsService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,10 +24,13 @@ public class ReviewController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @RequestMapping("/{id}")
     public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
         model.addAttribute("review", reviewDetailsService.getReviewByID(reviewID));
-        model.addAttribute("newComment", new Comment());
+        model.addAttribute("newComment", new CommentDTO());
         Long currentUserID = userDetailsService.getCurrentUserID(auth);
         model.addAttribute("ratePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "RATING"));
         model.addAttribute("likePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "LIKE"));
@@ -33,11 +38,11 @@ public class ReviewController {
     }
 
     @PostMapping("/{reviewID}/add_comment/{userID}")
-    public String commentCreation(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @Valid Comment comment, BindingResult bindingResult){
+    public String commentCreation(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @Valid CommentDTO comment, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "redirect:/review/{reviewID}";
         }
-        reviewDetailsService.saveComment(reviewID, userID, comment);
+        reviewDetailsService.saveComment(reviewID, userID, modelMapper.map(comment, Comment.class));
         return "redirect:/review/{reviewID}";
     }
 

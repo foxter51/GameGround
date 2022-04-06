@@ -3,8 +3,6 @@ package com.project.GameGround.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,17 +12,14 @@ import java.util.Set;
 @Entity
 @Table(name="reviews")
 public class Review {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Max(64)
     @Column(nullable = false, length = 64)
     private String reviewName;
 
-    @NotBlank
-    @Max(32)
     @Column(nullable = false, length = 32)
     private String groupName;
 
@@ -32,7 +27,6 @@ public class Review {
     @JoinTable
     private Set<Tag> tags = new HashSet<>();
 
-    @NotBlank
     @Column(nullable = false)
     private String text;
 

@@ -3,12 +3,12 @@ package com.project.GameGround.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
 @Table(name = "comments")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +16,6 @@ public class Comment {
     @Column(name = "review_id")
     private Long reviewID;
 
-    @NotBlank
     @Column(nullable = false)
     private String text;
 

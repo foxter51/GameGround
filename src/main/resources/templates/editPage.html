@@ -23,7 +23,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row">
-                        <form th:action="@{/profile/{id}/save/(id=${profileID})}" method="post" th:object="${updateReview}">
+                        <form th:action="@{/profile/{id}/edit/save/(id=${profileID})}" method="post" th:object="${updateReview}">
                             <div class="form-group" hidden>
                                 <input type="text" autocomplete="off" th:field="*{id}"/>
                             </div>
