@@ -37,4 +37,10 @@ public class MainPageController {
         model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
         return "main";
     }
+
+    @GetMapping("/read_also")
+    public String readAlso(@ModelAttribute("reviews")List<Review> reviews, Model model){
+        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
+        return "main";
+    }
 }

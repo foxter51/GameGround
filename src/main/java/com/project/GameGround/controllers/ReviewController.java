@@ -2,6 +2,7 @@ package com.project.GameGround.controllers;
 
 import com.project.GameGround.dto.CommentDTO;
 import com.project.GameGround.entities.Comment;
+import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.CustomUserDetailsService;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -29,11 +31,13 @@ public class ReviewController {
 
     @RequestMapping("/{id}")
     public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
-        model.addAttribute("review", reviewDetailsService.getReviewByID(reviewID));
+        Review review = reviewDetailsService.getReviewByID(reviewID);
+        model.addAttribute("review", review);
         model.addAttribute("newComment", new CommentDTO());
         Long currentUserID = userDetailsService.getCurrentUserID(auth);
         model.addAttribute("ratePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "RATING"));
         model.addAttribute("likePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "LIKE"));
+        model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));
         return "review";
     }
 
@@ -56,5 +60,11 @@ public class ReviewController {
     public String likeReview(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
         reviewDetailsService.likeReview(reviewID, userID);
         return "redirect:/review/{reviewID}";
+    }
+
+    @RequestMapping("/{reviewID}/read_also/{request}")
+    public String readAlso(@PathVariable("reviewID")String reviewID, @PathVariable("request")String request, RedirectAttributes ra){
+        ra.addFlashAttribute("reviews", reviewDetailsService.getReviewsByGenre(request));
+        return "redirect:/read_also";
     }
 }

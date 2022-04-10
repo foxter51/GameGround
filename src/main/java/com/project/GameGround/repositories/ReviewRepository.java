@@ -27,4 +27,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(value = "SELECT * FROM reviews WHERE MATCH (`review_name`, `group_name`, `text`) AGAINST (?1)", nativeQuery = true)
     List<Review> search(String request);
+
+    List<Review> getReviewsByGroupName(String groupName);
+
+    @Query(value = "SELECT DISTINCT group_name FROM reviews WHERE group_name != ?1 ORDER BY id DESC LIMIT 0, 4", nativeQuery = true)
+    List<String> getLast4Genres(String withoutGenre);
 }

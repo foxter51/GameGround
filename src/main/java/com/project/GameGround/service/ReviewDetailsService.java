@@ -162,6 +162,14 @@ public class ReviewDetailsService {
         return last5tags.size()>0 ? last5tags : null;
     }
 
+    public List<Review> getReviewsByGenre(String groupName){
+        return repo.getReviewsByGroupName(groupName);
+    }
+
+    public List<String> getLastGenres(String withoutGenre){
+        return repo.getLast4Genres(withoutGenre);
+    }
+
     private String markdownToHTML(String markdown) {
         Parser parser = Parser.builder()
                 .build();

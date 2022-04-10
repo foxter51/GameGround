@@ -42,8 +42,11 @@
                                 </div>
                             </label><br><br>
                         </div>
-                        <h4 class="mb-0" style="display: inline" th:text="#{author}"></h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4>
-                        <p class="text-muted" th:text="${review.publishDate}"></p>
+                        <h4 class="mb-0" style="display: inline" th:text="#{author}"></h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4><br>
+                        <div>
+                            <i class="fa-regular fa-calendar-check" name="signs"></i>
+                            <i class="text-muted" th:text="${review.publishDate}"></i>
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -76,9 +79,21 @@
                  </div>
              </div>
         </div>
+        <hr>
+        <div class="row">
+            <p class="text-muted" th:text="#{readAlso}"></p>
+            <div class="float-start">
+                <nav class="nav nav-masthead justify-content-center float-md-start">
+                    <a class="nav-link" th:href="@{/review/{reviewID}/read_also/{genre}(reviewID=${review.id}, genre=${review.groupName})}"><button class="btn btn-danger" th:text="${review.groupName}"></button></a>
+                    <div th:each="genre : ${lastGenres}">
+                        <a class="nav-link" th:href="@{/review/{reviewID}/read_also/{genre}(reviewID=${review.id}, genre=${genre})}"><button class="btn btn-primary" th:text="${genre}"></button></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
         <div class="row">
             <div class="container" sec:authorize="isAuthenticated()">
-                <hr><br>
+                <br>
                 <div class="row">
                     <div class="col-6" id="addCommentSection">
                         <div class="card mb-4">
