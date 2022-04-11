@@ -113,7 +113,7 @@ public class ReviewDetailsService {
         return new Tags(tags.toString());
     }
 
-    public Review loadReviewToUpdate(Review review){  //loading review to update
+    public Review reviewTextToMarkdown(Review review){  //loading review to update
         review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
         return review;
     }
