@@ -17,6 +17,7 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 <main class="container py-5">
+    <div th:insert="blocks/toTheTopButton :: toTheTop"></div>
     <div th:insert="blocks/searchBar :: searchBar"></div><br>
     <div th:object="${review}">
         <div class="row">

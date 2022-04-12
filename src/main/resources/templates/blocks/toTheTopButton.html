@@ -1,0 +1,19 @@
+<div th:fragment="toTheTop" class="position-fixed" style="bottom: 30px; right: 30px">
+  <div id="btn-back-to-top">
+    <a href="#top">
+      <button
+              type="button"
+              class="btn btn-danger btn-floating btn-lg"
+              style="border-radius: 100%"
+      >
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </a>
+  </div>
+  <script>
+    $("#btn-back-to-top").fadeOut();
+    $(document).scroll(function (){
+      $("#btn-back-to-top").fadeIn();
+    });
+  </script>
+</div>
