@@ -32,4 +32,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query(value = "SELECT DISTINCT group_name FROM reviews WHERE group_name != ?1 ORDER BY id DESC LIMIT 0, 4", nativeQuery = true)
     List<String> getLast4Genres(String withoutGenre);
+
+    @Query(value = "SELECT id FROM reviews WHERE id < ?1 ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    Long getPrevRevID(Long currentRevID);
+
+    @Query(value = "SELECT id FROM reviews WHERE id > ?1 LIMIT 1", nativeQuery = true)
+    Long getNextRevID(Long currentRevID);
 }

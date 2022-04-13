@@ -40,6 +40,8 @@ public class ReviewController {
         model.addAttribute("ratePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "RATING"));
         model.addAttribute("likePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "LIKE"));
         model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));
+        model.addAttribute("prevReview", reviewDetailsService.getPrevReviewID(review.getId()));
+        model.addAttribute("nextReview", reviewDetailsService.getNextReviewID(review.getId()));
         return "review";
     }
 

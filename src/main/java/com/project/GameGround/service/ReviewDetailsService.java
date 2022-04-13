@@ -170,6 +170,14 @@ public class ReviewDetailsService {
         return repo.getLast4Genres(withoutGenre);
     }
 
+    public Long getPrevReviewID(Long currentReviewID){
+        return repo.getPrevRevID(currentReviewID);
+    }
+
+    public Long getNextReviewID(Long currentReviewID){
+        return repo.getNextRevID(currentReviewID);
+    }
+
     private String markdownToHTML(String markdown) {
         Parser parser = Parser.builder()
                 .build();
