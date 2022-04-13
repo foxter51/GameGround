@@ -15,12 +15,18 @@
 <header th:insert="blocks/header :: header"></header>
 
 <main class="container py-5">
-    <div class="position-relative" th:insert="blocks/toTheTopButton :: toTheTop"></div>
+    <div th:insert="blocks/toTheTopButton :: toTheTop"></div>
     <h3 align="center" th:if="${register == true}" th:text="#{SuccessRegister}"></h3>
     <h3 align="center" th:if="${register == false}" th:text="#{RegisterFail}"></h3>
-    <div th:insert="blocks/searchBar :: searchBar"></div>
-    <div class="w-75 mx-auto" th:if="${last5tags != null}">
-        <div class="d-inline p-5" th:each="tag: ${last5tags}"><a th:text="${tag.tagName}" th:href="@{/{tag}(tag=${tag.tagName})}" class="text-decoration-none"></a></div>
+    <div>
+        <div th:insert="blocks/searchBar :: searchBar"></div>
+        <div class="d-flex flex-row justify-content-between w-75 mx-auto" th:if="${last6tags != null}">
+            <div class="p-" th:each="tag: ${last6tags}">
+                <a th:href="@{/{tag}(tag=${tag.tagName})}" class="text-decoration-none">
+                    <button class="btn btn-primary" th:text="${tag.tagName}"></button>
+                </a>
+            </div>
+        </div>
     </div>
     <h2 th:text="#{reviewsLabel}"></h2><hr><br>
     <div th:if="${searchResult != null}">

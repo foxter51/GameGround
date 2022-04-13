@@ -24,7 +24,7 @@ public class MainPageController {
     @RequestMapping("/{filter}")
     public String mainPageSort(@PathVariable("filter")String filter, Model model){
         model.addAttribute("reviews", reviewDetailsService.loadReviews(filter));
-        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
+        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
         return "main";
     }
 
@@ -34,13 +34,13 @@ public class MainPageController {
         model.addAttribute("searchResult", reviews.size() > 0);
         model.addAttribute("searchRequest", request);
         model.addAttribute("reviews", reviews.size()>0 ? reviews : null);
-        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
+        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
         return "main";
     }
 
     @GetMapping("/read_also")
     public String readAlso(@ModelAttribute("reviews")List<Review> reviews, Model model){
-        model.addAttribute("last5tags", reviewDetailsService.getLast5Tags());
+        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
         return "main";
     }
 }

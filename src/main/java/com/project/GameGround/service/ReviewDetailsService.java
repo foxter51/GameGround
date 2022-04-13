@@ -157,9 +157,9 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public Set<Tag> getLast5Tags(){
-        Set<Tag> last5tags = tagDetailsService.repo.findFirst5ByOrderByIdDesc();
-        return last5tags.size()>0 ? last5tags : null;
+    public Set<Tag> getLast6Tags(){
+        Set<Tag> last6tags = tagDetailsService.repo.findFirst6ByOrderByIdDesc();
+        return last6tags.size()>0 ? last6tags : null;
     }
 
     public List<Review> getReviewsByGenre(String groupName){
