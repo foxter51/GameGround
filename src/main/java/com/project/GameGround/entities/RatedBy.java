@@ -21,10 +21,19 @@ public class RatedBy {
 
     private String rateType;
 
+    private Integer rating;
+
     public RatedBy(Long reviewID, User user, String rateType){
         this.reviewID = reviewID;
         this.user = user;
         this.rateType = rateType;
+    }
+
+    public RatedBy(Long reviewID, User user, String rateType, Integer rating){
+        this.reviewID = reviewID;
+        this.user = user;
+        this.rateType = rateType;
+        this.rating = rating;
     }
 
     public RatedBy() {}

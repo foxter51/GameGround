@@ -128,33 +128,51 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public boolean isUserNotRated(String reviewID, Long currentUserID, String rateType){  //check if user rated to give him possibility
-        List<RatedBy> usersRated = repo.getById(Long.parseLong(reviewID)).getBlockedToRate();
-        for(RatedBy user : usersRated){
-            if(Objects.equals(user.getUser().getId(), currentUserID) && user.getRateType().equals(rateType)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void changeRate(String reviewID, String userID, String starValue){
+    public void addRate(String reviewID, String userID, String starValue){
         Review review = repo.getById(Long.parseLong(reviewID));
         float rate = review.getRate();
         float rateCount = review.getRateCount();
         review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));  //count new review rate
         review.setRateCount((int)(rateCount+1));
-        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "RATING"));
+        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "RATING", Integer.parseInt(starValue)));
         review.addBlockedToRate(user);  //remember user rated
         repo.save(review);
     }
 
-    public void likeReview(String reviewID, String userID){
-        userDetailsService.repo.incrementLike(Long.parseLong(userID));
+    public void changeRate(String reviewID, String userID){
+        Long user_id = Long.parseLong(userID);
         Review review = repo.getById(Long.parseLong(reviewID));
-        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "LIKE"));
-        review.addBlockedToRate(user);  //remember user liked
+        Float userRate = ratingDetailsService.repo.getUserRate(review.getId(), user_id);
+        float rate = review.getRate();
+        float rateCount = review.getRateCount();
+        float newRate = rateCount-1 != 0 ? (rateCount*rate - userRate)/(rateCount-1) : 0;  //count new review rate
+        review.setRate(newRate);
+        review.setRateCount((int)(rateCount-1));
+        ratingDetailsService.repo.deleteUserRating(user_id);  //delete record user rated
         repo.save(review);
+    }
+
+    public void likeReview(String reviewID, String userID){
+        Long currentUserID = Long.parseLong(userID);
+        Review review = repo.getById(Long.parseLong(reviewID));
+        if(isUserLiked(reviewID, currentUserID)){  //if user liked - decrement likes
+            userDetailsService.repo.decrementLike(review.getUser().getId());
+            ratingDetailsService.repo.deleteUserLike(currentUserID);
+        }
+        else{  //else increment likes
+            userDetailsService.repo.incrementLike(review.getUser().getId());
+            RatedBy user = ratingDetailsService.repo.save(new RatedBy(review.getId(), userDetailsService.repo.getById(currentUserID), "LIKE"));
+            review.addBlockedToRate(user);  //remember user liked
+            repo.save(review);
+        }
+    }
+
+    public Float getRateIfRated(String reviewID, Long currentUserID){
+        return ratingDetailsService.repo.getUserRate(Long.parseLong(reviewID), currentUserID);
+    }
+
+    public boolean isUserLiked(String reviewID, Long currentUserID){
+        return ratingDetailsService.repo.isUserLiked(Long.parseLong(reviewID), currentUserID) != null;
     }
 
     public Set<Tag> getLast6Tags(){

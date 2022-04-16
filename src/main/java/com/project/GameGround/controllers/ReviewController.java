@@ -37,8 +37,8 @@ public class ReviewController {
         model.addAttribute("review", review);
         model.addAttribute("newComment", new CommentDTO());
         Long currentUserID = userDetailsService.getCurrentUserID(auth);
-        model.addAttribute("ratePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "RATING"));
-        model.addAttribute("likePossibility", reviewDetailsService.isUserNotRated(reviewID, currentUserID, "LIKE"));
+        model.addAttribute("oldRating", reviewDetailsService.getRateIfRated(reviewID, currentUserID));
+        model.addAttribute("liked", reviewDetailsService.isUserLiked(reviewID, currentUserID));
         model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));
         model.addAttribute("prevReview", reviewDetailsService.getPrevReviewID(review.getId()));
         model.addAttribute("nextReview", reviewDetailsService.getNextReviewID(review.getId()));
@@ -90,7 +90,13 @@ public class ReviewController {
 
     @PostMapping("/review/{reviewID}/add_rate/{userID}")
     public String addRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @RequestParam(name = "rStar")String starValue){
-        reviewDetailsService.changeRate(reviewID, userID, starValue);
+        reviewDetailsService.addRate(reviewID, userID, starValue);
+        return "redirect:/review/{reviewID}";
+    }
+
+    @RequestMapping("/review/{reviewID}/change_rate/{userID}")
+    public String changeRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
+        reviewDetailsService.changeRate(reviewID, userID);
         return "redirect:/review/{reviewID}";
     }
 

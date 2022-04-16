@@ -34,7 +34,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="container">
-                        <h1 th:text="${review.reviewName}"></h1>
+                        <h1><strong th:text="${review.reviewName}"></strong></h1>
                         <h3 class="mb-0" style="display: inline" th:text="#{genreLabel}"></h3><h3 class="mb-0" th:text="${review.groupName}" style="display: inline"></h3><br>
                         <h6 class="mb-0 text-muted" style="display: inline" th:text="#{tagLabelSimple}"></h6><div th:each="tag: ${review.tags}" style="display: inline"><h6 class="mb-0 text-muted" th:text="${tag.tagName}+' '" style="display: inline"></h6></div>
                     </div>
@@ -63,29 +63,53 @@
                 </div>
             </div>
              <div class="row">
-                 <div id="rateReview" class="col" sec:authorize="isAuthenticated()" th:if="${ratePossibility == true}">
-                     <form th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
+                 <div id="rateReview" class="col" sec:authorize="isAuthenticated()">
+                     <form th:if="${oldRating == null}" th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="4"><i class="fa-regular fa-star fa-2xl" id="rStar4" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="5"><i class="fa-regular fa-star fa-2xl" id="rStar5" name="signs"></i></button>
                      </form>
+                     <div th:if="${oldRating != null}" id="reviewRate">
+                         <script>displayRate([[${oldRating}]], 'fa-2xl')</script>
+                         <a th:href="@{review/{reviewID}/change_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}"
+                            th:text="#{changeRate}" class="text-decoration-none"
+                         ></a>
+                     </div>
                  </div>
-                 <div id="likeReview" class="col" sec:authorize="isAuthenticated()" th:if="${likePossibility == true}">
+                 <div id="likeReview" class="col" sec:authorize="isAuthenticated()">
                      <form th:action="@{review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post" class="float-end">
-                         <button type="submit" style="background: transparent; color: white; border: none"><i class="fa-regular fa-heart fa-2xl" name="signs" id="likeButton"></i></button>
-                         <script>
-                             $(function (){
-                                 $("#likeButton").hover(
-                                     function (){
-                                         $(this).removeClass("fa-regular").addClass("fa-solid");
-                                     },
-                                     function (){
-                                         $(this).removeClass("fa-solid").addClass("fa-regular");
+                         <button type="submit" style="background: transparent; color: white; border: none">
+                             <div th:if="${liked == false}">
+                                 <i class="fa-regular fa-heart fa-2xl" name="signs" id="likeButton"></i>
+                                 <script>
+                                     $(function (){
+                                         $("#likeButton").hover(
+                                             function (){
+                                                 $(this).removeClass("fa-regular").addClass("fa-solid");
+                                             },
+                                             function (){
+                                                 $(this).removeClass("fa-solid").addClass("fa-regular");
+                                             });
                                      });
-                             });
-                         </script>
+                                 </script>
+                             </div>
+                             <div th:if="${liked == true}">
+                                 <i class="fa-solid fa-heart fa-2xl" name="signs" id="likeButton"></i>
+                                 <script>
+                                     $(function (){
+                                         $("#likeButton").hover(
+                                             function (){
+                                                 $(this).removeClass("fa-solid").addClass("fa-regular");
+                                             },
+                                             function (){
+                                                 $(this).removeClass("fa-regular").addClass("fa-solid");
+                                             });
+                                     });
+                                 </script>
+                             </div>
+                         </button>
                      </form>
                  </div>
              </div>
