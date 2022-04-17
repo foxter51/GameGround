@@ -45,6 +45,10 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
+    public Review getReviewByID(String reviewID){
+        return repo.getById(Long.parseLong(reviewID));
+    }
+
     public List<Review> loadReviews(String sortBy){  //load all reviews depending on sort type
         List<Review> reviews;
         switch(sortBy){
@@ -95,35 +99,26 @@ public class ReviewDetailsService {
         return repo.search(request);
     }
 
-    public Review getReviewByID(String reviewID){
-        return repo.getById(Long.parseLong(reviewID));
+    public List<Review> getReviewsByGenre(String groupName){
+        return repo.getReviewsByGroupName(groupName);
+    }
+
+    public List<String> getLastGenres(String withoutGenre){
+        return repo.getLast4Genres(withoutGenre);
+    }
+
+    public Review getReviewToUpdate(String reviewID){  //get old review to update
+        Review review = repo.getById(Long.parseLong(reviewID));
+        return reviewTextToMarkdown(review);
     }
 
     public void removeReviewByID(String reviewID){
         repo.deleteById(Long.parseLong(reviewID));
     }
 
-    public Review getReviewToUpdate(String reviewID){  //get old review to update
-        return repo.getById(Long.parseLong(reviewID));
-    }
-
-    public Tags getOldTags(Review review){
-        StringBuilder tags = new StringBuilder();
-        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));  //get old tags
-        return new Tags(tags.toString());
-    }
-
-    public Review reviewTextToMarkdown(Review review){  //loading review to update
-        review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
-        return review;
-    }
-
-    public void saveComment(String reviewID, String userID, Comment comment){
-        comment.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
-        comment.setReviewID(Long.parseLong(reviewID));
-        comment.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
-        Comment savedComment = commentDetailsService.repo.save(comment);
+    public void addCommentToReview(String reviewID, String userID, Comment comment){
         Review review = repo.getById(Long.parseLong(reviewID));
+        Comment savedComment = commentDetailsService.addComment(comment, review.getId(), Long.parseLong(userID));
         review.addComment(savedComment);
         repo.save(review);
     }
@@ -155,7 +150,7 @@ public class ReviewDetailsService {
     public void likeReview(String reviewID, String userID){
         Long currentUserID = Long.parseLong(userID);
         Review review = repo.getById(Long.parseLong(reviewID));
-        if(isUserLiked(reviewID, currentUserID)){  //if user liked - decrement likes
+        if(ratingDetailsService.isUserLiked(reviewID, currentUserID)){  //if user liked - decrement likes
             userDetailsService.repo.decrementLike(review.getUser().getId());
             ratingDetailsService.repo.deleteUserLike(currentUserID);
         }
@@ -167,33 +162,24 @@ public class ReviewDetailsService {
         }
     }
 
-    public Float getRateIfRated(String reviewID, Long currentUserID){
-        return ratingDetailsService.repo.getUserRate(Long.parseLong(reviewID), currentUserID);
-    }
-
-    public boolean isUserLiked(String reviewID, Long currentUserID){
-        return ratingDetailsService.repo.isUserLiked(Long.parseLong(reviewID), currentUserID) != null;
-    }
-
-    public Set<Tag> getLast6Tags(){
-        Set<Tag> last6tags = tagDetailsService.repo.findFirst6ByOrderByIdDesc();
-        return last6tags.size()>0 ? last6tags : null;
-    }
-
-    public List<Review> getReviewsByGenre(String groupName){
-        return repo.getReviewsByGroupName(groupName);
-    }
-
-    public List<String> getLastGenres(String withoutGenre){
-        return repo.getLast4Genres(withoutGenre);
-    }
-
     public Long getPrevReviewID(Long currentReviewID){
         return repo.getPrevRevID(currentReviewID);
     }
 
     public Long getNextReviewID(Long currentReviewID){
         return repo.getNextRevID(currentReviewID);
+    }
+
+    public Tags getOldTags(String reviewID){
+        Review review = repo.getById(Long.parseLong(reviewID));
+        StringBuilder tags = new StringBuilder();
+        review.getTags().forEach(tag -> tags.append(tag.getTagName()).append(" "));  //get old tags
+        return new Tags(tags.toString());
+    }
+
+    public Review reviewTextToMarkdown(Review review){
+        review.setText(new CopyDown().convert(review.getText()));  //convert from html to markdown
+        return review;
     }
 
     private String markdownToHTML(String markdown) {

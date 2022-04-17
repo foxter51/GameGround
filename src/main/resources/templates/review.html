@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <title>Review</title>
+    <title th:text="${review.reviewName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/b7f4bdb099.js" crossorigin="anonymous"></script>
@@ -64,7 +64,7 @@
             </div>
              <div class="row">
                  <div id="rateReview" class="col" sec:authorize="isAuthenticated()">
-                     <form th:if="${oldRating == null}" th:action="@{review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
+                     <form th:if="${oldRating == null}" th:action="@{/review/{reviewID}/add_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="1"><i class="fa-regular fa-star fa-2xl" id="rStar1" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="2"><i class="fa-regular fa-star fa-2xl" id="rStar2" name="signs"></i></button>
                          <button type="submit" style="background: transparent; color: white; border: none" name="rStar" th:value="3"><i class="fa-regular fa-star fa-2xl" id="rStar3" name="signs"></i></button>
@@ -73,13 +73,13 @@
                      </form>
                      <div th:if="${oldRating != null}" id="reviewRate">
                          <script>displayRate([[${oldRating}]], 'fa-2xl')</script>
-                         <a th:href="@{review/{reviewID}/change_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}"
+                         <a th:href="@{/review/{reviewID}/change_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}"
                             th:text="#{changeRate}" class="text-decoration-none"
                          ></a>
                      </div>
                  </div>
                  <div id="likeReview" class="col" sec:authorize="isAuthenticated()">
-                     <form th:action="@{review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post" class="float-end">
+                     <form th:action="@{/review/{reviewID}/like/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post" class="float-end">
                          <button type="submit" style="background: transparent; color: white; border: none">
                              <div th:if="${liked == false}">
                                  <i class="fa-regular fa-heart fa-2xl" name="signs" id="likeButton"></i>
@@ -119,9 +119,9 @@
             <p class="text-muted" th:text="#{readAlso}"></p>
             <div class="float-start">
                 <nav class="nav nav-masthead justify-content-center float-md-start">
-                    <a class="nav-link" th:href="@{/review/{reviewID}/read_also/{genre}(reviewID=${review.id}, genre=${review.groupName})}"><button class="btn btn-danger" th:text="${review.groupName}"></button></a>
+                    <a class="nav-link" th:href="@{/read_also/{genre}(genre=${review.groupName})}"><button class="btn btn-danger" th:text="${review.groupName}"></button></a>
                     <div th:each="genre : ${lastGenres}">
-                        <a class="nav-link" th:href="@{/review/{reviewID}/read_also/{genre}(reviewID=${review.id}, genre=${genre})}"><button class="btn btn-primary" th:text="${genre}"></button></a>
+                        <a class="nav-link" th:href="@{/read_also/{genre}(genre=${genre})}"><button class="btn btn-primary" th:text="${genre}"></button></a>
                     </div>
                 </nav>
             </div>

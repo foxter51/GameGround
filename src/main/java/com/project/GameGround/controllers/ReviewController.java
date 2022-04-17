@@ -6,6 +6,7 @@ import com.project.GameGround.dto.ReviewDTO;
 import com.project.GameGround.entities.Comment;
 import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.CustomUserDetailsService;
+import com.project.GameGround.service.RatingDetailsService;
 import com.project.GameGround.service.ReviewDetailsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class ReviewController {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
+    private RatingDetailsService ratingDetailsService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @RequestMapping("/{id}")
@@ -37,8 +41,8 @@ public class ReviewController {
         model.addAttribute("review", review);
         model.addAttribute("newComment", new CommentDTO());
         Long currentUserID = userDetailsService.getCurrentUserID(auth);
-        model.addAttribute("oldRating", reviewDetailsService.getRateIfRated(reviewID, currentUserID));
-        model.addAttribute("liked", reviewDetailsService.isUserLiked(reviewID, currentUserID));
+        model.addAttribute("oldRating", ratingDetailsService.getRateIfRated(reviewID, currentUserID));
+        model.addAttribute("liked", ratingDetailsService.isUserLiked(reviewID, currentUserID));
         model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));
         model.addAttribute("prevReview", reviewDetailsService.getPrevReviewID(review.getId()));
         model.addAttribute("nextReview", reviewDetailsService.getNextReviewID(review.getId()));
@@ -57,24 +61,20 @@ public class ReviewController {
         return "redirect:/profile/{userID}";
     }
 
-    @PostMapping("/{userID}/review_edit/{reviewID}")
-    public String reviewUpdate(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID, RedirectAttributes ra){
+    @PostMapping("/review_edit/{reviewID}")
+    public String reviewUpdate(@PathVariable("reviewID") String reviewID, RedirectAttributes ra){
         ra.addFlashAttribute("updateReview", reviewDetailsService.getReviewToUpdate(reviewID));
+        ra.addFlashAttribute("Tags", reviewDetailsService.getOldTags(reviewID));
         return "redirect:/review/edit_page";
     }
 
     @GetMapping("/edit_page")
-    public String editPage(@ModelAttribute("updateReview") Review review, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
-            return "redirect:/profile/"+review.getUser().getId();
-        }
-        model.addAttribute("Tags", reviewDetailsService.getOldTags(review));
-        model.addAttribute("updateReview", reviewDetailsService.reviewTextToMarkdown(review));
+    public String editPage(){
         return "editPage";
     }
 
     @PostMapping("/{id}/edit/save")
-    public String saveEditedReview(@PathVariable ("id") String userID, Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
+    public String saveEditedReview(@PathVariable ("id")String userID, Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
         reviewDetailsService.saveReview(userID, review, tags, starValue);
         return "redirect:/profile/{id}";
     }
@@ -84,31 +84,25 @@ public class ReviewController {
         if(bindingResult.hasErrors()){
             return "redirect:/review/{reviewID}";
         }
-        reviewDetailsService.saveComment(reviewID, userID, modelMapper.map(comment, Comment.class));
+        reviewDetailsService.addCommentToReview(reviewID, userID, modelMapper.map(comment, Comment.class));
         return "redirect:/review/{reviewID}";
     }
 
-    @PostMapping("/review/{reviewID}/add_rate/{userID}")
+    @PostMapping("/{reviewID}/add_rate/{userID}")
     public String addRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @RequestParam(name = "rStar")String starValue){
         reviewDetailsService.addRate(reviewID, userID, starValue);
         return "redirect:/review/{reviewID}";
     }
 
-    @RequestMapping("/review/{reviewID}/change_rate/{userID}")
+    @RequestMapping("/{reviewID}/change_rate/{userID}")
     public String changeRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
         reviewDetailsService.changeRate(reviewID, userID);
         return "redirect:/review/{reviewID}";
     }
 
-    @PostMapping("/review/{reviewID}/like/{userID}")
+    @PostMapping("/{reviewID}/like/{userID}")
     public String likeReview(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
         reviewDetailsService.likeReview(reviewID, userID);
         return "redirect:/review/{reviewID}";
-    }
-
-    @RequestMapping("/{reviewID}/read_also/{request}")
-    public String readAlso(@PathVariable("reviewID")String reviewID, @PathVariable("request")String request, RedirectAttributes ra){
-        ra.addFlashAttribute("reviews", reviewDetailsService.getReviewsByGenre(request));
-        return "redirect:/read_also";
     }
 }

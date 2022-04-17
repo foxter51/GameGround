@@ -2,6 +2,7 @@ package com.project.GameGround.controllers;
 
 import com.project.GameGround.entities.Review;
 import com.project.GameGround.service.ReviewDetailsService;
+import com.project.GameGround.service.TagDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,9 @@ public class MainPageController {
     @Autowired
     private ReviewDetailsService reviewDetailsService;
 
+    @Autowired
+    private TagDetailsService tagDetailsService;
+
     @GetMapping("/")
     public String mainPage(){
         return "redirect:/sort=dateDSC";
@@ -24,7 +28,7 @@ public class MainPageController {
     @RequestMapping("/{filter}")
     public String mainPageSort(@PathVariable("filter")String filter, Model model){
         model.addAttribute("reviews", reviewDetailsService.loadReviews(filter));
-        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
+        model.addAttribute("last6tags", tagDetailsService.getLast6Tags());
         return "main";
     }
 
@@ -34,13 +38,14 @@ public class MainPageController {
         model.addAttribute("searchResult", reviews.size() > 0);
         model.addAttribute("searchRequest", request);
         model.addAttribute("reviews", reviews.size()>0 ? reviews : null);
-        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
+        model.addAttribute("last6tags", tagDetailsService.getLast6Tags());
         return "main";
     }
 
-    @GetMapping("/read_also")
-    public String readAlso(@ModelAttribute("reviews")List<Review> reviews, Model model){
-        model.addAttribute("last6tags", reviewDetailsService.getLast6Tags());
+    @RequestMapping("/read_also/{request}")
+    public String readAlso(@PathVariable("request")String request, Model model){
+        model.addAttribute("reviews", reviewDetailsService.getReviewsByGenre(request));
+        model.addAttribute("last6tags", tagDetailsService.getLast6Tags());
         return "main";
     }
 }
