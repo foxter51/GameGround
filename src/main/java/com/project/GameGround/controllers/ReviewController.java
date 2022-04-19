@@ -55,13 +55,13 @@ public class ReviewController {
         return "redirect:/profile/{id}";
     }
 
-    @PostMapping("/{userID}/review_remove/{reviewID}")
+    @PostMapping("/{userID}/remove/{reviewID}")
     public String reviewRemove(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID){
         reviewDetailsService.removeReviewByID(reviewID);
         return "redirect:/profile/{userID}";
     }
 
-    @PostMapping("/review_edit/{reviewID}")
+    @PostMapping("/edit/{reviewID}")
     public String reviewUpdate(@PathVariable("reviewID") String reviewID, RedirectAttributes ra){
         ra.addFlashAttribute("updateReview", reviewDetailsService.getReviewToUpdate(reviewID));
         ra.addFlashAttribute("Tags", reviewDetailsService.getOldTags(reviewID));

@@ -199,12 +199,12 @@
                                     <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
                                     <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                                     <div class="float-end">
-                                        <form th:action="@{/review/review_edit/{reviewID}(reviewID=${review.id})}" method="post" style="display: inline">
+                                        <form th:action="@{/review/edit/{reviewID}(reviewID=${review.id})}" method="post" style="display: inline">
                                             <div id="editReview" style="display: inline; margin-right: 30px">
                                                 <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
                                             </div>
                                         </form>
-                                        <form th:action="@{/review/{userID}/review_remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
+                                        <form th:action="@{/review/{userID}/remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
                                             <div id="deleteReview" style="display: inline">
                                                 <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
                                             </div>
