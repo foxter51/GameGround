@@ -116,7 +116,7 @@
                     <div class="card-body">
                         <div class="row">
                             <form th:action="@{/review/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}">
-                                <div class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></div>
+                                <button type="button" style="background: transparent; border:none" class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></button>
 
                                 <div class="form-group" hidden>
                                     <input type="text" autocomplete="off" th:field="*{id}"/>
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-        <div th:if="${reviews != null}">
+        <div>
             <h3 th:text="#{reviewsLabel}"></h3>
             <hr><br>
             <div class="row">

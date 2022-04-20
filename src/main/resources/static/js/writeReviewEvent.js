@@ -7,13 +7,13 @@ function writeReviewEvent(){
     $("#reviewForm").hide();
     $("#writeReview").click(function (){
         $("#writeReview").hide();
-        $("#reviewForm").show();
+        $("#reviewForm").fadeIn();
     });
 }
 
 function hideWriting(){
     $("#hideWrite").click(function (){
-        $("#reviewForm").hide();
+        $("#reviewForm").fadeOut();
         $("#writeReview").show();
     })
 }

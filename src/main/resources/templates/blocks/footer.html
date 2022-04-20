@@ -1,7 +1,26 @@
 <div th:fragment="footer">
-    <div class="flex-shrink-0 py-4 bg-dark text-white-50 border-top" style="z-index: 3; width: 100%; border-color: white; margin-top: 30px">
-        <div class="container text-center">
-            <small th:text="#{footerLabel}">All rights are reserved. 2022</small>
+    <div class="flex-shrink-0 py-4 border-top" style="z-index: 3; width: 100%; border-color: white; margin-top: 30px" id="footerDiv">
+        <div class="footer-20192">
+            <div class="site-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <h2 href="#top" class="text-decoration-none">GameGround</h2>
+                            <p class="copyright">
+                                <small>© 2022</small>
+                            </p>
+                        </div>
+                        <div class="col-md-3 float-end">
+                            <h3 th:text="#{footerLabel}"></h3>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="https://github.com/foxter51" target="_blank"><i class="fa-brands fa-github fa-2x"></i></a></li>
+                                <li class="list-inline-item"><a href="https://t.me/geniustoday" target="_blank"><i class="fa-brands fa-telegram fa-2x"></i></a></li>
+                                <li class="list-inline-item"><a href="http://discordapp.com/users/8798" target="_blank"><i class="fa-brands fa-discord fa-2x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

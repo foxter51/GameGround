@@ -10,7 +10,7 @@
 <body class="bg-dark">
 <header th:insert="blocks/header :: header"></header>
 
-    <main class="text-center w-100 h-100 p-3 mx-auto flex-column text-white">
+    <main class="text-center w-100 h-100 p-3 mx-auto flex-column">
         <div class="position-relative" th:insert="blocks/toTheTopButton :: toTheTop"></div>
         <h1>GameGround Admin Panel</h1>
         <form th:action="@{/users/control}" method="post">
