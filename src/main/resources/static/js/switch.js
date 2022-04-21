@@ -51,8 +51,8 @@ function setDarkMode(){
     $(".card").addClass('bg-dark text-white border border-white');
     $('[name="signs"]').removeClass('text-dark').addClass("text-white");
     $('.list-group a').removeClass('list-group-item-light').addClass('list-group-item-dark');
-    $("#footerDiv").removeClass('bg-light text-dark').addClass('bg-dark text-white');
-    $("#headerDiv").removeClass('bg-light text-dark').addClass('bg-dark text-white');
+    $("#footerDiv").removeClass('bg-light text-dark').addClass('text-white').css('background-color', 'rgb(37,40,42)');
+    $("#headerDiv").removeClass('bg-light text-dark').addClass('text-white').css('background-color', 'rgb(37,40,42)');
     $("#nameLabel").removeClass('text-dark').addClass('text-white');
 }
 
@@ -61,8 +61,8 @@ function removeDarkMode(){
     $(".card").removeClass('bg-dark text-white border border-white');
     $('[name="signs"]').removeClass('text-white').addClass("text-dark");
     $('.list-group a').removeClass('list-group-item-dark').addClass('list-group-item-light');
-    $("#footerDiv").removeClass('bg-dark text-white').addClass('bg-light text-dark');
-    $("#headerDiv").removeClass('bg-dark text-white').addClass('bg-light text-dark');
+    $("#footerDiv").removeClass('text-white').css('background-color', '').addClass('bg-light text-dark');
+    $("#headerDiv").removeClass('text-white').css('background-color', '').addClass('bg-light text-dark');
     $("#nameLabel").removeClass('text-white').addClass('text-dark');
 }
 

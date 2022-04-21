@@ -1,17 +1,17 @@
 <div th:fragment="header" id="top">
-    <div class="navbar border-bottom" style="border-color: white" id="headerDiv">
+    <div class="navbar" style="box-shadow: 0 4px 12px 10px rgba(0,0,0,0.3)" id="headerDiv">
         <div class="container">
-            <a th:href="@{/}" class="text-decoration-none" id="nameLabel">
+            <a th:href="@{/}" class="text-decoration-none" style="color: inherit" id="nameLabel">
                 <h3><strong>GameGround</strong></h3>
             </a>
             <nav class="nav nav-masthead justify-content-center float-md-end">
-                <a class="nav-link" th:href="@{/}" th:text="#{homeLabel}"></a>
+                <a class="nav-link" style="color: inherit" th:href="@{/}" th:text="#{homeLabel}"></a>
                 <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/users/list}" th:text="#{controlPanelLabel}"></a>
+                    <a class="nav-link" style="color: inherit" th:href="@{/users/list}" th:text="#{controlPanelLabel}"></a>
                 </th:block>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/profile/{id}/(id=${#authentication.getPrincipal().getId()})}"><b th:text="${#authentication.getPrincipal().getFullName()}"></b></a>
-                    <a class="nav-link" sec:authorize="hasAuthority('ADMIN')"><strong>ADMIN</strong></a>
+                    <a class="nav-link" style="color: inherit" th:href="@{/profile/{id}/(id=${#authentication.getPrincipal().getId()})}"><b th:text="${#authentication.getPrincipal().getFullName()}"></b></a>
+                    <a class="nav-link" style="color: red" sec:authorize="hasAuthority('ADMIN')"><strong>ADMIN</strong></a>
                     <form th:action="@{/logout}" method="post">
                         <button type="submit" style="background: transparent; border:none"><i class="fa-solid fa-door-open fa-xl text-white" name="signs"></i></button>
                     </form>

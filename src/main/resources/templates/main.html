@@ -72,10 +72,7 @@
         </div>
     </div>
 </main>
-<div th:if="${reviews == null}">
-    <footer th:insert="blocks/footer :: footer" style="position: fixed; bottom: 0; width: 100%;"></footer>
-</div>
-<div th:if="${reviews != null}">
+<div>
     <footer th:insert="blocks/footer :: footer"></footer>
 </div>
 </body>
