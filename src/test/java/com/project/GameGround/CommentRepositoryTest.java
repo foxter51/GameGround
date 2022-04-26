@@ -2,6 +2,7 @@ package com.project.GameGround;
 
 import com.project.GameGround.entities.Comment;
 import com.project.GameGround.repositories.CommentRepository;
+import com.project.GameGround.repositories.ReviewRepository;
 import com.project.GameGround.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CommentRepositoryTest {
     private UserRepository repo;
 
     @Autowired
+    private ReviewRepository reviewRepo;
+
+    @Autowired
     private TestEntityManager entityManager;
 
     @Test
@@ -34,7 +38,7 @@ public class CommentRepositoryTest {
         Comment comment = new Comment();
         comment.setText("Test comment");
         comment.setUser(repo.getById((long) 1));
-        comment.setReviewID((long)1);
+        comment.setReview(reviewRepo.getById((long) 1));
         Comment savedComment = commentRepo.save(comment);
         Comment existComment = entityManager.find(Comment.class, savedComment.getId());
         assertThat(existComment.getId()).isEqualTo(comment.getId());
