@@ -73,7 +73,12 @@
     </div>
 </main>
 <div>
-    <footer th:insert="blocks/footer :: footer"></footer>
+    <footer th:insert="blocks/footer :: footer" style="position: fixed; bottom: 0; width: 100%;" id="footerMain"></footer>
+    <script>
+        if(screen.width<=1440){
+            $("#footerMain").css('position', '', 'bottom', '', 'width', '');
+        }
+    </script>
 </div>
 </body>
 </html>

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {  //interface to communicate with database
 

@@ -49,7 +49,6 @@ public class ReviewRepositoryTest {
         review.addComment(commentRepo.getById((long) 1));
         review.setRate((float)5.0);
         review.setRateCount(1);
-        review.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         Review savedReview = reviewRepo.save(review);
         Review existReview = entityManager.find(Review.class, savedReview.getId());
         assertThat(existReview.getId()).isEqualTo(review.getId());

@@ -1,6 +1,5 @@
 package com.project.GameGround.service;
 
-import com.project.GameGround.Constants;
 import com.project.GameGround.Tags;
 import com.project.GameGround.entities.*;
 import com.project.GameGround.repositories.*;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -40,7 +38,6 @@ public class ReviewDetailsService {
             if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagDetailsService.repo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
         }
         review.setText(markdownToHTML(review.getText()));
-        review.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         review.setAuthorRate(starValue);
         repo.save(review);
     }
@@ -118,7 +115,7 @@ public class ReviewDetailsService {
 
     public void addCommentToReview(String reviewID, String userID, Comment comment){
         Review review = repo.getById(Long.parseLong(reviewID));
-        Comment savedComment = commentDetailsService.addComment(comment, review.getId(), Long.parseLong(userID));
+        Comment savedComment = commentDetailsService.addComment(comment, review, Long.parseLong(userID));
         review.addComment(savedComment);
         repo.save(review);
     }
@@ -129,34 +126,34 @@ public class ReviewDetailsService {
         float rateCount = review.getRateCount();
         review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));  //count new review rate
         review.setRateCount((int)(rateCount+1));
-        RatedBy user = ratingDetailsService.repo.save(new RatedBy(Long.parseLong(reviewID), userDetailsService.repo.getById(Long.parseLong(userID)), "RATING", Integer.parseInt(starValue)));
+        RatedBy user = ratingDetailsService.repo.save(new RatedBy(review, userDetailsService.repo.getById(Long.parseLong(userID)), "RATING", Integer.parseInt(starValue)));
         review.addBlockedToRate(user);  //remember user rated
         repo.save(review);
     }
 
     public void changeRate(String reviewID, String userID){
-        Long user_id = Long.parseLong(userID);
+        User user = userDetailsService.getProfileByID(userID);
         Review review = repo.getById(Long.parseLong(reviewID));
-        Float userRate = ratingDetailsService.repo.getUserRate(review.getId(), user_id);
+        Float userRate = ratingDetailsService.repo.getUserRate(review, user);
         float rate = review.getRate();
         float rateCount = review.getRateCount();
         float newRate = rateCount-1 != 0 ? (rateCount*rate - userRate)/(rateCount-1) : 0;  //count new review rate
         review.setRate(newRate);
         review.setRateCount((int)(rateCount-1));
-        ratingDetailsService.repo.deleteUserRating(user_id);  //delete record user rated
+        ratingDetailsService.repo.deleteUserRating(user);  //delete record user rated
         repo.save(review);
     }
 
     public void likeReview(String reviewID, String userID){
-        Long currentUserID = Long.parseLong(userID);
+        User currentUser = userDetailsService.getProfileByID(userID);
         Review review = repo.getById(Long.parseLong(reviewID));
-        if(ratingDetailsService.isUserLiked(reviewID, currentUserID)){  //if user liked - decrement likes
+        if(ratingDetailsService.isUserLiked(review, currentUser)){  //if user liked - decrement likes
             userDetailsService.repo.decrementLike(review.getUser().getId());
-            ratingDetailsService.repo.deleteUserLike(currentUserID);
+            ratingDetailsService.repo.deleteUserLike(currentUser);
         }
         else{  //else increment likes
             userDetailsService.repo.incrementLike(review.getUser().getId());
-            RatedBy user = ratingDetailsService.repo.save(new RatedBy(review.getId(), userDetailsService.repo.getById(currentUserID), "LIKE"));
+            RatedBy user = ratingDetailsService.repo.save(new RatedBy(review, currentUser, "LIKE"));
             review.addBlockedToRate(user);  //remember user liked
             repo.save(review);
         }

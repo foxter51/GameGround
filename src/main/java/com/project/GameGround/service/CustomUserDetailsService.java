@@ -2,7 +2,6 @@ package com.project.GameGround.service;
 
 import com.project.GameGround.Constants;
 import com.project.GameGround.details.CustomOAuth2UserDetails;
-import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
@@ -15,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -33,15 +32,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException("User not found!");
         }
-        repo.updateLoginDate(email, new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));  //update user last login date
-        return new CustomUserDetails(user);  //found user
+        repo.updateLoginDate(email, LocalDateTime.now().format(Constants.dateTimeFormatter));  //update user last login date
+        return user;  //found user
     }
 
     public boolean saveUser(User user){
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
-        user.setRegistrationDate(dateTimeFormat.format(new Date()));
-        user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
@@ -59,7 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public boolean getCurrentUserAuthorities(Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
-            return isAdmin(new CustomUserDetails(repo.getByEmail(email)).getAuthorities());
+            return isAdmin(repo.getByEmail(email).getAuthorities());
         }
         return false;
     }
@@ -90,6 +86,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof CustomUserDetails;
+        return auth.getPrincipal() instanceof UserDetails;
     }
 }

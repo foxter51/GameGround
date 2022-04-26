@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -33,7 +34,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
         else{  //if exists
             if(repo.getByEmail(oAuth2User.getEmail()).getStatus().equals("Blocked")) SecurityContextHolder.getContext().setAuthentication(null);  //if user blocked - logout
-            repo.updateLoginDate(oAuth2User.getEmail(), new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));  //update login date
+            repo.updateLoginDate(oAuth2User.getEmail(), LocalDateTime.now().format(Constants.dateTimeFormatter));  //update login date
         }
         response.sendRedirect("/");
     }

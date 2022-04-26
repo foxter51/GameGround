@@ -38,8 +38,6 @@ public class UserRepositoryTest {
         user.setPassword(new BCryptPasswordEncoder().encode("test2022"));
         user.setFirstName("John");
         user.setLastName("Yeak");
-        user.setRegistrationDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
-        user.setLastLoginDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleRepo.getRoleByName("USER"));

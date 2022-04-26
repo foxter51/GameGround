@@ -13,10 +13,8 @@ window.addEventListener('load', function(){
     }
     if(localStorage.getItem('lang')==='true'){
         $("#languageCheck").prop('checked', true);
-        $('[name="cardCol"]').removeClass("col-sm-3").addClass("col-sm-4");
     } else{
         $("#languageCheck").prop('false');
-        $('[name="cardCol"]').removeClass("col-sm-4").addClass("col-sm-3");
     }
 });
 

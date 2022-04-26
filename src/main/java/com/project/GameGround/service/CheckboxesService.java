@@ -1,12 +1,12 @@
 package com.project.GameGround.service;
 
 import com.project.GameGround.details.CustomOAuth2UserDetails;
-import com.project.GameGround.details.CustomUserDetails;
 import com.project.GameGround.entities.Role;
 import com.project.GameGround.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -86,6 +86,6 @@ public class CheckboxesService {
     }
 
     public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof CustomUserDetails;
+        return auth.getPrincipal() instanceof UserDetails;
     }
 }

@@ -1,13 +1,10 @@
 package com.project.GameGround.service;
 
-import com.project.GameGround.Constants;
 import com.project.GameGround.entities.Comment;
+import com.project.GameGround.entities.Review;
 import com.project.GameGround.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Service
 public class CommentDetailsService {
@@ -18,10 +15,9 @@ public class CommentDetailsService {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    public Comment addComment(Comment comment, Long reviewID, Long userID){
+    public Comment addComment(Comment comment, Review review, Long userID){
         comment.setUser(userDetailsService.repo.getById(userID));
-        comment.setReviewID(reviewID);
-        comment.setPublishDate(new SimpleDateFormat(Constants.dateTimeFormat).format(new Date()));
+        comment.setReview(review);
         return repo.save(comment);
     }
 }

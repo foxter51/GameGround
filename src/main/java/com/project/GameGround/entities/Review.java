@@ -1,8 +1,11 @@
 package com.project.GameGround.entities;
 
+import com.project.GameGround.Constants;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +19,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(nullable = false, length = 64)
     private String reviewName;
 
@@ -24,14 +27,12 @@ public class Review {
     private String groupName;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable
     private Set<Tag> tags = new HashSet<>();
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String text;
 
-    @OneToOne
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private int authorRate;
@@ -40,16 +41,21 @@ public class Review {
 
     private int rateCount;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "review_id")
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "review", orphanRemoval = true)
     private List<RatedBy> blockedToRate = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "review_id")
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "review", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String publishDate;
+
+    @PrePersist
+    public void onPublish(){
+        this.publishDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
+    }
 
     public void addTag(Tag tag){
         this.tags.add(tag);

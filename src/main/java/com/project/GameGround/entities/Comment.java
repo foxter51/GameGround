@@ -1,8 +1,10 @@
 package com.project.GameGround.entities;
 
+import com.project.GameGround.Constants;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -13,16 +15,20 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "review_id")
-    private Long reviewID;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Review review;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String text;
 
-    @OneToOne
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    @Column(nullable = false, length = 20)
+    @Column(updatable = false, nullable = false)
     private String publishDate;
+
+    @PrePersist
+    public void onCreate(){
+        this.publishDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
+    }
 }

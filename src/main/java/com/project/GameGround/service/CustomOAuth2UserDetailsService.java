@@ -11,9 +11,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service
 public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
 
@@ -38,9 +35,6 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setLastName(name.split(" ", 2)[Constants.secondNamePart]);
         }
         else user.setFirstName(name);  //else set only name
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat(Constants.dateTimeFormat);
-        user.setRegistrationDate(dateTimeFormat.format(new Date()));
-        user.setLastLoginDate(dateTimeFormat.format(new Date()));
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));

@@ -1,19 +1,21 @@
 package com.project.GameGround.entities;
 
+import com.project.GameGround.Constants;
 import com.project.GameGround.security.AuthProvider;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,10 +32,10 @@ public class User {
     @Column(length = 32)
     private String lastName;
 
-    @Column(nullable = false, length = 20)
+    @Column(updatable = false, nullable = false)
     private String registrationDate;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String lastLoginDate;
 
     @Column(nullable = false, length = 20)
@@ -45,23 +47,66 @@ public class User {
     private int likesQuantity;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable
     private Set<Role> roles = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     private List<RatedBy> blockedToRate = new ArrayList<>();
+
+    @PrePersist
+    public void onCreate(){
+        this.registrationDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
+        this.lastLoginDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !status.equals("Blocked");
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public String getFullName() {
+        return firstName+ " " +lastName;
+    }
 
     public void addRole(Role role){
         this.roles.add(role);
