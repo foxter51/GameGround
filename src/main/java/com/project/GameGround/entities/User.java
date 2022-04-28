@@ -67,6 +67,7 @@ public class User implements UserDetails {
         this.lastLoginDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -103,6 +104,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
     public String getFullName() {
         return firstName+ " " +lastName;

@@ -1,6 +1,5 @@
 package com.project.GameGround.details;
 
-import com.project.GameGround.entities.Role;
 import com.project.GameGround.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,13 +24,8 @@ public class CustomOAuth2UserDetails implements OAuth2User {  //implement authen
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = new HashSet<>();
-        if(user != null){
-            roles = user.getRoles();  //if user exists - get his roles
-        }
-        else roles.add(new Role(1, "USER"));  //else give role "USER"
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        this.user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return authorities;
     }
 
@@ -46,9 +40,5 @@ public class CustomOAuth2UserDetails implements OAuth2User {  //implement authen
 
     public String getEmail(){
         return oAuth2User.getAttribute("email");
-    }
-
-    public Long getId(){
-        return user.getId();
     }
 }
