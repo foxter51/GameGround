@@ -24,10 +24,13 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{
         OAuth2User OAuthUser = super.loadUser(userRequest);
         User user = userDetailsService.repo.getByEmail(OAuthUser.getAttribute("email"));  //searching for user in database
+        if(user == null){  //if user doesn't exist
+            user = createUserAfterOAuth(OAuthUser.getAttribute("email"), OAuthUser.getAttribute("name"), AuthProvider.OTHERS); //add him to DB
+        }
         return new CustomOAuth2UserDetails(OAuthUser, user);  //returns new user after successful auth
     }
 
-    public void createUserAfterOAuth(String email, String name, AuthProvider provider){
+    public User createUserAfterOAuth(String email, String name, AuthProvider provider){
         User user = new User();
         user.setEmail(email);
         if(name.contains(" ")){  //if oauth2 user has last name -> get it
@@ -38,6 +41,6 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
         user.setStatus("Unblocked");
         user.setAuthProvider(provider);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
-        userDetailsService.repo.save(user);
+        return userDetailsService.repo.save(user);
     }
 }
