@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {  //interface to communicate with database
 
@@ -17,9 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
     @Modifying
     @Query("UPDATE User user SET user.lastLoginDate = ?2 WHERE user.email = ?1")  //request to modify last login date
     void updateLoginDate(String email, String last_login_date);
-
-    @Modifying
-    void deleteById(Long id);  //request to delete user
 
     @Modifying
     @Query("UPDATE User user SET user.status = 'Blocked' WHERE user.id = ?1")  //request to block user

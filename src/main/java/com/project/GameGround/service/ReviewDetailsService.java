@@ -65,7 +65,7 @@ public class ReviewDetailsService {
                 reviews = repo.getReviewsRatingGE4();
                 break;
             default:  //find by tag
-                reviews = repo.getReviewsByTag(sortBy);
+                reviews = repo.getReviewsByTagsTagName(sortBy);
                 break;
         }
         return reviews.size() > 0 ? reviews : null;
@@ -134,13 +134,13 @@ public class ReviewDetailsService {
     public void changeRate(String reviewID, String userID){
         User user = userDetailsService.getProfileByID(userID);
         Review review = repo.getById(Long.parseLong(reviewID));
-        Float userRate = ratingDetailsService.repo.getUserRate(review, user);
+        float userRate = ratingDetailsService.repo.getRatedByReviewAndUserAndRateType(review, user, "RATING").get().getRating();
         float rate = review.getRate();
         float rateCount = review.getRateCount();
         float newRate = rateCount-1 != 0 ? (rateCount*rate - userRate)/(rateCount-1) : 0;  //count new review rate
         review.setRate(newRate);
         review.setRateCount((int)(rateCount-1));
-        ratingDetailsService.repo.deleteUserRating(user);  //delete record user rated
+        ratingDetailsService.repo.deleteByUserAndRateType(user, "RATING");  //delete record user rated
         repo.save(review);
     }
 
@@ -149,7 +149,7 @@ public class ReviewDetailsService {
         Review review = repo.getById(Long.parseLong(reviewID));
         if(ratingDetailsService.isUserLiked(review, currentUser)){  //if user liked - decrement likes
             userDetailsService.repo.decrementLike(review.getUser().getId());
-            ratingDetailsService.repo.deleteUserLike(currentUser);
+            ratingDetailsService.repo.deleteByUserAndRateType(currentUser, "LIKE");
         }
         else{  //else increment likes
             userDetailsService.repo.incrementLike(review.getUser().getId());
