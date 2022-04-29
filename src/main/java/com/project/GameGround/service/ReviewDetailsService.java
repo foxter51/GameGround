@@ -132,7 +132,7 @@ public class ReviewDetailsService {
     }
 
     public void changeRate(String reviewID, String userID){
-        User user = userDetailsService.getProfileByID(userID);
+        User user = userDetailsService.getProfileByID(Long.parseLong(userID));
         Review review = repo.getById(Long.parseLong(reviewID));
         float userRate = ratingDetailsService.repo.getRatedByReviewAndUserAndRateType(review, user, "RATING").get().getRating();
         float rate = review.getRate();
@@ -145,7 +145,7 @@ public class ReviewDetailsService {
     }
 
     public void likeReview(String reviewID, String userID){
-        User currentUser = userDetailsService.getProfileByID(userID);
+        User currentUser = userDetailsService.getProfileByID(Long.parseLong(userID));
         Review review = repo.getById(Long.parseLong(reviewID));
         if(ratingDetailsService.isUserLiked(review, currentUser)){  //if user liked - decrement likes
             userDetailsService.repo.decrementLike(review.getUser().getId());

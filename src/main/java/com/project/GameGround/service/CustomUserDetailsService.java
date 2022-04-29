@@ -48,8 +48,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return false;
     }
 
-    public User getProfileByID(String userID){
-        return repo.getById(Long.parseLong(userID));
+    public User getProfileByID(Long userID){
+        return userID != null ? repo.getById(userID) : null;
     }
 
     public boolean getCurrentUserAuthorities(Authentication currentUser){

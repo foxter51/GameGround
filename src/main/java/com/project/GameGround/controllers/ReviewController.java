@@ -41,8 +41,7 @@ public class ReviewController {
         Review review = reviewDetailsService.getReviewByID(reviewID);
         model.addAttribute("review", review);
         model.addAttribute("newComment", new CommentDTO());
-        User currentUser = null;
-        if(auth!=null) currentUser = userDetailsService.getProfileByID(userDetailsService.getCurrentUserID(auth).toString());
+        User currentUser = userDetailsService.getProfileByID(userDetailsService.getCurrentUserID(auth));
         model.addAttribute("oldRating", ratingDetailsService.getRateIfRated(review, currentUser));
         model.addAttribute("liked", ratingDetailsService.isUserLiked(review, currentUser));
         model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));

@@ -1,13 +1,16 @@
 package com.project.GameGround.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "tags")
 public class Tag {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,8 +21,6 @@ public class Tag {
     public Tag(String tagName) {
         removeTagMistakes(tagName);
     }
-
-    public Tag() {}
 
     public void removeTagMistakes(String tagName){
         if(tagName.split("#").length > 2 || tagName.endsWith("#")){  //if tag contains more than one "#"

@@ -1,13 +1,16 @@
 package com.project.GameGround.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name="ratedby")
 public class RatedBy {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +37,4 @@ public class RatedBy {
         this.rateType = rateType;
         this.rating = rating;
     }
-
-    public RatedBy() {}
 }
