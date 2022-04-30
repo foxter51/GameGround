@@ -82,10 +82,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public String getUserEmail(Authentication auth){
-        return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");  //get user email depending on the login type
+        return isUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");  //get user email depending on the login type
     }
 
-    public boolean isCustomUserDetails(Authentication auth){
+    public boolean isUserDetails(Authentication auth){
         return auth.getPrincipal() instanceof UserDetails;
     }
 }

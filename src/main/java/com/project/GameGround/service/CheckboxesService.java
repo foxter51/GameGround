@@ -1,12 +1,10 @@
 package com.project.GameGround.service;
 
-import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.entities.Role;
 import com.project.GameGround.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,19 +71,11 @@ public class CheckboxesService {
     }
 
     public String isOnMyselfAction(List<Long> ID, Authentication auth){  //check if user blocked or deleted himself to logout
-        String email = getUserEmail(auth);
+        String email = userDetailsService.getUserEmail(auth);
         User currentUser = userDetailsService.repo.getByEmail(email);
         if(currentUser == null || ID.contains(currentUser.getId())){
             SecurityContextHolder.getContext().setAuthentication(null);
             return "redirect:/";
         } else return "redirect:/users/list";
-    }
-
-    public String getUserEmail(Authentication auth){
-        return isCustomUserDetails(auth) ? auth.getName() : ((CustomOAuth2UserDetails)auth.getPrincipal()).getAttribute("email");
-    }
-
-    public boolean isCustomUserDetails(Authentication auth){
-        return auth.getPrincipal() instanceof UserDetails;
     }
 }
