@@ -5,6 +5,8 @@ import com.project.GameGround.details.CustomOAuth2UserDetails;
 import com.project.GameGround.repositories.UserRepository;
 import com.project.GameGround.entities.User;
 import com.project.GameGround.security.AuthProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +22,8 @@ import java.util.*;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     protected UserRepository repo;
 
@@ -30,8 +34,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repo.getByEmail(email);  //searching for user in database
         if(user == null){
+            LOG.error("User {} not found", email);
             throw new UsernameNotFoundException("User not found!");
         }
+        LOG.info("User {} authorized", email);
         repo.updateLoginDate(email, LocalDateTime.now().format(Constants.dateTimeFormatter));  //update user last login date
         return user;  //found user
     }
@@ -42,9 +48,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
         if(repo.getByEmail(user.getEmail()) == null){
+            LOG.info("Saving user {}", user.getEmail());
             repo.save(user);
             return true;
         }
+        LOG.error("User {} registration failed (already exists)", user.getEmail());
         return false;
     }
 

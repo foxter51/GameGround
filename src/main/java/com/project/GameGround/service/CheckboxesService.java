@@ -2,6 +2,8 @@ package com.project.GameGround.service;
 
 import com.project.GameGround.entities.Role;
 import com.project.GameGround.entities.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class CheckboxesService {
+
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -34,16 +38,25 @@ public class CheckboxesService {
     }
 
     public String blockAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> userDetailsService.repo.blockById(id));
+        ID.forEach(id -> {
+            userDetailsService.repo.blockById(id);
+            LOG.info("User with ID: {} has been blocked", id);
+        });
         return isOnMyselfAction(ID, auth);
     }
 
     public void unblockAction(List<Long> ID){
-        ID.forEach(id -> userDetailsService.repo.unblockById(id));
+        ID.forEach(id -> {
+            userDetailsService.repo.unblockById(id);
+            LOG.info("User with ID: {} has been unblocked", id);
+        });
     }
 
     public String deleteAction(List<Long> ID, Authentication auth){
-        ID.forEach(id -> userDetailsService.repo.deleteById(id));
+        ID.forEach(id -> {
+            userDetailsService.repo.deleteById(id);
+            LOG.info("User with ID: {} has been deleted", id);
+        });
         return isOnMyselfAction(ID, auth);
     }
 
@@ -53,8 +66,10 @@ public class CheckboxesService {
             user = userDetailsService.repo.getById(userID);
             if(isContainsRoleAdmin(user)){  //if user is admin -> remove admin role
                 user.removeAdminRole();
+                LOG.info("User with ID: {} has been removed admin role", userID);
             }
             else user.addRole(roleDetailsService.repo.getRoleByName("ADMIN"));  //if user is not admin -> add admin role
+            LOG.info("User with ID: {} has been given admin role", userID);
         }
         assert user != null;
         userDetailsService.repo.save(user);
