@@ -26,6 +26,7 @@
                 <div class="card-body">
                     <div class="row">
                         <form th:action="@{/review/{id}/edit/save/(id=${updateReview.user.id})}" method="post" th:object="${updateReview}" enctype="multipart/form-data">
+
                             <div class="form-group" hidden>
                                 <input type="text" autocomplete="off" th:field="*{id}"/>
                             </div>
