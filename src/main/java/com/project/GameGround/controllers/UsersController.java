@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
+
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
@@ -27,7 +28,7 @@ public class UsersController {
         return "users";
     }
 
-    @RequestMapping("/control")
+    @GetMapping("/control")
     public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
         return checkboxesService.doCheckboxAction(ID, button, auth);
     }

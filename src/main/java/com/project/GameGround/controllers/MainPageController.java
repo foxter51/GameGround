@@ -25,7 +25,7 @@ public class MainPageController {
         return "redirect:/sort=dateDSC";
     }
 
-    @RequestMapping("/{filter}")
+    @GetMapping("/{filter}")
     public String mainPageSort(@PathVariable("filter")String filter, Model model){
         model.addAttribute("reviews", reviewDetailsService.loadReviews(filter));
         model.addAttribute("last6tags", tagDetailsService.getLast6Tags());
@@ -42,7 +42,7 @@ public class MainPageController {
         return "main";
     }
 
-    @RequestMapping("/read_also/{request}")
+    @GetMapping("/read_also/{request}")
     public String readAlso(@PathVariable("request")String request, Model model){
         model.addAttribute("reviews", reviewDetailsService.getReviewsByGenre(request));
         model.addAttribute("last6tags", tagDetailsService.getLast6Tags());

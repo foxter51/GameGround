@@ -6,10 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -19,6 +16,9 @@ public class Review {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    @Lob
+    private byte[] reviewPhoto;
     
     @Column(nullable = false, length = 64)
     private String reviewName;
@@ -67,5 +67,9 @@ public class Review {
 
     public void addBlockedToRate(RatedBy ratedBy){
         blockedToRate.add(ratedBy);
+    }
+
+    public String getEncodedPhoto(){
+        return Base64.getEncoder().encodeToString(reviewPhoto);
     }
 }

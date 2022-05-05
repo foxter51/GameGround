@@ -10,7 +10,9 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -31,7 +33,7 @@ public class ReviewDetailsService {
     @Autowired
     private RatingDetailsService ratingDetailsService;
 
-    public void saveReview(String userID, Review review, Tags tags, Integer starValue){
+    public void saveReview(String userID, Review review, Tags tags, Integer starValue, MultipartFile image){
         review.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
         for (String tag : tags.getTagsString().trim().split(" ")) {  //extract tags from string
             Tag newTag = new Tag(tag);
@@ -39,6 +41,17 @@ public class ReviewDetailsService {
         }
         review.setText(markdownToHTML(review.getText()));
         review.setAuthorRate(starValue);
+        try{
+            if(!image.isEmpty()){
+                review.setReviewPhoto(image.getBytes());
+            }
+            else{
+                review.setReviewPhoto(repo.getById(review.getId()).getReviewPhoto());
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
         repo.save(review);
     }
 

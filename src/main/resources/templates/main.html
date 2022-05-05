@@ -58,13 +58,21 @@
                 <div class="col" th:each="review: ${reviews}">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
-                            <div id="reviewRate" style="display: inline" class="float-end">
-                                <script>displayRate([[${review.rate}]], "")</script>
+                            <div class="row">
+                                <div class="col-3">
+                                    <img style="height: 100%; width: 200px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
+                                </div>
+                                <div class="col">
+                                    <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
+                                    <div id="reviewRate" style="display: inline" class="float-end">
+                                        <script>displayRate([[${review.rate}]], "")</script>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                                    <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                                </div>
                             </div>
-                            <br>
-                            <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                            <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
                         </div>
                     </div>
                 </div>

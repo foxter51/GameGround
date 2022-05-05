@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -36,7 +37,7 @@ public class ReviewController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
         Review review = reviewDetailsService.getReviewByID(reviewID);
         model.addAttribute("review", review);
@@ -51,8 +52,8 @@ public class ReviewController {
     }
 
     @PostMapping("/{id}/save")
-    public String saveReview(@PathVariable ("id") String userID, @Valid ReviewDTO review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
-        reviewDetailsService.saveReview(userID, modelMapper.map(review, Review.class), tags, starValue);
+    public String saveReview(@PathVariable ("id") String userID, @Valid ReviewDTO review, @RequestParam("rStar")Integer starValue, @RequestParam("image")MultipartFile image, @ModelAttribute("Tags") Tags tags){
+        reviewDetailsService.saveReview(userID, modelMapper.map(review, Review.class), tags, starValue, image);
         return "redirect:/profile/{id}";
     }
 
@@ -75,8 +76,8 @@ public class ReviewController {
     }
 
     @PostMapping("/{id}/edit/save")
-    public String saveEditedReview(@PathVariable ("id")String userID, Review review, @RequestParam("rStar")Integer starValue, @ModelAttribute("Tags") Tags tags){
-        reviewDetailsService.saveReview(userID, review, tags, starValue);
+    public String saveEditedReview(@PathVariable ("id")String userID, Review review, @RequestParam("rStar")Integer starValue, @RequestParam("image") MultipartFile image, @ModelAttribute("Tags") Tags tags){
+        reviewDetailsService.saveReview(userID, review, tags, starValue, image);
         return "redirect:/profile/{id}";
     }
 
@@ -95,7 +96,7 @@ public class ReviewController {
         return "redirect:/review/{reviewID}";
     }
 
-    @RequestMapping("/{reviewID}/change_rate/{userID}")
+    @GetMapping("/{reviewID}/change_rate/{userID}")
     public String changeRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
         reviewDetailsService.changeRate(reviewID, userID);
         return "redirect:/review/{reviewID}";

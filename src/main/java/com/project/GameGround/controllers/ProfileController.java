@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
+
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
     private ReviewDetailsService reviewDetailsService;
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public String profilePage(@PathVariable("id")String userID){
         return "redirect:/profile/{id}/sort=dateDSC";
     }
 
-    @RequestMapping("/{id}/{filter}")
+    @GetMapping("/{id}/{filter}")
     public String profilePageSort(@PathVariable("id") String userID, @PathVariable("filter") String filter, Model model, Authentication auth){
         model.addAttribute("userProfile", userDetailsService.getProfileByID(Long.parseLong(userID)));
         model.addAttribute("isAdmin", userDetailsService.getCurrentUserAuthorities(auth));

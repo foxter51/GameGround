@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5" xmlns="http://www.w3.org/1999/html">
 <head>
     <title th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -17,6 +17,7 @@
     <script th:src="@{/js/writeReviewEvent.js}" type="text/javascript"></script>
     <script th:src="@{/js/activeFilters.js}" type="text/javascript"></script>
     <script th:src="@{/js/starsEvents.js}" type="text/javascript"></script>
+    <script th:src="@{/js/imagePreview.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -115,7 +116,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
-                            <form th:action="@{/review/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}">
+                            <form th:action="@{/review/{id}/save(id=${userProfile.id})}" method="post" th:object="${createReview}" enctype="multipart/form-data">
                                 <button type="button" style="background: transparent; border:none" class="float-end"><i class="fa-solid fa-xmark text-white" name="signs" id="hideWrite"></i></button>
 
                                 <div class="form-group" hidden>
@@ -123,6 +124,17 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="photoUpload" th:text="#{reviewPhotoLabel}"></label>
+                                    <input id="photoUpload" type="file" name="image" accept="image/png, image/jpeg" class="form-control" required/>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img style="height: 100%; width: 200px" class="mt-3" id="previewPhotoCreate"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-3">
                                     <label for="title" th:text="#{titleLabel}"></label>
                                     <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
                                            th:field="*{reviewName}" required/>
@@ -192,29 +204,36 @@
                         <div class="col" th:each="review: ${reviews}">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
-                                    <div id="reviewRate" style="display: inline" class="float-end">
-                                        <script>displayRate([[${review.rate}]], "")</script>
-                                    </div><br>
-                                    <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
-                                    <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
-                                    <div class="float-end">
-                                        <form th:action="@{/review/edit/{reviewID}(reviewID=${review.id})}" method="post" style="display: inline">
-                                            <div id="editReview" style="display: inline; margin-right: 30px">
-                                                <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <img style="height: 100%; width: 200px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
+                                        </div>
+                                        <div class="col">
+                                            <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>
+                                            <div id="reviewRate" style="display: inline" class="float-end">
+                                                <script>displayRate([[${review.rate}]], "")</script>
+                                            </div><br><br>
+                                            <p class="mb-0" style="display: inline" th:text="#{genreLabel}"></p><p class="mb-0" th:text="${review.groupName}" style="display: inline"></p><br>
+                                            <p class="mb-0" style="display: inline" th:text="#{tagLabelSimple}"></p><div th:each="tag: ${review.tags}" style="display: inline"><p class="mb-0" th:text="${tag.tagName}+' '" style="display: inline"></p></div>
+                                            <div class="float-end">
+                                                <form th:action="@{/review/edit/{reviewID}(reviewID=${review.id})}" method="post" style="display: inline">
+                                                    <div id="editReview" style="display: inline; margin-right: 30px">
+                                                        <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+                                                    </div>
+                                                </form>
+                                                <form th:action="@{/review/{userID}/remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
+                                                    <div id="deleteReview" style="display: inline">
+                                                        <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
+                                                    </div>
+                                                </form>
+                                                <script>
+                                                    if([[${#authentication.getPrincipal().getId()}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
+                                                        $("#editReview").hide().removeAttr("id");
+                                                        $("#deleteReview").hide().removeAttr("id");
+                                                    }
+                                                </script>
                                             </div>
-                                        </form>
-                                        <form th:action="@{/review/{userID}/remove/{reviewID}(userID=${review.user.id}, reviewID=${review.id})}" method="post" style="display: inline">
-                                            <div id="deleteReview" style="display: inline">
-                                                <button name="button" type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-white" name="signs"></i></button>
-                                            </div>
-                                        </form>
-                                        <script>
-                                            if([[${#authentication.getPrincipal().getId()}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
-                                                $("#editReview").hide().removeAttr("id");
-                                                $("#deleteReview").hide().removeAttr("id");
-                                            }
-                                        </script>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

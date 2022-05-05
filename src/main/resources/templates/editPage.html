@@ -14,6 +14,7 @@
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/switch.js}" type="text/javascript"></script>
     <script th:src="@{/js/starsEvents.js}" type="text/javascript"></script>
+    <script th:src="@{/js/imagePreview.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="blocks/header :: header"></header>
@@ -24,7 +25,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="row">
-                        <form th:action="@{/review/{id}/edit/save/(id=${updateReview.user.id})}" method="post" th:object="${updateReview}">
+                        <form th:action="@{/review/{id}/edit/save/(id=${updateReview.user.id})}" method="post" th:object="${updateReview}" enctype="multipart/form-data">
                             <div class="form-group" hidden>
                                 <input type="text" autocomplete="off" th:field="*{id}"/>
                             </div>
@@ -42,6 +43,18 @@
                             </div>
                             <div class="form-group" hidden>
                                 <input type="text" autocomplete="off" th:field="*{publishDate}"/>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img style="height: 100%; width: 200px" id="previewPhoto" th:src="@{'data:image/jpg;base64,'+*{getEncodedPhoto()}}"/>
+                                    </div>
+                                    <div class="col">
+                                        <label for="photoUpload" th:text="#{reviewPhotoEdit}"></label>
+                                        <input id="photoUpload" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="form-group">
