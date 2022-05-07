@@ -124,13 +124,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="photoUpload" th:text="#{reviewPhotoLabel}"></label>
-                                    <input id="photoUpload" type="file" name="image" accept="image/png, image/jpeg" class="form-control" required/>
+                                    <label for="photoUploadCreate" th:text="#{reviewPhotoLabel}"></label>
+                                    <input id="photoUploadCreate" type="file" name="image" accept="image/png, image/jpeg" class="form-control" required/>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-2">
-                                        <img style="height: 100%; width: 200px" class="mt-3" id="previewPhotoCreate"/>
+                                        <img style="height: 100%; width: 200px; border-radius: 5px" class="mt-3" id="previewPhotoCreate"/>
                                     </div>
                                 </div>
 
@@ -206,7 +206,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-3">
-                                            <img style="height: 100%; width: 200px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
+                                            <img style="height: 100%; width: 200px; border-radius: 5px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
                                         </div>
                                         <div class="col">
                                             <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>

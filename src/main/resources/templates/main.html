@@ -60,7 +60,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-3">
-                                    <img style="height: 100%; width: 200px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
+                                    <img style="height: 100%; width: 200px; border-radius: 5px" th:src="@{'data:image/jpg;base64,'+${review.getEncodedPhoto()}}"/>
                                 </div>
                                 <div class="col">
                                     <a class="mb-0 text-decoration-none" th:href="@{/review/{id}(id=${review.id})}"><big th:text="${review.reviewName}"></big></a>

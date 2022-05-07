@@ -49,11 +49,11 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-2">
-                                        <img style="height: 100%; width: 200px" id="previewPhoto" th:src="@{'data:image/jpg;base64,'+*{getEncodedPhoto()}}"/>
+                                        <img style="height: 100%; width: 200px; border-radius: 5px" id="previewPhotoEdit" th:src="@{'data:image/jpg;base64,'+*{getEncodedPhoto()}}"/>
                                     </div>
                                     <div class="col">
-                                        <label for="photoUpload" th:text="#{reviewPhotoEdit}"></label>
-                                        <input id="photoUpload" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
+                                        <label for="photoUploadEdit" th:text="#{reviewPhotoEdit}"></label>
+                                        <input id="photoUploadEdit" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
                                     </div>
                                 </div>
                             </div>
