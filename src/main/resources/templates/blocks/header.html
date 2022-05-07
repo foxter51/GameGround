@@ -20,6 +20,9 @@
                     <a th:href="@{/login}"><button class="btn btn-outline-primary me-2" th:text="#{logButtonLabel}"></button></a>
                     <a th:href="@{/register}"><button class="btn btn-primary" th:text="#{regButtonLabel}"></button></a>
                 </th:block>
+                <div class="position-absolute top-50 start-50 border-bottom">
+                    <strong th:text="${#dates.format(#dates.createNow(), 'HH:mm')}"></strong>
+                </div>
             </nav>
         </div>
     </div>
