@@ -151,7 +151,7 @@
                         <div class="col-9 float-end" id="commentsSection">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <img th:src="@{'data:image/jpg;base64,'+${review.user.getEncodedPhoto()}}" class="rounded-circle img-fluid" style="height: 30px; width: 30px; display: inline; margin-right: 10px"/><a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
+                                    <img th:src="@{'data:image/jpg;base64,'+${comment.user.getEncodedPhoto()}}" class="rounded-circle img-fluid" style="height: 30px; width: 30px; display: inline; margin-right: 10px"/><a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
                                     <p class="mb-0" th:text="${comment.text}"></p>
                                 </div>
                             </div>
