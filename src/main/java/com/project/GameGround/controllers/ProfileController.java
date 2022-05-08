@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/profile")
@@ -33,5 +34,11 @@ public class ProfileController {
         model.addAttribute("createReview", new ReviewDTO());
         model.addAttribute("Tags", new Tags());
         return "profile";
+    }
+
+    @PostMapping("/{id}/change_profile_picture")
+    public String changeProfilePicture(@PathVariable("id")String profileID, @RequestParam("profilePicture")MultipartFile profilePicture){
+        userDetailsService.changeProfilePicture(Long.parseLong(profileID), profilePicture);
+        return "redirect:/profile/{id}";
     }
 }

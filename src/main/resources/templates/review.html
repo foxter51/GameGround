@@ -53,7 +53,7 @@
                                 </div>
                             </label><br><br>
                         </div>
-                        <h4 class="mb-0" style="display: inline" th:text="#{author}"></h4><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4><br>
+                        <img th:src="@{'data:image/jpg;base64,'+${review.user.getEncodedPhoto()}}" class="rounded-circle img-fluid" style="height: 40px; width: 40px; display: inline; margin-right: 10px"/><h4 style="display: inline"><a th:text="${review.user.firstName}+' '+${review.user.lastName}" th:href="@{/profile/{id}(id=${review.user.id})}" class="text-decoration-none"></a></h4><br>
                         <div>
                             <i class="fa-regular fa-calendar-check" name="signs"></i>
                             <i class="text-muted" th:text="${review.publishDate}"></i>
@@ -151,7 +151,7 @@
                         <div class="col-9 float-end" id="commentsSection">
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
+                                    <img th:src="@{'data:image/jpg;base64,'+${review.user.getEncodedPhoto()}}" class="rounded-circle img-fluid" style="height: 30px; width: 30px; display: inline; margin-right: 10px"/><a class="mb-0 text-decoration-none" style="display: inline" th:href="@{/profile/{id}(id=${comment.user.id})}"><big th:text="${comment.user.firstName}+' '+${comment.user.lastName}"></big></a> <p class="text-muted float-end" style="display: inline" th:text="${comment.publishDate}"></p><br>
                                     <p class="mb-0" th:text="${comment.text}"></p>
                                 </div>
                             </div>

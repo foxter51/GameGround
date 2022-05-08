@@ -28,7 +28,7 @@
         <div class="col-lg-4">
             <div class="card mb-4">
                 <div class="card-body text-center">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                    <img th:src="@{'data:image/jpg;base64,'+${userProfile.getEncodedPhoto()}}" id="profilePicture" class="rounded-circle img-fluid" style="height: 150px; width: 150px"/>
                     <h5 class="my-3" th:text="${userProfile.firstName}+' '+${userProfile.lastName}"></h5>
                     <i class="fa-solid fa-heart fa-xl" name="signs"></i><strong th:text="' '+${userProfile.likesQuantity}" style="display: inline"></strong>
                     <p class="text-muted mb-1" th:text="#{roleLabel}"></p>
@@ -100,6 +100,23 @@
                                 <input class="form-check-input" type="checkbox" role="switch" id="languageCheck"/>
                                 <label class="form-check-label" for="languageCheck" th:text="#{checkOptLang}"></label>
                             </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0" th:text="#{profilePhotoPicture}"></p>
+                        </div>
+                        <div class="col-sm-8">
+                            <form th:action="@{/profile/{id}/change_profile_picture(id=${userProfile.id})}" method="post" enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input id="changeProfilePicture" name="profilePicture" type="file" accept="image/png, image/jpeg" class="form-control" required/>
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button" th:text="#{pictureCancel}" id="cancelPicture"></button>
+                                    <button class="btn btn-primary" type="submit" th:text="#{pictureSave}"></button>
+                                    </span>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -7,8 +7,13 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.ResourceUtils;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -19,6 +24,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Lob
+    private byte[] profilePicture;
 
     @Column(nullable = false, unique = true, length = 32)
     private String email;
@@ -62,9 +70,10 @@ public class User implements UserDetails {
     private List<RatedBy> blockedToRate = new ArrayList<>();
 
     @PrePersist
-    public void onCreate(){
+    public void onCreate() throws IOException {
         this.registrationDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
         this.lastLoginDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
+        this.profilePicture = Files.readAllBytes(ResourceUtils.getFile("classpath:images/ava.webp").toPath());
     }
 
     //userDetails
@@ -108,6 +117,10 @@ public class User implements UserDetails {
 
     public String getFullName() {
         return firstName+ " " +lastName;
+    }
+
+    public String getEncodedPhoto(){
+        return Base64.getEncoder().encodeToString(profilePicture);
     }
 
     public void addRole(Role role){

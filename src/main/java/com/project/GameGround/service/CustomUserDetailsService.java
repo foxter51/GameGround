@@ -15,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -58,6 +60,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public User getProfileByID(Long userID){
         return userID != null ? repo.getById(userID) : null;
+    }
+
+    public void changeProfilePicture(Long profileID, MultipartFile profilePicture){
+        User user = getProfileByID(profileID);
+        try{
+            user.setProfilePicture(profilePicture.getBytes());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        repo.save(user);
     }
 
     public boolean getCurrentUserAuthorities(Authentication currentUser){

@@ -22,4 +22,16 @@ $(document).ready(()=>{
         }
         reader.readAsDataURL(file);
     });
+    $('#changeProfilePicture').change(function (){
+        file = this.files[0];
+        if (file){
+            reader.onload = function(event){
+                $('#profilePicture').attr('src', event.target.result);
+            }
+        }
+        reader.readAsDataURL(file);
+    });
+    $("#cancelPicture").click(function (){
+        location.reload();
+    })
 });
