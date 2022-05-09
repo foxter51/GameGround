@@ -2,6 +2,8 @@ $(document).ready(()=>{
     let file;
     let reader = new FileReader();
 
+    let nativeReviewPhoto = $('#previewPhotoEdit').attr('src');
+
     $('#previewPhotoCreate').hide();
 
     $('#photoUploadCreate').change(function(){
@@ -21,6 +23,10 @@ $(document).ready(()=>{
             }
         }
         reader.readAsDataURL(file);
+    });
+    $("#cancelPictureEdit").click(function (){
+        $("#previewPhotoEdit").attr('src', nativeReviewPhoto);
+        $('#photoUploadEdit').val('');
     });
     $('#changeProfilePicture').change(function (){
         file = this.files[0];

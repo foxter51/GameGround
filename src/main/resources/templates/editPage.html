@@ -51,9 +51,14 @@
                                     <div class="col-2">
                                         <img style="height: 100%; width: 200px; border-radius: 5px" id="previewPhotoEdit" th:src="@{'data:image/jpg;base64,'+*{getEncodedPhoto()}}"/>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-6">
                                         <label for="photoUploadEdit" th:text="#{reviewPhotoEdit}"></label>
-                                        <input id="photoUploadEdit" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
+                                        <div class="input-group">
+                                            <input id="photoUploadEdit" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="button" th:text="#{pictureCancel}" id="cancelPictureEdit"></button>
+                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
