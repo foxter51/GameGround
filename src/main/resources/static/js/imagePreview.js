@@ -3,6 +3,7 @@ $(document).ready(()=>{
     let reader = new FileReader();
 
     let nativeReviewPhoto = $('#previewPhotoEdit').attr('src');
+    let nativeProfilePicture = $('#profilePicture').attr('src');
 
     $('#previewPhotoCreate').hide();
 
@@ -38,6 +39,7 @@ $(document).ready(()=>{
         reader.readAsDataURL(file);
     });
     $("#cancelPicture").click(function (){
-        location.reload();
+        $("#profilePicture").attr('src', nativeProfilePicture);
+        $('#changeProfilePicture').val('');
     })
 });
