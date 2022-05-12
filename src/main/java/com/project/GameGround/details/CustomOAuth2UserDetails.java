@@ -31,15 +31,15 @@ public class CustomOAuth2UserDetails implements OAuth2User {  //implement authen
 
     @Override
     public String getName() {
-        return oAuth2User.getAttribute("name");
+        return user.getFirstName();
     }
 
     public String getFullName() {
-        return oAuth2User.getAttribute("name");
+        return user.getFullName();
     }
 
     public String getEmail(){
-        return oAuth2User.getAttribute("email");
+        return user.getEmail();
     }
 
     public Long getId(){

@@ -38,7 +38,7 @@ public class ReviewController {
     private ModelMapper modelMapper;
 
     @GetMapping("/{id}")
-    public String reviewPage(@PathVariable("id") String reviewID, Model model, Authentication auth){
+    public String reviewPage(@PathVariable("id")Long reviewID, Model model, Authentication auth){
         Review review = reviewDetailsService.getReviewByID(reviewID);
         model.addAttribute("review", review);
         model.addAttribute("newComment", new CommentDTO());
@@ -46,19 +46,19 @@ public class ReviewController {
         model.addAttribute("oldRating", ratingDetailsService.getRateIfRated(review, currentUser));
         model.addAttribute("liked", ratingDetailsService.isUserLiked(review, currentUser));
         model.addAttribute("lastGenres", reviewDetailsService.getLastGenres(review.getGroupName()));
-        model.addAttribute("prevReview", reviewDetailsService.getPrevReviewID(review.getId()));
-        model.addAttribute("nextReview", reviewDetailsService.getNextReviewID(review.getId()));
+        model.addAttribute("prevReview", reviewDetailsService.getPrevReviewID(reviewID));
+        model.addAttribute("nextReview", reviewDetailsService.getNextReviewID(reviewID));
         return "review";
     }
 
     @PostMapping("/{id}/save")
-    public String saveReview(@PathVariable ("id") String userID, @Valid ReviewDTO review, @RequestParam("rStar")Integer starValue, @RequestParam("image")MultipartFile image, @ModelAttribute("Tags") Tags tags){
+    public String saveReview(@PathVariable ("id")Long userID, @Valid ReviewDTO review, @RequestParam("rStar")Integer starValue, @RequestParam("image")MultipartFile image, @ModelAttribute("Tags")Tags tags){
         reviewDetailsService.saveReview(userID, modelMapper.map(review, Review.class), tags, starValue, image);
         return "redirect:/profile/{id}";
     }
 
     @PostMapping("/{userID}/remove/{reviewID}")
-    public String reviewRemove(@PathVariable("userID") String userID, @PathVariable("reviewID") String reviewID){
+    public String reviewRemove(@PathVariable("userID")Long userID, @PathVariable("reviewID")Long reviewID){
         reviewDetailsService.removeReviewByID(reviewID);
         return "redirect:/profile/{userID}";
     }
@@ -76,13 +76,13 @@ public class ReviewController {
     }
 
     @PostMapping("/{id}/edit/save")
-    public String saveEditedReview(@PathVariable ("id")String userID, Review review, @RequestParam("rStar")Integer starValue, @RequestParam("image") MultipartFile image, @ModelAttribute("Tags") Tags tags){
+    public String saveEditedReview(@PathVariable ("id")Long userID, Review review, @RequestParam("rStar")Integer starValue, @RequestParam("image") MultipartFile image, @ModelAttribute("Tags") Tags tags){
         reviewDetailsService.saveReview(userID, review, tags, starValue, image);
         return "redirect:/profile/{id}";
     }
 
     @PostMapping("/{reviewID}/add_comment/{userID}")
-    public String commentCreation(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @Valid CommentDTO comment, BindingResult bindingResult){
+    public String commentCreation(@PathVariable("reviewID")Long reviewID, @PathVariable("userID")Long userID, @Valid CommentDTO comment, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "redirect:/review/{reviewID}";
         }
@@ -91,19 +91,19 @@ public class ReviewController {
     }
 
     @PostMapping("/{reviewID}/add_rate/{userID}")
-    public String addRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID, @RequestParam(name = "rStar")String starValue){
+    public String addRating(@PathVariable("reviewID")Long reviewID, @PathVariable("userID")Long userID, @RequestParam("rStar")Integer starValue){
         reviewDetailsService.addRate(reviewID, userID, starValue);
         return "redirect:/review/{reviewID}";
     }
 
-    @GetMapping("/{reviewID}/change_rate/{userID}")
-    public String changeRating(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
+    @PostMapping("/{reviewID}/change_rate/{userID}")
+    public String changeRating(@PathVariable("reviewID")Long reviewID, @PathVariable("userID")Long userID){
         reviewDetailsService.changeRate(reviewID, userID);
         return "redirect:/review/{reviewID}";
     }
 
     @PostMapping("/{reviewID}/like/{userID}")
-    public String likeReview(@PathVariable("reviewID")String reviewID, @PathVariable("userID")String userID){
+    public String likeReview(@PathVariable("reviewID")Long reviewID, @PathVariable("userID")Long userID){
         reviewDetailsService.likeReview(reviewID, userID);
         return "redirect:/review/{reviewID}";
     }

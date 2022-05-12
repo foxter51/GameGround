@@ -22,13 +22,13 @@ public class ProfileController {
     private ReviewDetailsService reviewDetailsService;
 
     @GetMapping("/{id}")
-    public String profilePage(@PathVariable("id")String userID){
+    public String profilePage(@PathVariable("id")Long userID){
         return "redirect:/profile/{id}/sort=dateDSC";
     }
 
     @GetMapping("/{id}/{filter}")
-    public String profilePageSort(@PathVariable("id") String userID, @PathVariable("filter") String filter, Model model, Authentication auth){
-        model.addAttribute("userProfile", userDetailsService.getProfileByID(Long.parseLong(userID)));
+    public String profilePageSort(@PathVariable("id")Long userID, @PathVariable("filter")String filter, Model model, Authentication auth){
+        model.addAttribute("userProfile", userDetailsService.getProfileByID(userID));
         model.addAttribute("isAdmin", userDetailsService.getCurrentUserAuthorities(auth));
         model.addAttribute("reviews", reviewDetailsService.loadReviewsByID(userID, filter));
         model.addAttribute("createReview", new ReviewDTO());
@@ -37,8 +37,20 @@ public class ProfileController {
     }
 
     @PostMapping("/{id}/change_profile_picture")
-    public String changeProfilePicture(@PathVariable("id")String profileID, @RequestParam("profilePicture")MultipartFile profilePicture){
-        userDetailsService.changeProfilePicture(Long.parseLong(profileID), profilePicture);
+    public String changeProfilePicture(@PathVariable("id")Long profileID, @RequestParam("profilePicture")MultipartFile profilePicture){
+        userDetailsService.changeProfilePicture(profileID, profilePicture);
+        return "redirect:/profile/{id}";
+    }
+
+    @PostMapping("/{id}/change_firstname")
+    public String changeFirstname(@PathVariable("id")Long profileID, @RequestParam("changeFirstname")String firstname){
+        userDetailsService.changeUserFirstname(profileID, firstname);
+        return "redirect:/profile/{id}";
+    }
+
+    @PostMapping("/{id}/change_lastname")
+    public String changeLastname(@PathVariable("id")Long profileID, @RequestParam("changeLastname")String lastname){
+        userDetailsService.changeUserLastname(profileID, lastname);
         return "redirect:/profile/{id}";
     }
 }

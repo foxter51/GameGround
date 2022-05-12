@@ -29,7 +29,7 @@ public class UsersController {
     }
 
     @GetMapping("/control")
-    public String checkboxActions(@RequestParam(name = "checkbox") List<Long> ID, @RequestParam(name = "button") String button, Authentication auth) {
+    public String checkboxActions(@RequestParam(name = "checkbox")List<Long> ID, @RequestParam(name = "button")String button, Authentication auth) {
         return checkboxesService.doCheckboxAction(ID, button, auth);
     }
 }

@@ -33,8 +33,8 @@ public class ReviewDetailsService {
     @Autowired
     private RatingDetailsService ratingDetailsService;
 
-    public void saveReview(String userID, Review review, Tags tags, Integer starValue, MultipartFile image){
-        review.setUser(userDetailsService.repo.getById(Long.parseLong(userID)));
+    public void saveReview(Long userID, Review review, Tags tags, Integer starValue, MultipartFile image){
+        review.setUser(userDetailsService.repo.getById(userID));
         for (String tag : tags.getTagsString().trim().split(" ")) {  //extract tags from string
             Tag newTag = new Tag(tag);
             if(tag.length() > 1) review.addTag(Objects.requireNonNullElse(tagDetailsService.repo.isContains(newTag.getTagName()), newTag));  //if tag already exists we use it, else create
@@ -55,8 +55,8 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public Review getReviewByID(String reviewID){
-        return repo.getById(Long.parseLong(reviewID));
+    public Review getReviewByID(Long reviewID){
+        return repo.getById(reviewID);
     }
 
     public List<Review> loadReviews(String sortBy){  //load all reviews depending on sort type
@@ -84,8 +84,8 @@ public class ReviewDetailsService {
         return reviews.size() > 0 ? reviews : null;
     }
 
-    public List<Review> loadReviewsByID(String userID, String sortBy){  //load reviews by id depending on sort type
-        List<Review> reviews = repo.getReviewByUserId(Long.parseLong(userID));
+    public List<Review> loadReviewsByID(Long userID, String sortBy){  //load reviews by id depending on sort type
+        List<Review> reviews = repo.getReviewByUserId(userID);
         switch(sortBy){
             case "sort=dateASC":
                 break;
@@ -99,7 +99,7 @@ public class ReviewDetailsService {
                 reviews.sort(Comparator.comparing(Review::getRate).reversed());
                 break;
             case "filter=ratingGE4":
-                reviews = repo.getReviewsRatingGE4ByID(Long.parseLong(userID));
+                reviews = repo.getReviewsRatingGE4ByID(userID);
                 break;
         }
         return reviews.size() > 0 ? reviews : null;
@@ -122,31 +122,31 @@ public class ReviewDetailsService {
         return reviewTextToMarkdown(review);
     }
 
-    public void removeReviewByID(String reviewID){
-        repo.deleteById(Long.parseLong(reviewID));
+    public void removeReviewByID(Long reviewID){
+        repo.deleteById(reviewID);
     }
 
-    public void addCommentToReview(String reviewID, String userID, Comment comment){
-        Review review = repo.getById(Long.parseLong(reviewID));
-        Comment savedComment = commentDetailsService.addComment(comment, review, Long.parseLong(userID));
+    public void addCommentToReview(Long reviewID, Long userID, Comment comment){
+        Review review = repo.getById(reviewID);
+        Comment savedComment = commentDetailsService.addComment(comment, review, userID);
         review.addComment(savedComment);
         repo.save(review);
     }
 
-    public void addRate(String reviewID, String userID, String starValue){
-        Review review = repo.getById(Long.parseLong(reviewID));
+    public void addRate(Long reviewID, Long userID, Integer starValue){
+        Review review = repo.getById(reviewID);
         float rate = review.getRate();
         float rateCount = review.getRateCount();
-        review.setRate((rateCount*rate + Float.parseFloat(starValue))/(rateCount+1));  //count new review rate
+        review.setRate((rateCount*rate + starValue)/(rateCount+1));  //count new review rate
         review.setRateCount((int)(rateCount+1));
-        RatedBy user = ratingDetailsService.repo.save(new RatedBy(review, userDetailsService.repo.getById(Long.parseLong(userID)), "RATING", Integer.parseInt(starValue)));
+        RatedBy user = ratingDetailsService.repo.save(new RatedBy(review, userDetailsService.repo.getById(userID), "RATING", starValue));
         review.addBlockedToRate(user);  //remember user rated
         repo.save(review);
     }
 
-    public void changeRate(String reviewID, String userID){
-        User user = userDetailsService.getProfileByID(Long.parseLong(userID));
-        Review review = repo.getById(Long.parseLong(reviewID));
+    public void changeRate(Long reviewID, Long userID){
+        User user = userDetailsService.getProfileByID(userID);
+        Review review = repo.getById(reviewID);
         float userRate = ratingDetailsService.repo.getRatedByReviewAndUserAndRateType(review, user, "RATING").get().getRating();
         float rate = review.getRate();
         float rateCount = review.getRateCount();
@@ -157,9 +157,9 @@ public class ReviewDetailsService {
         repo.save(review);
     }
 
-    public void likeReview(String reviewID, String userID){
-        User currentUser = userDetailsService.getProfileByID(Long.parseLong(userID));
-        Review review = repo.getById(Long.parseLong(reviewID));
+    public void likeReview(Long reviewID, Long userID){
+        User currentUser = userDetailsService.getProfileByID(userID);
+        Review review = repo.getById(reviewID);
         if(ratingDetailsService.isUserLiked(review, currentUser)){  //if user liked - decrement likes
             userDetailsService.repo.decrementLike(review.getUser().getId());
             ratingDetailsService.repo.deleteByUserAndRateType(currentUser, "LIKE");

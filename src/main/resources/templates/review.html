@@ -73,9 +73,9 @@
                      </form>
                      <div th:if="${oldRating != null}" id="reviewRate">
                          <script>displayRate([[${oldRating}]], 'fa-2xl')</script>
-                         <a th:href="@{/review/{reviewID}/change_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}"
-                            th:text="#{changeRate}" class="text-decoration-none"
-                         ></a>
+                         <form style="display: inline" th:action="@{/review/{reviewID}/change_rate/{userID}(reviewID=${review.id}, userID=${#authentication.getPrincipal().getId()})}" method="post">
+                             <button type="submit" class="btn btn-link" th:text="#{changeRate}"></button>
+                         </form>
                      </div>
                  </div>
                  <div id="likeReview" class="col" sec:authorize="isAuthenticated()">

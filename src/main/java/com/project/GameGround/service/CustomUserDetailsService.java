@@ -73,6 +73,18 @@ public class CustomUserDetailsService implements UserDetailsService {
         repo.save(user);
     }
 
+    public void changeUserFirstname(Long profileID, String firstname){
+        User user = repo.getById(profileID);
+        user.setFirstName(firstname);
+        repo.save(user);
+    }
+
+    public void changeUserLastname(Long profileID, String lastname){
+        User user = repo.getById(profileID);
+        user.setLastName(lastname);
+        repo.save(user);
+    }
+
     public boolean getCurrentUserAuthorities(Authentication currentUser){
         if(currentUser != null){
             String email = getUserEmail(currentUser);
