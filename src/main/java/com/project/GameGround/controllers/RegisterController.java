@@ -46,7 +46,8 @@ public class RegisterController {
     public String verifyUser(@Param("code") String code, RedirectAttributes ra) {
         if (userDetailsService.verify(code)) {
             ra.addFlashAttribute("confirmation", true);
-        } else {
+        }
+        else {
             ra.addFlashAttribute("confirmation", false);
         }
         return "redirect:/sort=dateDSC";
