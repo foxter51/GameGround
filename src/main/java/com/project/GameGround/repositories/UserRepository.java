@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
 
     User getByEmail(String email);  //request to find by email
 
+    User findUserByVerificationCode(String verificationCode);
+
     @Modifying
     @Query("UPDATE User user SET user.lastLoginDate = ?2 WHERE user.email = ?1")  //request to modify last login date
     void updateLoginDate(String email, String last_login_date);

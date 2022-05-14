@@ -84,6 +84,11 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    @Column(length = 64)
+    private String verificationCode;
+
+    private boolean enabled;
+
     @Override
     public String getPassword() {
         return password;
@@ -111,7 +116,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
     //
 
