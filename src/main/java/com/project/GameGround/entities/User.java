@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -73,7 +74,7 @@ public class User implements UserDetails {
     public void onCreate() throws IOException {
         this.registrationDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
         this.lastLoginDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
-        this.profilePicture = Files.readAllBytes(ResourceUtils.getFile("classpath:images/ava.webp").toPath());
+        this.profilePicture = Files.readAllBytes(Path.of("src/main/resources/images/ava.webp"));
     }
 
     //userDetails
