@@ -73,7 +73,7 @@ public class User implements UserDetails {
     public void onCreate() throws IOException {
         this.registrationDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
         this.lastLoginDate = LocalDateTime.now().format(Constants.dateTimeFormatter);
-        this.profilePicture = Files.readAllBytes(ResourceUtils.getFile("classpath:/resources/images/ava.webp").toPath());
+        this.profilePicture = Files.readAllBytes(ResourceUtils.getFile("classpath:images/ava.webp").toPath());
     }
 
     //userDetails
