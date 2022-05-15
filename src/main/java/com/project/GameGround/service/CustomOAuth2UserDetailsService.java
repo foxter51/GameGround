@@ -45,7 +45,8 @@ public class CustomOAuth2UserDetailsService extends DefaultOAuth2UserService {
             user.setLastName(name.split(" ", 2)[Constants.secondNamePart]);
         }
         else user.setFirstName(name);  //else set only name
-        user.setStatus("Unblocked");
+        user.setEnabled(true);
+        user.setBlocked(false);
         user.setAuthProvider(provider);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
         LOG.info("Saving OAuth2 user {}", email);

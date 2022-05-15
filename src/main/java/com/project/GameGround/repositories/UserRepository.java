@@ -19,11 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {  //interface
     void updateLoginDate(String email, String last_login_date);
 
     @Modifying
-    @Query("UPDATE User user SET user.status = 'Blocked' WHERE user.id = ?1")  //request to block user
+    @Query("UPDATE User user SET user.blocked = 1 WHERE user.id = ?1")  //request to block user
     void blockById(Long id);
 
     @Modifying
-    @Query("UPDATE User user SET user.status = 'Unblocked' WHERE user.id = ?1")  //request to unblock user
+    @Query("UPDATE User user SET user.blocked = 0 WHERE user.id = ?1")  //request to unblock user
     void unblockById(Long id);
 
     @Modifying

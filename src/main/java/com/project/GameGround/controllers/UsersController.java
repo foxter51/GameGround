@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,7 +29,7 @@ public class UsersController {
         return "users";
     }
 
-    @GetMapping("/control")
+    @PostMapping("/control")
     public String checkboxActions(@RequestParam(name = "checkbox")List<Long> ID, @RequestParam(name = "button")String button, Authentication auth) {
         return checkboxesService.doCheckboxAction(ID, button, auth);
     }

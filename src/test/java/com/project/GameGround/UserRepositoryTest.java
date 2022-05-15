@@ -14,6 +14,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,15 +35,17 @@ public class UserRepositoryTest {
     private TestEntityManager entityManager;  //useful methods for tests
 
     @Test
-    public void testCreateUser(){
+    public void testCreateUser() throws IOException {
         User user = new User();
         user.setEmail("invisiblepanda@gmail.com");
         user.setPassword(new BCryptPasswordEncoder().encode("test2022"));
         user.setFirstName("John");
         user.setLastName("Yeak");
-        user.setStatus("Unblocked");
+        user.setEnabled(true);
+        user.setBlocked(false);
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleRepo.getRoleByName("USER"));
+        user.setProfilePicture(Files.readAllBytes(Path.of("src/main/resources/images/ava.webp")));
         User savedUser = repo.save(user);
         User existUser = entityManager.find(User.class, savedUser.getId());
         assertThat(existUser.getEmail()).isEqualTo(user.getEmail());

@@ -7,11 +7,8 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.ResourceUtils;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,9 +43,6 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String lastLoginDate;
-
-    @Column(nullable = false, length = 20)
-    private String status;
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
@@ -88,7 +82,9 @@ public class User implements UserDetails {
     @Column(length = 64)
     private String verificationCode;
 
-    private boolean enabled;
+    private Boolean enabled;
+
+    private Boolean blocked;
 
     @Override
     public String getPassword() {
@@ -107,7 +103,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !status.equals("Blocked");
+        return !blocked;
     }
 
     @Override

@@ -12,6 +12,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,7 +41,7 @@ public class ReviewRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    public void testCreateReview(){
+    public void testCreateReview() throws IOException {
         Review review = new Review();
         review.setReviewName("Skyrim");
         review.setGroupName("RPG");
@@ -49,6 +52,7 @@ public class ReviewRepositoryTest {
         review.addComment(commentRepo.getById((long) 1));
         review.setRate((float)5.0);
         review.setRateCount(1);
+        review.setReviewPhoto(Files.readAllBytes(Path.of("src/main/resources/images/ava.webp")));
         Review savedReview = reviewRepo.save(review);
         Review existReview = entityManager.find(Review.class, savedReview.getId());
         assertThat(existReview.getId()).isEqualTo(review.getId());

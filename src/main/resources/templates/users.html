@@ -45,7 +45,7 @@
                         <td th:text="${user.email}"></td>
                         <td th:text="${user.registrationDate}"></td>
                         <td th:text="${user.lastLoginDate}"></td>
-                        <td th:text="${user.status}"></td>
+                        <td th:if="${user.blocked == true}" th:text="Blocked"></td><td th:if="${user.blocked == false}" th:text="Unblocked"></td>
                         <td th:each="role: ${user.roles}" th:text="${role.name}"></td>
                     </tr>
                     </tbody>

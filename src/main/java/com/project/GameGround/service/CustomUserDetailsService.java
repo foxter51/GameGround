@@ -55,7 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public boolean saveUser(User user, String siteUrl) throws MessagingException, UnsupportedEncodingException{
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setStatus("Unblocked");
+        user.setBlocked(false);
         user.setAuthProvider(AuthProvider.LOCAL);
         user.addRole(roleDetailsService.repo.getRoleByName("USER"));
         String randomCode = RandomString.make(64);
