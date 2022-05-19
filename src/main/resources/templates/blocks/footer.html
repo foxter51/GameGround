@@ -7,7 +7,7 @@
                         <div class="col-sm">
                             <h2 href="#top" class="text-decoration-none">GameGround</h2>
                             <p class="copyright">
-                                <small>© 2022</small>
+                                <small>©</small><small th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></small>
                             </p>
                         </div>
                         <div class="col-md-3 float-end">

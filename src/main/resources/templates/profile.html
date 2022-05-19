@@ -128,7 +128,7 @@
                             <div class="col-sm-6">
                                 <form th:action="@{/profile/{id}/change_firstname(id=${userProfile.getId()})}" method="post">
                                     <div class="input-group">
-                                        <input type="text" name="changeFirstname" class="form-control" maxlength="32">
+                                        <input type="text" th:placeholder="${userProfile.firstName}" name="changeFirstname" class="form-control" maxlength="32">
                                         <span class="input-group-btn">
                                         <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
                                     </span>
@@ -144,7 +144,7 @@
                             <div class="col-sm-6">
                                 <form th:action="@{/profile/{id}/change_lastname(id=${userProfile.getId()})}" method="post">
                                     <div class="input-group">
-                                        <input type="text" name="changeLastname" class="form-control" maxlength="32">
+                                        <input type="text" th:placeholder="${userProfile.lastName}" name="changeLastname" class="form-control" maxlength="32">
                                         <span class="input-group-btn">
                                         <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
                                     </span>
