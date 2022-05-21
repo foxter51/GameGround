@@ -113,9 +113,9 @@
                                     <div class="input-group">
                                         <input id="changeProfilePicture" name="profilePicture" type="file" accept="image/png, image/jpeg" class="form-control" required/>
                                         <span class="input-group-btn">
-                                    <button class="btn btn-danger" type="button" th:text="#{pictureCancel}" id="cancelPicture"></button>
-                                    <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
-                                    </span>
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelPicture"></button>
+                                            <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
+                                        </span>
                                     </div>
                                 </form>
                             </div>
@@ -125,13 +125,19 @@
                             <div class="col-sm-3">
                                 <p class="mb-0" th:text="#{editFirstName}"></p>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <form th:action="@{/profile/{id}/change_firstname(id=${userProfile.getId()})}" method="post">
                                     <div class="input-group">
                                         <input type="text" th:placeholder="${userProfile.firstName}" name="changeFirstname" class="form-control" maxlength="32">
                                         <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
-                                    </span>
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelFirstname"></button>
+                                            <script>
+                                                $("#cancelFirstname").click(function (){
+                                                    $('[name="changeFirstname"]').val('');
+                                                });
+                                            </script>
+                                            <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
+                                        </span>
                                     </div>
                                 </form>
                             </div>
@@ -141,13 +147,19 @@
                             <div class="col-sm-3">
                                 <p class="mb-0" th:text="#{editLastName}"></p>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <form th:action="@{/profile/{id}/change_lastname(id=${userProfile.getId()})}" method="post">
                                     <div class="input-group">
                                         <input type="text" th:placeholder="${userProfile.lastName}" name="changeLastname" class="form-control" maxlength="32">
                                         <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
-                                    </span>
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelLastname"></button>
+                                            <script>
+                                                $("#cancelLastname").click(function (){
+                                                    $('[name="changeLastname"]').val('');
+                                                });
+                                            </script>
+                                            <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
+                                        </span>
                                     </div>
                                 </form>
                             </div>
@@ -189,19 +201,19 @@
                                 <div class="form-group mt-3">
                                     <label for="title" th:text="#{titleLabel}"></label>
                                     <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
-                                           th:field="*{reviewName}" required/>
+                                           th:field="*{reviewName}" maxlength="64" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="genreName" th:text="#{genreLabel}"></label>
                                     <input type="text" id="genreName" th:placeholder="#{genrePlaceholder}" autocomplete="off" class="form-control"
-                                           th:field="*{groupName}" required/>
+                                           th:field="*{groupName}" maxlength="32" required/>
                                 </div>
 
                                 <div class="form-group" th:object="${Tags}">
                                     <label for="tagList" th:text="#{tagLabel}"></label>
                                     <input type="text" id="tagList" th:placeholder="#{tagPlaceholder}" autocomplete="off" class="form-control"
-                                           th:field="*{tagsString}" required/>
+                                           th:field="*{tagsString}" maxlength="255" required/>
                                 </div>
 
                                 <div class="form-group">

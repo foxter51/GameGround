@@ -1,7 +1,7 @@
 <div th:fragment="searchBar">
     <form th:action="@{/search}" method="get">
         <div class="input-group mb-3 w-75 mx-auto">
-            <input type="search" class="form-control" th:placeholder="#{searchPlaceholder}" name="request" required>
+            <input type="search" class="form-control" th:placeholder="#{searchPlaceholder}" name="request" maxlength="255" required>
             <div class="input-group-append">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
             </div>

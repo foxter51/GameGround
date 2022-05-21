@@ -56,7 +56,7 @@
                                         <div class="input-group">
                                             <input id="photoUploadEdit" type="file" name="image" accept="image/png, image/jpeg" class="form-control"/>
                                             <span class="input-group-btn">
-                                            <button class="btn btn-danger" type="button" th:text="#{pictureCancel}" id="cancelPictureEdit"></button>
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelPictureEdit"></button>
                                         </span>
                                         </div>
                                     </div>
@@ -66,19 +66,19 @@
                             <div class="form-group">
                                 <label for="title" th:text="#{titleLabel}"></label>
                                 <input type="text" id="title" th:placeholder="#{titlePlaceholder}" autocomplete="off" class="form-control"
-                                       th:field="*{reviewName}" required/>
+                                       th:field="*{reviewName}" maxlength="64" required/>
                             </div>
 
                             <div class="form-group">
                                 <label for="genreName" th:text="#{genreLabel}"></label>
                                 <input type="text" id="genreName" th:placeholder="#{genrePlaceholder}" autocomplete="off" class="form-control"
-                                       th:field="*{groupName}" required/>
+                                       th:field="*{groupName}" maxlength="32" required/>
                             </div>
 
                             <div class="form-group" th:object="${Tags}">
                                 <label for="tagList" th:text="#{tagLabel}"></label>
                                 <input type="text" id="tagList" th:placeholder="#{tagPlaceholder}" autocomplete="off" class="form-control"
-                                       th:field="*{tagsString}" required/>
+                                       th:field="*{tagsString}" maxlength="255" required/>
                             </div>
 
                             <div class="form-group">
