@@ -53,4 +53,10 @@ public class ProfileController {
         userDetailsService.changeUserLastname(profileID, lastname);
         return "redirect:/profile/{id}";
     }
+
+    @PostMapping("/{id}/account_remove")
+    public String removeAccount(@PathVariable("id")Long userID, Authentication auth){
+        userDetailsService.deleteAccount(userID, auth);
+        return "redirect:/";
+    }
 }

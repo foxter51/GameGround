@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -174,5 +175,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public boolean isUserDetails(Authentication auth){
         return auth.getPrincipal() instanceof UserDetails;
+    }
+
+    public void deleteAccount(Long userID, Authentication auth){
+        String userEmail = getUserEmail(auth);
+        if(userID.equals(getCurrentUserID(auth))) SecurityContextHolder.getContext().setAuthentication(null);
+        repo.deleteById(userID);
+        LOG.info("Account {} was deleted", userEmail);
     }
 }

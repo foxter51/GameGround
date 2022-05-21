@@ -164,6 +164,17 @@
                                 </form>
                             </div>
                         </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0 text-danger" th:text="#{deleteAccount}"></p>
+                            </div>
+                            <div class="col-sm-8">
+                                <form th:action="@{/profile/{id}/account_remove(id=${userProfile.getId()})}" method="post">
+                                    <button type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-danger"></i></button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
