@@ -4,8 +4,7 @@ $(function (){
 });
 
 function writeReviewEvent(){
-    $("#reviewForm").hide();
-    $("#writeReview").click(function (){
+    $("#write").click(function (){
         $("#writeReview").hide();
         $("#reviewForm").fadeIn();
     });

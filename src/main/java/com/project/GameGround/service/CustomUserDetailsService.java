@@ -178,7 +178,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public void deleteAccount(Long userID, Authentication auth){
-        String userEmail = getUserEmail(auth);
+        String userEmail = repo.getById(userID).getEmail();
         if(userID.equals(getCurrentUserID(auth))) SecurityContextHolder.getContext().setAuthentication(null);
         repo.deleteById(userID);
         LOG.info("Account {} was deleted", userEmail);

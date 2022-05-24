@@ -102,7 +102,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="personal">
+                    <div id="personal" style="display: none">
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
@@ -170,24 +170,38 @@
                                 <p class="mb-0 text-danger" th:text="#{deleteAccount}"></p>
                             </div>
                             <div class="col-sm-8">
-                                <form th:action="@{/profile/{id}/account_remove(id=${userProfile.getId()})}" method="post">
-                                    <button type="submit" style="background: transparent; border: none"><i class="fa-solid fa-xmark text-danger"></i></button>
+                                <form th:action="@{/profile/{id}/account_remove(id=${userProfile.getId()})}" method="post" id="deleteForm">
+                                    <button type="button" style="background: transparent; border: none" class="text-danger" th:text="#{deleteLabel}" id="deleteAction"></button>
+                                    <div id="acceptDecline" style="display: none">
+                                        <button type="submit" style="background: transparent; border: none"><i class="fa-solid fa-check text-success"></i></button>
+                                        <button type="button" style="background: transparent; border: none" id="cancelDelete"><i class="fa-solid fa-xmark text-danger"></i></button>
+                                    </div>
+                                    <script>
+                                        $("#deleteAction").click(function (){
+                                            $("#deleteAction").hide();
+                                            $("#acceptDecline").show();
+                                        });
+                                        $("#cancelDelete").click(function (){
+                                            $("#acceptDecline").hide();
+                                            $("#deleteAction").show();
+                                        });
+                                    </script>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="text-center">
-                <button id="writeReview" style="background: transparent; border:none"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
+            <div class="text-center" style="display: none" id="writeReview">
+                <button style="background: transparent; border:none" id="write"><i class="fa-solid fa-pencil text-white" name="signs"></i></button>
                 <script>
-                    if([[${#authentication.getPrincipal().getId()}]] !== [[${userProfile.id}]] && [[${isAdmin}]] === false){
-                        $("#writeReview").hide();
-                        $("#personal").hide();
+                    if([[${#authentication.getPrincipal().getId()}]] === [[${userProfile.id}]] || [[${isAdmin}]] === true){
+                        $("#writeReview").show();
+                        $("#personal").show();
                     }
                 </script>
             </div>
-            <div class="col-lg-12" id="reviewForm">
+            <div class="col-lg-12" id="reviewForm" style="display: none">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
