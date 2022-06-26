@@ -44,12 +44,7 @@ public class RegisterController {
 
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code, RedirectAttributes ra) {
-        if (userDetailsService.verify(code)) {
-            ra.addFlashAttribute("confirmation", true);
-        }
-        else {
-            ra.addFlashAttribute("confirmation", false);
-        }
+        ra.addFlashAttribute("confirmation", userDetailsService.verify(code));
         return "redirect:/sort=dateDSC";
     }
 

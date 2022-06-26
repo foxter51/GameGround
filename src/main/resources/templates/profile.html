@@ -23,6 +23,13 @@
 <header th:insert="blocks/header :: header"></header>
 <main class="container py-5">
     <div th:insert="blocks/toTheTopButton :: toTheTop"></div>
+    <h3 align="center" th:if="${photoChange == true}" th:text="#{changePhotoSuccess}"></h3>
+    <h3 align="center" th:if="${photoChange == false}" th:text="#{changePhotoError}"></h3>
+    <h3 align="center" th:if="${nameChange == true}" th:text="#{changeNameSuccess}"></h3>
+    <h3 align="center" th:if="${lastnameChange == true}" th:text="#{changeLastNameSuccess}"></h3>
+    <h3 align="center" th:if="${emailChange == true}" th:text="#{sendEmailSuccess}"></h3>
+    <h3 align="center" th:if="${emailChange == false}" th:text="#{sendEmailError}"></h3>
+    <h3 align="center" th:if="${passwordChange == true}" th:text="#{changePasswordSuccess}"></h3>
     <div th:insert="blocks/searchBar :: searchBar"></div><br>
     <div class="row" th:object="${userProfile}">
         <div class="col-lg-4">
@@ -105,7 +112,7 @@
                     <div id="personal" style="display: none">
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 d-flex align-items-center">
                                 <p class="mb-0" th:text="#{profilePhotoPicture}"></p>
                             </div>
                             <div class="col-sm-8">
@@ -122,7 +129,7 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 d-flex align-items-center">
                                 <p class="mb-0" th:text="#{editFirstName}"></p>
                             </div>
                             <div class="col-sm-8">
@@ -144,7 +151,7 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3 d-flex align-items-center">
                                 <p class="mb-0" th:text="#{editLastName}"></p>
                             </div>
                             <div class="col-sm-8">
@@ -165,6 +172,57 @@
                             </div>
                         </div>
                         <hr>
+                        <div style="display: none" id="changeLoginCredentials">
+                            <div class="row">
+                                <div class="col-sm-3 d-flex align-items-center">
+                                    <p class="mb-0" th:text="#{editEmail}"></p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <form th:action="@{/profile/{id}/change_email(id=${userProfile.getId()})}" method="post">
+                                        <div class="input-group">
+                                            <input type="email" th:placeholder="${userProfile.getEmail()}" name="changeEmail" class="form-control" maxlength="32">
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelEmail"></button>
+                                            <script>
+                                                $("#cancelEmail").click(function (){
+                                                    $('[name="changeEmail"]').val('');
+                                                });
+                                            </script>
+                                            <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
+                                        </span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" id="passwordChange">
+                                <div class="col-sm-3 d-flex align-items-center">
+                                    <p class="mb-0" th:text="#{editPassword}"></p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <form th:action="@{/profile/{id}/change_password(id=${userProfile.getId()})}" method="post">
+                                        <div class="input-group">
+                                            <input type="password" name="changePassword" class="form-control" maxlength="64">
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="button" th:text="#{cancel}" id="cancelPassword"></button>
+                                            <script>
+                                                $("#cancelPassword").click(function (){
+                                                    $('[name="changePassword"]').val('');
+                                                });
+                                            </script>
+                                            <button class="btn btn-primary" type="submit" th:text="#{save}"></button>
+                                        </span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <script>
+                            if([[${credentialsChangeAccess}]]){
+                                $("#changeLoginCredentials").show();
+                            }
+                        </script>
                         <div class="row">
                             <div class="col-sm-3">
                                 <p class="mb-0 text-danger" th:text="#{deleteAccount}"></p>

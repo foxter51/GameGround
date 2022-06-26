@@ -21,7 +21,18 @@
                     <a th:href="@{/register}"><button class="btn btn-primary" th:text="#{regButtonLabel}"></button></a>
                 </th:block>
                 <div class="position-absolute top-50 start-50 border-bottom">
-                    <strong th:text="${#dates.format(#dates.createNow(), 'HH:mm')}"></strong>
+                    <strong id="timePlace"></strong>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                                ShowTime();
+                            });
+
+                        function ShowTime() {
+                            let dt = new Date();
+                            document.getElementById("timePlace").innerHTML = dt.toLocaleTimeString([], {timeStyle: 'short'});
+                            window.setTimeout("ShowTime()", 1000);
+                        }
+                    </script>
                 </div>
             </nav>
         </div>

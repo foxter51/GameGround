@@ -83,20 +83,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 + "Thank you,<br>"
                 + "GameGround.";
 
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getFullName());
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
-        content = content.replace("[[URL]]", verifyURL);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
+        send(user, siteURL, toAddress, fromAddress, senderName, subject, content, Optional.empty());
     }
 
     public boolean verify(String verificationCode) {
@@ -113,19 +100,77 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
+    public boolean sendVerificationNewEmail(User user, String siteURL, String newEmail) throws MessagingException, UnsupportedEncodingException {
+        if(repo.getByEmail(newEmail) != null){
+            LOG.error("User {} update email failed (already exists: {})", user.getEmail(), newEmail);
+            return false;
+        }
+        String newURL = siteURL + "/profile/mail";
+        String fromAddress = "gamegroundmailer@gmail.com";
+        String senderName = "GameGround";
+        String subject = "Please verify your new email";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your new email:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "GameGround.";
+        setNewVerificationCode(user);
+        send(user, newURL, newEmail, fromAddress, senderName, subject, content, Optional.of("&email=" + newEmail));
+        return true;
+    }
+
+    public boolean verifyNewEmail(String verificationCode, String newEmail) {
+        User user = repo.findUserByVerificationCode(verificationCode);
+
+        if (user == null) {
+            return false;
+        }
+        else {
+            user.setVerificationCode(null);
+            user.setEmail(newEmail);
+            repo.save(user);
+            SecurityContextHolder.getContext().setAuthentication(null);
+            return true;
+        }
+    }
+
+    private void send(User user, String siteURL, String receiver, String fromAddress, String senderName, String subject, String content, Optional<String> emailParam) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(receiver);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFullName());
+        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode() + (emailParam.orElse(""));
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    private void setNewVerificationCode(User user){
+        user.setVerificationCode(RandomString.make(64));
+        repo.save(user);
+    }
+
     public User getProfileByID(Long userID){
         return userID != null ? repo.getById(userID) : null;
     }
 
-    public void changeProfilePicture(Long profileID, MultipartFile profilePicture){
+    public boolean changeProfilePicture(Long profileID, MultipartFile profilePicture){
         User user = getProfileByID(profileID);
         try{
             user.setProfilePicture(profilePicture.getBytes());
+            repo.save(user);
+            return true;
         }
         catch (IOException e){
             e.printStackTrace();
         }
-        repo.save(user);
+        return false;
     }
 
     public void changeUserFirstname(Long profileID, String firstname){
@@ -137,6 +182,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void changeUserLastname(Long profileID, String lastname){
         User user = repo.getById(profileID);
         user.setLastName(lastname);
+        repo.save(user);
+    }
+
+    public boolean isLocalRegistered(Long profileID){
+        return repo.getById(profileID).getAuthProvider().equals(AuthProvider.LOCAL);
+    }
+
+    public void changeUserPassword(Long profileID, String password){
+        User user = repo.getById(profileID);
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
         repo.save(user);
     }
 
